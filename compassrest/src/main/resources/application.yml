@@ -1,0 +1,26 @@
+server:
+  port: 9092
+  
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@127.0.0.1:1521:orcl
+    username: tpcfs
+    password: tpcfs
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  
+options:
+  url: http://weixin.nbwldh.com/cnplannotify/
+  uploadpath: d:\Tomcat 7.0\webapps\ROOT\photos
+  updatefile: d:\Tomcat 7.0\webapps\ROOT\apk\update.txt
