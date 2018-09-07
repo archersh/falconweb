@@ -1,0 +1,10 @@
+server:
+  port: 9091
+  
+options:
+  falconweb: http://127.0.0.1:9090/ws?wsdl
+  uploadpath: /usr/local/tomcat-7.0.70/webapps/pic/
+  
+  //uploadpath: /usr/local/apache-tomcat-7.0.70/webapps/pic/
+  
+  
