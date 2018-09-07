@@ -1,0 +1,23 @@
+server:
+  port: 9091 
+  
+config:
+  sfurl: http://book.4plmarket.com/tyardnewservice/router/rest?
+  //sfurl: http://book.trainer.4plmarket.com/tyardnewservice/router/rest?
+  sfwxurl: http://weixin.nbwldh.com/cnplannotify/
+  //ygturl: http://202.96.124.70:8888/com.nbport.ediesb.service.EDIESBService?wsdl
+  ygturl: http://202.96.124.20:8888/com.nbport.ediesb.service.EDIESBService?wsdl
+  
+spring:
+  datasource:
+    //url: jdbc:oracle:thin:@169.169.43.72:1521:orcl
+    url: jdbc:oracle:thin:@192.168.17.10:1521:orcl
+    username: tpcfs
+    password: tpcfs
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
