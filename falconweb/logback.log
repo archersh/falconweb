@@ -1,0 +1,283 @@
+2018-05-12 00:15:28.056  INFO 13300 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 13300 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-12 00:15:28.060  INFO 13300 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-12 00:15:28.150  INFO 13300 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sat May 12 00:15:28 CST 2018]; root of context hierarchy
+2018-05-12 00:15:29.684  INFO 13300 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$b263cf0f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-12 00:15:29.727  INFO 13300 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-12 00:15:31.442  INFO 13300 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-12 00:15:31.459  INFO 13300 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-12 00:15:31.461  INFO 13300 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-12 00:15:31.691  INFO 13300 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-12 00:15:31.921  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-12 00:15:31.923  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-12 00:15:31.927  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-12 00:15:31.927  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-12 00:15:31.927  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-12 00:15:31.928  INFO 13300 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-12 00:15:32.073  INFO 13300 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-12 00:15:33.662  INFO 13300 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-12 00:15:34.198  INFO 13300 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-12 00:15:34.217  INFO 13300 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-12 00:15:34.296  INFO 13300 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-12 00:15:34.298  INFO 13300 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-12 00:15:34.299  INFO 13300 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-12 00:15:34.353  INFO 13300 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-12 00:15:34.504  INFO 13300 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-12 00:15:34.758  INFO 13300 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-12 00:15:35.102  INFO 13300 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-12 00:15:35.657  INFO 13300 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-12 00:15:36.657  INFO 13300 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-12 00:15:36.658  INFO 13300 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-12 00:15:36.666  INFO 13300 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-12 00:15:36.676  INFO 13300 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-12 00:15:36.735  INFO 13300 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-12 00:15:36.744  INFO 13300 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.123 seconds (JVM running for 9.724)
+2018-05-12 00:15:49.218  WARN 13300 --- [http-nio-9090-exec-1] cn.com.sailin.falconweb.publiccode.sh    : 考勤系统没有工种信息 {"APCD":"HW","BKAN":"DD","BKCD":"CCB","BRDT":"1899-12-30","BSCD":"GD_GMHY","CYJL":"","ETHNIC":"","HOMEADD":"DD","IDCDNO":"123456782","INDY":"N","INONEMON":"","INSEX":"女","LCCD":"A001","NAME":"A","PIC1":"","PIC2":"","PIC3":"","PIC4":"","PIC5":"","PXQK":"","RGDT":"1524576791000","RGUR":"","SZ_EMPLOY_ID":"28","USERPASS":"817aef87dfc0f65ba99c5f29138f8598","WKKD":"","ZYJN":""}
+2018-05-12 18:21:40.441  INFO 16796 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 16796 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-12 18:21:40.446  INFO 16796 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-12 18:21:40.526  INFO 16796 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sat May 12 18:21:40 CST 2018]; root of context hierarchy
+2018-05-12 18:21:42.075  INFO 16796 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$68a17e82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-12 18:21:42.115  INFO 16796 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-12 18:21:43.849  INFO 16796 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-12 18:21:43.867  INFO 16796 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-12 18:21:43.869  INFO 16796 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-12 18:21:44.054  INFO 16796 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-12 18:21:44.308  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-12 18:21:44.310  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-12 18:21:44.313  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-12 18:21:44.314  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-12 18:21:44.314  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-12 18:21:44.315  INFO 16796 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-12 18:21:44.452  INFO 16796 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-12 18:21:46.041  INFO 16796 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-12 18:21:46.484  INFO 16796 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-12 18:21:46.503  INFO 16796 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-12 18:21:46.590  INFO 16796 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-12 18:21:46.592  INFO 16796 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-12 18:21:46.594  INFO 16796 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-12 18:21:46.664  INFO 16796 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-12 18:21:46.824  INFO 16796 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-12 18:21:47.109  INFO 16796 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-12 18:21:47.473  INFO 16796 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-12 18:21:48.049  INFO 16796 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-12 18:21:49.001  INFO 16796 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-12 18:21:49.003  INFO 16796 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-12 18:21:49.009  INFO 16796 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-12 18:21:49.021  INFO 16796 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-12 18:21:49.080  INFO 16796 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-12 18:21:49.084  INFO 16796 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.075 seconds (JVM running for 9.63)
+2018-05-12 18:25:47.448  INFO 17160 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 17160 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-12 18:25:47.453  INFO 17160 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-12 18:25:47.543  INFO 17160 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sat May 12 18:25:47 CST 2018]; root of context hierarchy
+2018-05-12 18:25:49.151  INFO 17160 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$68a17e82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-12 18:25:49.189  INFO 17160 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-12 18:25:50.889  INFO 17160 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-12 18:25:50.905  INFO 17160 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-12 18:25:50.907  INFO 17160 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-12 18:25:51.091  INFO 17160 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-12 18:25:51.341  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-12 18:25:51.343  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-12 18:25:51.346  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-12 18:25:51.347  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-12 18:25:51.347  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-12 18:25:51.347  INFO 17160 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-12 18:25:51.481  INFO 17160 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-12 18:25:53.062  INFO 17160 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-12 18:25:53.551  INFO 17160 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-12 18:25:53.570  INFO 17160 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-12 18:25:53.657  INFO 17160 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-12 18:25:53.659  INFO 17160 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-12 18:25:53.661  INFO 17160 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-12 18:25:53.721  INFO 17160 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-12 18:25:53.875  INFO 17160 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-12 18:25:54.167  INFO 17160 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-12 18:25:54.533  INFO 17160 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-12 18:25:55.097  INFO 17160 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-12 18:25:56.120  INFO 17160 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-12 18:25:56.121  INFO 17160 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-12 18:25:56.127  INFO 17160 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-12 18:25:56.138  INFO 17160 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-12 18:25:56.200  INFO 17160 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-12 18:25:56.206  INFO 17160 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.184 seconds (JVM running for 9.735)
+2018-05-13 10:54:09.966  INFO 17380 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 17380 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-13 10:54:09.970  INFO 17380 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-13 10:54:10.071  INFO 17380 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sun May 13 10:54:10 CST 2018]; root of context hierarchy
+2018-05-13 10:54:11.613  INFO 17380 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$68a17e82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-13 10:54:11.654  INFO 17380 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-13 10:54:13.358  INFO 17380 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-13 10:54:13.374  INFO 17380 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-13 10:54:13.376  INFO 17380 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-13 10:54:13.557  INFO 17380 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-13 10:54:13.820  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-13 10:54:13.822  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-13 10:54:13.826  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-13 10:54:13.826  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-13 10:54:13.827  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-13 10:54:13.827  INFO 17380 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-13 10:54:13.962  INFO 17380 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-13 10:54:15.541  INFO 17380 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-13 10:54:16.031  INFO 17380 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-13 10:54:16.050  INFO 17380 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-13 10:54:16.135  INFO 17380 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-13 10:54:16.137  INFO 17380 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-13 10:54:16.139  INFO 17380 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-13 10:54:16.201  INFO 17380 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-13 10:54:16.350  INFO 17380 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-13 10:54:16.600  INFO 17380 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-13 10:54:16.953  INFO 17380 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-13 10:54:17.507  INFO 17380 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-13 10:54:18.394  INFO 17380 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-13 10:54:18.396  INFO 17380 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-13 10:54:18.401  INFO 17380 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-13 10:54:18.412  INFO 17380 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-13 10:54:18.473  INFO 17380 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-13 10:54:18.479  INFO 17380 --- [main] cn.com.sailin.falconweb.App              : Started App in 8.947 seconds (JVM running for 9.496)
+2018-05-13 11:18:30.720  INFO 12988 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 12988 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-13 11:18:30.725  INFO 12988 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-13 11:18:30.800  INFO 12988 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sun May 13 11:18:30 CST 2018]; root of context hierarchy
+2018-05-13 11:18:32.328  INFO 12988 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$4103f18d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-13 11:18:32.367  INFO 12988 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-13 11:18:34.062  INFO 12988 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-13 11:18:34.077  INFO 12988 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-13 11:18:34.079  INFO 12988 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-13 11:18:34.259  INFO 12988 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-13 11:18:34.516  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-13 11:18:34.517  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-13 11:18:34.521  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-13 11:18:34.521  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-13 11:18:34.521  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-13 11:18:34.522  INFO 12988 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-13 11:18:34.670  INFO 12988 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-13 11:18:36.291  INFO 12988 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-13 11:18:36.843  INFO 12988 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-13 11:18:36.863  INFO 12988 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-13 11:18:36.948  INFO 12988 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-13 11:18:36.950  INFO 12988 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-13 11:18:36.951  INFO 12988 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-13 11:18:37.018  INFO 12988 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-13 11:18:37.181  INFO 12988 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-13 11:18:37.460  INFO 12988 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-13 11:18:37.809  INFO 12988 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-13 11:18:38.399  INFO 12988 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-13 11:18:39.290  INFO 12988 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-13 11:18:39.292  INFO 12988 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-13 11:18:39.297  INFO 12988 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-13 11:18:39.308  INFO 12988 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-13 11:18:39.371  INFO 12988 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-13 11:18:39.376  INFO 12988 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.092 seconds (JVM running for 9.642)
+2018-05-13 12:25:46.318  INFO 14860 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 14860 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-13 12:25:46.323  INFO 14860 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-13 12:25:46.415  INFO 14860 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sun May 13 12:25:46 CST 2018]; root of context hierarchy
+2018-05-13 12:25:48.064  INFO 14860 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$b7ab1ff3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-13 12:25:48.112  INFO 14860 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-13 12:25:49.845  INFO 14860 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-13 12:25:49.862  INFO 14860 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-13 12:25:49.863  INFO 14860 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-13 12:25:50.049  INFO 14860 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-13 12:25:50.338  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-13 12:25:50.339  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-13 12:25:50.343  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-13 12:25:50.343  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-13 12:25:50.344  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-13 12:25:50.344  INFO 14860 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-13 12:25:50.585  INFO 14860 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-13 12:25:52.159  INFO 14860 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-13 12:25:52.616  INFO 14860 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-13 12:25:52.635  INFO 14860 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-13 12:25:52.715  INFO 14860 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-13 12:25:52.718  INFO 14860 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-13 12:25:52.720  INFO 14860 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-13 12:25:52.782  INFO 14860 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-13 12:25:52.950  INFO 14860 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-13 12:25:53.200  INFO 14860 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-13 12:25:53.536  INFO 14860 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-13 12:25:54.073  INFO 14860 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-13 12:25:54.961  INFO 14860 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-13 12:25:54.962  INFO 14860 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-13 12:25:54.968  INFO 14860 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-13 12:25:54.979  INFO 14860 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-13 12:25:55.049  INFO 14860 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-13 12:25:55.055  INFO 14860 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.168 seconds (JVM running for 9.738)
+2018-05-13 13:37:46.981  INFO 13852 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 13852 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-13 13:37:46.985  INFO 13852 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-13 13:37:47.062  INFO 13852 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sun May 13 13:37:47 CST 2018]; root of context hierarchy
+2018-05-13 13:37:48.717  INFO 13852 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$767b9dbf] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-13 13:37:48.762  INFO 13852 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-13 13:37:50.554  INFO 13852 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-13 13:37:50.570  INFO 13852 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-13 13:37:50.572  INFO 13852 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-13 13:37:50.794  INFO 13852 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-13 13:37:51.019  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-13 13:37:51.021  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-13 13:37:51.025  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-13 13:37:51.025  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-13 13:37:51.026  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-13 13:37:51.026  INFO 13852 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-13 13:37:51.169  INFO 13852 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-13 13:37:52.767  INFO 13852 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-13 13:37:53.239  INFO 13852 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-13 13:37:53.258  INFO 13852 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-13 13:37:53.349  INFO 13852 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-13 13:37:53.351  INFO 13852 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-13 13:37:53.353  INFO 13852 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-13 13:37:53.422  INFO 13852 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-13 13:37:53.586  INFO 13852 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-13 13:37:53.863  INFO 13852 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-13 13:37:54.211  INFO 13852 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-13 13:37:54.776  INFO 13852 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-13 13:37:55.814  INFO 13852 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-13 13:37:55.815  INFO 13852 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-13 13:37:55.822  INFO 13852 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-13 13:37:55.833  INFO 13852 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-13 13:37:55.896  INFO 13852 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-13 13:37:55.902  INFO 13852 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.362 seconds (JVM running for 9.922)
+2018-05-13 13:50:35.877  INFO 16248 --- [main] cn.com.sailin.falconweb.App              : Starting App on archer-PC with PID 16248 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+2018-05-13 13:50:35.882  INFO 16248 --- [main] cn.com.sailin.falconweb.App              : No active profile set, falling back to default profiles: default
+2018-05-13 13:50:35.957  INFO 16248 --- [main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@3daa422a: startup date [Sun May 13 13:50:35 CST 2018]; root of context hierarchy
+2018-05-13 13:50:38.002  INFO 16248 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$e02a84da] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-13 13:50:38.058  INFO 16248 --- [main] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2018-05-13 13:50:39.837  INFO 16248 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 9090 (http)
+2018-05-13 13:50:39.855  INFO 16248 --- [main] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2018-05-13 13:50:39.857  INFO 16248 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.14
+2018-05-13 13:50:40.043  INFO 16248 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-05-13 13:50:40.284  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'CXFServlet' to [/*]
+2018-05-13 13:50:40.286  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+2018-05-13 13:50:40.289  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-13 13:50:40.289  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-13 13:50:40.290  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-13 13:50:40.290  INFO 16248 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-13 13:50:40.423  INFO 16248 --- [main] c.c.s.falconweb.config.DataSourceConfig  : >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+2018-05-13 13:50:42.006  INFO 16248 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2018-05-13 13:50:42.470  INFO 16248 --- [main] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-13 13:50:42.488  INFO 16248 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-13 13:50:42.568  INFO 16248 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.0.12.Final}
+2018-05-13 13:50:42.570  INFO 16248 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-05-13 13:50:42.571  INFO 16248 --- [main] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2018-05-13 13:50:42.626  INFO 16248 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-13 13:50:42.770  INFO 16248 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-13 13:50:43.017  INFO 16248 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-13 13:50:43.359  INFO 16248 --- [main] o.a.c.w.s.f.ReflectionServiceFactoryBean : Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+2018-05-13 13:50:43.933  INFO 16248 --- [main] org.apache.cxf.endpoint.ServerImpl       : Setting the server's publish address to be /ws
+2018-05-13 13:50:44.794  INFO 16248 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-13 13:50:44.795  INFO 16248 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'druidDataSource' has been autodetected for JMX exposure
+2018-05-13 13:50:44.801  INFO 16248 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+2018-05-13 13:50:44.812  INFO 16248 --- [main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2018-05-13 13:50:44.878  INFO 16248 --- [main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 9090 (http)
+2018-05-13 13:50:44.883  INFO 16248 --- [main] cn.com.sailin.falconweb.App              : Started App in 9.475 seconds (JVM running for 10.03)
+2018-05-13 13:50:51.551  WARN 16248 --- [http-nio-9090-exec-1] cn.com.sailin.falconweb.publiccode.sh    : 考勤系统没有工种信息 {"APCD":"HW","BKAN":"DD","BKCD":"CCB","BRDT":"1899-12-30","BSCD":"GD_GMHY","CYJL":"","ETHNIC":"","HOMEADD":"DD","IDCDNO":"123456782","INDY":"N","INONEMON":"","INSEX":"女","LCCD":"A001","NAME":"A","PIC1":"","PIC2":"","PIC3":"","PIC4":"","PIC5":"","PXQK":"","RGDT":"1524576791000","RGUR":"","SZ_EMPLOY_ID":"28","USERPASS":"817aef87dfc0f65ba99c5f29138f8598","WKKD":"","ZYJN":""}
+2018-05-13 13:57:39.360  WARN 16248 --- [http-nio-9090-exec-3] cn.com.sailin.falconweb.publiccode.sh    : 考勤系统没有工种信息 {"APCD":"HW","BKAN":"DD","BKCD":"CCB","BRDT":"1899-12-30","BSCD":"GD_GMHY","CYJL":"","ETHNIC":"","HOMEADD":"DD","IDCDNO":"123456782","INDY":"N","INONEMON":"","INSEX":"女","LCCD":"A001","NAME":"A","PIC1":"","PIC2":"","PIC3":"","PIC4":"","PIC5":"","PXQK":"","RGDT":"1524576791000","RGUR":"","SZ_EMPLOY_ID":"28","USERPASS":"817aef87dfc0f65ba99c5f29138f8598","WKKD":"","ZYJN":""}

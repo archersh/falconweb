@@ -1,0 +1,50 @@
+14:49:35 Starting App on archer-PC with PID 13912 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+14:49:35 No active profile set, falling back to default profiles: default
+14:49:36 Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f0eb4b4: startup date [Sun May 13 14:49:36 CST 2018]; root of context hierarchy
+14:49:36 HV000001: Hibernate Validator 5.3.5.Final
+14:49:37 Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$fb3ba65e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+14:49:37 Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+14:50:09 Starting App on archer-PC with PID 3076 (D:\Workspaces\MyEclipse\falconweb\target\classes started by Administrator in D:\Workspaces\MyEclipse\falconweb)
+14:50:09 No active profile set, falling back to default profiles: default
+14:50:09 Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f0eb4b4: startup date [Sun May 13 14:50:09 CST 2018]; root of context hierarchy
+14:50:09 HV000001: Hibernate Validator 5.3.5.Final
+14:50:11 Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$be0285d8] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+14:50:11 Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+14:50:12 Tomcat initialized with port(s): 9090 (http)
+14:50:12 Starting service Tomcat
+14:50:12 Starting Servlet Engine: Apache Tomcat/8.5.14
+14:50:12 Initializing Spring embedded WebApplicationContext
+14:50:13 Mapping servlet: 'CXFServlet' to [/*]
+14:50:13 Mapping servlet: 'messageDispatcherServlet' to [/services/*]
+14:50:13 Mapping filter: 'characterEncodingFilter' to: [/*]
+14:50:13 Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+14:50:13 Mapping filter: 'httpPutFormContentFilter' to: [/*]
+14:50:13 Mapping filter: 'requestContextFilter' to: [/*]
+14:50:13 >>>>>>>>>>>>>>>>>>>>>>Druid DataSource init>>>>>>>>>>>
+14:50:14 {dataSource-1} inited
+14:50:15 Building JPA container EntityManagerFactory for persistence unit 'default'
+14:50:15 HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+14:50:15 HHH000412: Hibernate Core {5.0.12.Final}
+14:50:15 HHH000206: hibernate.properties not found
+14:50:15 HHH000021: Bytecode provider name : javassist
+14:50:15 HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+14:50:15 HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+14:50:16 Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:50:16 Creating Service {http://service.falconweb.sailin.com.cn/}WebserviceImplService from class cn.com.sailin.falconweb.service.WebserviceInterface
+14:50:16 Setting the server's publish address to be /ws
+14:50:17 Registering beans for JMX exposure on startup
+14:50:17 Bean with name 'druidDataSource' has been autodetected for JMX exposure
+14:50:17 Located MBean 'druidDataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=druidDataSource,type=DruidDataSource]
+14:50:17 No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+14:50:17 Initializing ProtocolHandler ["http-nio-9090"]
+14:50:17 Starting ProtocolHandler ["http-nio-9090"]
+14:50:17 Using a shared selector for servlet write/read
+14:50:17 Tomcat started on port(s): 9090 (http)
+14:50:17 Started App in 8.86 seconds (JVM running for 9.553)
+14:50:18 pid:40285 method:insertwker applydata:{"SZ_EMPLOY_ID":"28","USERPASS":"817aef87dfc0f65ba99c5f29138f8598","INSEX":"女","INONEMON":"","HOMEADD":"DD","IDCDNO":"123456782","ZYJN":"","WKKD":"","RGUR":"BS","RGDT":"1524576791000","PXQK":"","PIC5":"","PIC4":"","PIC3":"","PIC2":"","PIC1":"","NAME":"A","LCCD":"A001","INDY":"N","CYJL":"","BSCD":"GD_GMHY","BRDT":"1899-12-30","BKCD":"CCB","BKAN":"DD","APCD":"HW","ETHNIC":""}
+14:50:18 考勤系统没有工种信息 {"APCD":"HW","BKAN":"DD","BKCD":"CCB","BRDT":"1899-12-30","BSCD":"GD_GMHY","CYJL":"","ETHNIC":"","HOMEADD":"DD","IDCDNO":"123456782","INDY":"N","INONEMON":"","INSEX":"女","LCCD":"A001","NAME":"A","PIC1":"","PIC2":"","PIC3":"","PIC4":"","PIC5":"","PXQK":"","RGDT":"1524576791000","RGUR":"","SZ_EMPLOY_ID":"28","USERPASS":"817aef87dfc0f65ba99c5f29138f8598","WKKD":"","ZYJN":""}
+14:50:18 pid:40285 res:{"DATA":null,"MSGDESC":"考勤系统没有工种信息","MSGID":"1111"}
+21:53:06 pid:41714 method:importwkdsbybscdmonth applydata:{"MONTH":"201804","ENDDATE":"20180501","BSCD":"GD_TST5","APCD":"HW","STARTDATE":"20180401"}
+21:53:06 pid:41714 res:{"DATA":null,"MSGDESC":"导入考勤数据出错java.util.ArrayList cannot be cast to java.util.Map","MSGID":"1111"}
