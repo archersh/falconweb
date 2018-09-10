@@ -134,7 +134,8 @@ public class Controller {
 				result = getRepairfee(applydata);
 			}
 			if (method.equals("getrepairid")) {
-				result = getRepairid();
+				String cntrid = Code.getFieldVal(obj, "applydata", "");
+				result = getRepairid(cntrid);
 			}
 			if (method.equals("repairbillinsertdetail")) {
 				result = repairbillInsertdetail(obj);
@@ -147,6 +148,10 @@ public class Controller {
 			}
 			if (method.equals("deleteuploadfile")) {
 				result = deleteUploadfile(obj);
+			}
+			
+			if (method.equals("getctnsizetype")) {
+				return getCtnsizetype();
 			}
 
 			if (result.equals("")) {
@@ -384,6 +389,11 @@ public class Controller {
 		List<Map<String, Object>> l = data.qryRp_repairitempurpose();
 		return Code.resultSuccess(l);
 	}
+	
+	public String getCtnsizetype() {
+		List<Map<String,Object>> l=data.qryCtnsizetype();
+		return Code.resultSuccess(l);
+	}
 
 	private JSONObject reqToJson(HttpServletRequest request) {
 		try {
@@ -469,8 +479,8 @@ public class Controller {
 		return data.getRepairfee(lineCode, repairCode, placeCode, repairPos, repairSize, workHour, szty);
 	}
 
-	private String getRepairid() {
-		return Code.resultSuccess(data.getRepairid());
+	private String getRepairid(String cntrid) {
+		return Code.resultSuccess(data.getRepairid(cntrid));
 	}
 
 	private String repairbillInsertdetail(JSONObject obj) {

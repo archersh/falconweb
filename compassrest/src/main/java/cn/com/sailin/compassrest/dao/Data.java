@@ -106,6 +106,11 @@ public class Data {
 		String sql = "select purposecode,purposename from rp_repairitempurpose";
 		return jdbc.queryForList(sql);
 	}
+	
+	public List<Map<String,Object>> qryCtnsizetype(){
+		String sql = "select * from ctn_size_type order by ctnsizetype";
+		return jdbc.queryForList(sql);
+	}
 
 	public String getPid() {
 		String sql = "select processid.nextval as pid from dual";
@@ -156,9 +161,9 @@ public class Data {
 		return Code.getFieldVal(list.get(0), "result", "");
 	}
 
-	public String getRepairid() {
-		String sql = "select f_getrepairid() as repairid from dual";
-		List<Map<String, Object>> list = jdbc.queryForList(sql);
+	public String getRepairid(String cntrid) {
+		String sql = "select f_getrepairid(?) as repairid from dual";
+		List<Map<String, Object>> list = jdbc.queryForList(sql,new Object[] {cntrid});
 		return Code.getFieldVal(list.get(0), "repairid", "");
 	}
 
