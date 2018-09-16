@@ -329,6 +329,9 @@ public class WebserviceImpl implements WebserviceInterface {
 				res = sh.resetPassword(userid, applydata, data);
 			if (method.equals("attendsubmit"))
 				res = sh.attendSubmit(userid,applydata,data);
+			//工人离职
+			if (method.equals("wkerleave"))
+				res=sh.wkerleave(userid,applydata,data);
 			// if (method.equals("test")) {
 			// schedle.importWkds();
 			// }

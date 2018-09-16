@@ -68,6 +68,7 @@ public class Attend {
 			if (md == null) {
 				md = new Mandate();
 				md.setIdcdno(idcdno);
+				md.setWkid(Code.getFieldVal(m, "sz_employ_id", ""));
 				md.setDate(date.substring(0, 8));
 				md.setName(Code.getFieldVal(m, "sz_name", ""));
 				md.setPost(Code.getFieldVal(m, "post", ""));
@@ -111,6 +112,9 @@ public class Attend {
 				man.setSec(0);
 				man.setPost(entry.getValue().getPost());
 				man.setInonemon(entry.getValue().getInonemon());
+				man.setStarttime(Code.dtft.format(entry.getValue().getStarttime().getTime()));
+				man.setEndtime(Code.dtft.format(entry.getValue().getEndtime().getTime()));
+				man.setWkid(entry.getValue().getWkid());
 			}
 			man.setSec(man.getSec() + entry.getValue().getSec());
 			mman.put(man.getIdcdno(), man);
@@ -132,12 +136,18 @@ public class Attend {
 			Map<String, Object> item = new HashMap<String, Object>();
 			item.put("IDCDNO", man.getValue().getIdcdno());
 			item.put("NAME", man.getValue().getName());
+			item.put("WKID", man.getValue().getWkid());
 			item.put("POST", man.getValue().getPost());
 			float f = man.getValue().getSec();
-			f = f / 60 / 60 / 8;
+			f = f / 60 / 60;
+			item.put("WKTIME", f);
+			f = f / 8;
 			item.put("WKDS", String.valueOf(f));
 			item.put("LCCD", man.getValue().getLccd());
 			item.put("INONEMON", man.getValue().getInonemon());
+			item.put("STARTTIME", man.getValue().getStarttime());
+			item.put("ENDTIME", man.getValue().getEndtime());
+
 			lm.add(item);
 		}
 
@@ -159,6 +169,13 @@ class Man {
 	private int sec;
 
 	private String inonemon;
+
+	// 用于每天发送住建的数据，按月统计的时候这个数据没用
+	private String starttime;
+	// 用于每天发送住建的数据，按月统计的时候这个数据没用
+	private String endtime;
+
+	private String wkid;
 
 	public String getInonemon() {
 		return inonemon;
@@ -207,12 +224,39 @@ class Man {
 	public void setSec(int sec) {
 		this.sec = sec;
 	}
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
+	}
+
+	public String getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
+
+	public String getWkid() {
+		return wkid;
+	}
+
+	public void setWkid(String wkid) {
+		this.wkid = wkid;
+	}
+
 }
 
 // 记录人员一天的考勤数据，最早考勤，最晚考勤，上午是否考勤，下午是否考勤
 class Mandate {
 
 	private String idcdno;
+
+	private String wkid;
 
 	private String name;
 
@@ -225,6 +269,14 @@ class Mandate {
 	private String post;
 
 	private String inonemon;
+
+	public String getWkid() {
+		return wkid;
+	}
+
+	public void setWkid(String wkid) {
+		this.wkid = wkid;
+	}
 
 	public String getInonemon() {
 		return inonemon;
@@ -302,7 +354,7 @@ class Mandate {
 			sec = sec + 14400;
 		if (getPm())
 			sec = sec + 14400;
-		
+
 		return sec;
 
 	}

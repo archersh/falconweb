@@ -19,6 +19,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path=".apt_generated"/>
+	<classpathentry excluding="src/main/java/|src/main/resources/|src/test/java/|.apt_generated/|.apt_generated_tests/" kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

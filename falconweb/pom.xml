@@ -82,6 +82,11 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-logging</artifactId>
 	</dependency>
+	<dependency> 
+		<groupId>org.yaml</groupId> 
+		<artifactId>snakeyaml</artifactId> 
+	<version>${snakeyaml.version}</version> 
+</dependency> 
   </dependencies>
   <build>
   	<plugins>

@@ -18,5 +18,4 @@ spring:
     encoding:
       charset: UTF-8
       force: true
-      enabled: true  
-      
+      enabled: true

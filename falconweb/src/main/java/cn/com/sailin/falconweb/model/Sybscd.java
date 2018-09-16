@@ -15,7 +15,7 @@ public class Sybscd {
 	private String BSDS;// 工地名称
 
 	private String BKCD;// 银行代码
-
+	
 	private String PYDY;// 发薪日期
 
 	private String BCNM;// 建设单位名称
@@ -49,6 +49,127 @@ public class Sybscd {
 	private String CKBGDY;// 考勤开始日期
 
 	private String BSCDPATH;// 考勤用的路径汉王用
+	
+	private String AJCODE;//安监项目对接码
+	
+	private String TENDERID;//中标编号
+	
+	private String PROJECTTYPE;//项目类别
+	
+	private String PRINNAME;//负责人名称
+	
+	private String PRINTEL;//负责人电话
+	
+	private String BSADDRESS;//详细地址
+	
+	private String LICENSEKEY;//施工许可证号
+	
+	private String STARTDATE;//项目开始时间
+	
+	private String ENDDATE;//项目结束时间
+	
+	private String PROJECTCOST;//工程造价
+	
+	private String SALARYCOST;//工资性工程款
+	
+	@JSONField(name="AJCODE")
+	public String getAJCODE() {
+		return AJCODE;
+	}
+
+	public void setAJCODE(String aJCODE) {
+		AJCODE = aJCODE;
+	}
+
+	@JSONField(name="TENDERID")
+	public String getTENDERID() {
+		return TENDERID;
+	}
+
+	public void setTENDERID(String tENDERID) {
+		TENDERID = tENDERID;
+	}
+
+	@JSONField(name="PROJECTTYPE")
+	public String getPROJECTTYPE() {
+		return PROJECTTYPE;
+	}
+
+	public void setPROJECTTYPE(String pROJECTTYPE) {
+		PROJECTTYPE = pROJECTTYPE;
+	}
+
+	@JSONField(name="PRINNAME")
+	public String getPRINNAME() {
+		return PRINNAME;
+	}
+
+	public void setPRINNAME(String pRINNAME) {
+		PRINNAME = pRINNAME;
+	}
+
+	@JSONField(name="PRINTEL")
+	public String getPRINTEL() {
+		return PRINTEL;
+	}
+
+	public void setPRINTEL(String pRINTEL) {
+		PRINTEL = pRINTEL;
+	}
+
+	@JSONField(name="BSADDRESS")
+	public String getBSADDRESS() {
+		return BSADDRESS;
+	}
+
+	public void setBSADDRESS(String bSADDRESS) {
+		BSADDRESS = bSADDRESS;
+	}
+
+	@JSONField(name="LICENSEKEY")
+	public String getLICENSEKEY() {
+		return LICENSEKEY;
+	}
+
+	public void setLICENSEKEY(String lICENSEKEY) {
+		LICENSEKEY = lICENSEKEY;
+	}
+
+	@JSONField(name="STARTDATE")
+	public String getSTARTDATE() {
+		return STARTDATE;
+	}
+
+	public void setSTARTDATE(String sTARTDATE) {
+		STARTDATE = sTARTDATE;
+	}
+
+	@JSONField(name="ENDDATE")
+	public String getENDDATE() {
+		return ENDDATE;
+	}
+
+	public void setENDDATE(String eNDDATE) {
+		ENDDATE = eNDDATE;
+	}
+
+	@JSONField(name="PROJECTCOST")
+	public String getPROJECTCOST() {
+		return PROJECTCOST;
+	}
+
+	public void setPROJECTCOST(String pROJECTCOST) {
+		PROJECTCOST = pROJECTCOST;
+	}
+
+	@JSONField(name="SALARYCOST")
+	public String getSALARYCOST() {
+		return SALARYCOST;
+	}
+
+	public void setSALARYCOST(String sALARYCOST) {
+		SALARYCOST = sALARYCOST;
+	}
 
 	@JSONField(name = "BSCDPATH")
 	public String getBSCDPATH() {
@@ -167,6 +288,7 @@ public class Sybscd {
 		BKCD = bKCD;
 	}
 
+	
 	@JSONField(name = "PYDY")
 	public String getPYDY() {
 		return PYDY;

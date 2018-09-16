@@ -1,5 +1,7 @@
 package cn.com.sailin.falconweb.model;
 
+import java.util.List;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class Wker {
@@ -76,7 +78,160 @@ public class Wker {
 	
 	private String EMPDATE;//入职时间
 	
+	private String REGADDRESS;//户籍
 	
+	private String IDSTARTDATE;//身份证有效期开始日期
+	
+	private String IDENDDATE;//身份证有效期结束日期
+    
+	private String INMARRY;//婚姻状态 1已婚2未婚
+    
+	private String TEL;//手机号
+    
+	private String EDUCATION;//学历
+    
+	private String INMIN;//是否少数民族
+    
+	private String HOUSEHOLDTYPE;//户口性质(1本地农村/2本地城市/3外地农村/4外地城市/5港澳台及其他)
+    
+	private String TIMECARD;//考勤卡号
+    
+	private String INGROUPER;//是否班组长
+    
+	private String INMIGRANT;//是否农民工
+	
+	private List<Pxxx> PX;
+	
+	private List<Cyjl> JL;
+	
+	private List<Zyjn> JN;
+	
+	@JSONField(name="IDSTARTDATE")	
+	public String getIDSTARTDATE() {
+		return IDSTARTDATE;
+	}
+
+	public void setIDSTARTDATE(String iDSTARTDATE) {
+		IDSTARTDATE = iDSTARTDATE;
+	}
+
+	@JSONField(name="IDENDDATE")
+	public String getIDENDDATE() {
+		return IDENDDATE;
+	}
+
+	public void setIDENDDATE(String iDENDDATE) {
+		IDENDDATE = iDENDDATE;
+	}
+
+	@JSONField(name="REGADDRESS")
+	public String getREGADDRESS() {
+		return REGADDRESS;
+	}
+
+	public void setREGADDRESS(String rEGADDRESS) {
+		REGADDRESS = rEGADDRESS;
+	}
+
+	@JSONField(name="INMARRY")
+	public String getINMARRY() {
+		return INMARRY;
+	}
+
+	public void setINMARRY(String iNMARRY) {
+		INMARRY = iNMARRY;
+	}
+
+	@JSONField(name="TEL")
+	public String getTEL() {
+		return TEL;
+	}
+
+	public void setTEL(String tEL) {
+		TEL = tEL;
+	}
+
+	@JSONField(name="EDUCATION")
+	public String getEDUCATION() {
+		return EDUCATION;
+	}
+
+	public void setEDUCATION(String eDUCATION) {
+		EDUCATION = eDUCATION;
+	}
+
+	@JSONField(name="INMIN")
+	public String getINMIN() {
+		return INMIN;
+	}
+
+	public void setINMIN(String iNMIN) {
+		INMIN = iNMIN;
+	}
+
+	@JSONField(name="HOUSEHOLDTYPE")
+	public String getHOUSEHOLDTYPE() {
+		return HOUSEHOLDTYPE;
+	}
+
+	public void setHOUSEHOLDTYPE(String hOUSEHOLDTYPE) {
+		HOUSEHOLDTYPE = hOUSEHOLDTYPE;
+	}
+
+	@JSONField(name="TIMECARD")
+	public String getTIMECARD() {
+		return TIMECARD;
+	}
+
+	public void setTIMECARD(String tIMECARD) {
+		TIMECARD = tIMECARD;
+	}
+
+	@JSONField(name="INGROUPER")
+	public String getINGROUPER() {
+		return INGROUPER;
+	}
+
+	public void setINGROUPER(String iNGROUPER) {
+		INGROUPER = iNGROUPER;
+	}
+
+	@JSONField(name="INMIGRANT")
+	public String getINMIGRANT() {
+		return INMIGRANT;
+	}
+
+	public void setINMIGRANT(String iNMIGRANT) {
+		INMIGRANT = iNMIGRANT;
+	}
+
+	@JSONField(name="PX")
+	public List<Pxxx> getPX() {
+		return PX;
+	}
+
+	public void setPX(List<Pxxx> pX) {
+		PX = pX;
+	}
+
+	@JSONField(name="JL")
+	public List<Cyjl> getJL() {
+		return JL;
+	}
+
+	public void setJL(List<Cyjl> jL) {
+		JL = jL;
+	}
+
+	@JSONField(name="JN")
+	public List<Zyjn> getJN() {
+		return JN;
+	}
+
+	public void setJN(List<Zyjn> jN) {
+		JN = jN;
+	}
+
 	@JSONField(name="EMPDATE")	
 	public String getEMPDATE() {
 		return EMPDATE;

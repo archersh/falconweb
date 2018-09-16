@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.com.sailin.falconweb.dao.Data;
+import cn.com.sailin.falconweb.model.Uploaddata;
 import cn.com.sailin.falconweb.model.Wkerattendtime;
 import cn.com.sailin.falconweb.publiccode.Code;
 import cn.com.sailin.falconweb.publiccode.sh;
@@ -93,19 +94,110 @@ public class Schedle {
 			data.updateLog(day, pid, "Error:" + e.getMessage());
 		}
 	}
+	
+	@Scheduled(cron = "0 30 1 * * ?")
+	public void uploadWkds() {
+		String day = Code.getWeek(new Date());
+		String pid = null;
+		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
+		for (Map<String, Object> m : lbsif) {
+			try {
+
+				pid = data.getPid();
+				Calendar today = Code.getToday();
+				Calendar endday = Calendar.getInstance();
+				String temp = _ft.format(today.getTime());
+				endday.set(Integer.parseInt(temp.substring(0, 4)), Integer.parseInt(temp.substring(4, 6)) - 1,
+						Integer.parseInt(temp.substring(6,8)));
+				Calendar startday=(Calendar)endday.clone();
+				startday.add(Calendar.DATE, -1);
+
+				Map<String, String> mbs = new HashMap<String, String>();
+				mbs.put("APCD", Code.getFieldVal(m, "APCD", ""));
+				mbs.put("BSCD", Code.getFieldVal(m, "BSCD", ""));
+				mbs.put("STARTDATE", _ft.format(startday.getTime()));
+				mbs.put("ENDDATE", _ft.format(endday.getTime()));
+				mbs.put("MONTH", _ft.format(startday.getTime()).substring(0, 6));
+
+				String applydata = JSON.toJSONString(mbs);
+
+				data.insertLog(day, pid, "uploadwkds", "Localhost:" + applydata, "SYS");
+
+				String result = sh.uploadwkds("SYS", applydata, data);
+
+				data.updateLog(day, pid, result);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				data.updateLog(day, pid, "Error:" + e.getMessage());
+			}
+		}
+	}
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
 	public void importAttendData() {
 		List<Map<String, Object>> list = data.qryOplistbytype("attenddata");
 		for (Map<String, Object> m : list) {
-			JSONObject jcon=JSON.parseObject(Code.getFieldVal(m, "content", ""));
+			JSONObject jcon = JSON.parseObject(Code.getFieldVal(m, "content", ""));
 			jcon.put("apcd", Code.getFieldVal(m, "apcd", ""));
 			JSONObject jo = JSON.parseObject(sh.importAttendData(jcon.toJSONString(), data));
 			if (!Code.getFieldVal(jo, "MSGID", "").equals("0000")) {
 				data.updateOplistresult(Code.getFieldVal(m, "opid", ""), jo.toJSONString());
-			}else {
+			} else {
 				data.delOplist(Code.getFieldVal(m, "opid", ""));
 			}
+		}
+	}
+
+	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
+	public void uploadInfo() {
+		uploaditem("uploadproject");
+		uploaditem("uploadhuman");
+		uploaditem("deletehuman");
+		uploaditem("uploadattend");
+		uploaditem("uploadexprience");
+		uploaditem("deleteexprience");
+		uploaditem("uploadtrain");
+		uploaditem("deletetrain");
+		uploaditem("uploadsalary");
+		uploaditem("uploadbank");
+	}
+
+	private void uploaditem(String optype) {
+
+		try {
+			List<Map<String, Object>> list = data.qryOplistbytype(optype);
+			Uploaddata up = Uploaddata.buildObject(optype);
+			for (Map<String, Object> m : list) {
+				up.setContent(Code.getFieldVal(m, "content", ""));
+				JSONObject jo = JSON.parseObject(uploadpost(up));
+				if (!Code.getFieldVal(jo, "MSGID", "").equals("0000")) {
+					data.updateOplistresult(Code.getFieldVal(m, "opid", ""), jo.toJSONString());
+				} else {
+					data.delOplist(Code.getFieldVal(m, "opid", ""));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String uploadpost(Uploaddata up) {
+		try {
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("user", up.getUser());
+			m.put("pass", up.getPass());
+			m.put("content", up.getContent());
+			String req = Code.postHttp(up.getUrl(), m);
+			JSONObject jo = JSON.parseObject(req);
+			if (jo.getString("statusCode").equals("200")) {
+				return Code.resultSuccess();
+			} else {
+				return Code.resultError("1111", req);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", e.getMessage());
 		}
 	}
 

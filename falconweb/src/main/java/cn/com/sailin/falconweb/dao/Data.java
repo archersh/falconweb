@@ -18,6 +18,8 @@ import cn.com.sailin.falconweb.model.Annc;
 import cn.com.sailin.falconweb.model.Bs_lc;
 import cn.com.sailin.falconweb.model.Bs_ls;
 import cn.com.sailin.falconweb.model.Bscollinfo;
+import cn.com.sailin.falconweb.model.Cyjl;
+import cn.com.sailin.falconweb.model.Pxxx;
 import cn.com.sailin.falconweb.model.Spanbl;
 import cn.com.sailin.falconweb.model.Statcard;
 import cn.com.sailin.falconweb.model.Sybscd;
@@ -25,6 +27,7 @@ import cn.com.sailin.falconweb.model.Sycdtb;
 import cn.com.sailin.falconweb.model.Wkds;
 import cn.com.sailin.falconweb.model.Wker;
 import cn.com.sailin.falconweb.model.Wkerattendtime;
+import cn.com.sailin.falconweb.model.Zyjn;
 import cn.com.sailin.falconweb.publiccode.Code;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -411,7 +414,7 @@ public class Data {
 	}
 
 	public List<Map<String, Object>> qryAttendbsinfo(String apcd, String bscd) {
-		if (apcd.equals("HW") || apcd.equals("ZK")||apcd.equals("ZQ")) {
+		if (apcd.equals("HW") || apcd.equals("ZK") || apcd.equals("ZQ")) {
 			String sql = "select * from attend.sys_branch where sz_set_id=? and nt_state>0";
 			return jdbc.queryForList(sql, new Object[] { bscd });
 		}
@@ -426,6 +429,20 @@ public class Data {
 	public List<Map<String, Object>> qryBkcd() {
 		String sql = "select * from SYCDTB where SYCDTB='BKCD'";
 		return jdbc.queryForList(sql);
+	}
+	
+	public List<Map<String,Object>> qryZyjn(String idcdno){
+		String sql="select * from ZYJN where idcdno=?";
+		return jdbc.queryForList(sql,new Object[] {idcdno});
+	}
+
+	public String getSycdds(String syscd, String sysid) {
+		String sql = "select SYDSTB from SYCDTB where SYCDTB=? and SYIDTB=?";
+		List<Map<String, Object>> list = jdbc.queryForList(sql, new Object[] { syscd, sysid });
+		if (list.size() > 0)
+			return Code.getFieldVal(list.get(0), "SYCDTB", "");
+		else
+			return "";
 	}
 
 	public List<Map<String, Object>> qryCccd() {
@@ -468,7 +485,7 @@ public class Data {
 		return jdbc.queryForList(sql);
 
 	}
-
+	
 	public List<Map<String, Object>> qryAttendWker(String apcd, String bscd) {
 		if (apcd.equals("HW") || apcd.equals("ZK")) {
 			String sql = "SELECT attend.sys_user.sz_card_id,attend.sys_user.sz_name,"
@@ -522,24 +539,28 @@ public class Data {
 
 	public void delAttendbscd(String apcd, String bscd) {
 		if (apcd.equals("HW") || apcd.equals("ZK")) {
-			//String sql = "update attend.sys_branch set nt_state=-1 where sz_set_id=?";
+			// String sql = "update attend.sys_branch set nt_state=-1 where sz_set_id=?";
 			String sql = "delete from attend.sys_branch where sz_set_id=?";
 			jdbc.update(sql, new Object[] { bscd });
 		}
 	}
 
 	public void insertSybscd(Sybscd bs) {
-		String sql = "insert into SYBSCD(BSID,APCD,BSCD,SVDP,BSDS,BKCD,PYDY,BCNM,CCCD,BSCHUR,BSCHDT,RGDT,RGUR,CKBGDY)"
-				+ " values(?,?,?,?,?,?,?,?,?,?,now(),now(),?,?)";
-		jdbc.update(sql, new Object[] { bs.getBSID(), bs.getAPCD(), bs.getBSCD(), bs.getSVDP(), bs.getBSDS(),
-				bs.getBKCD(), bs.getPYDY(), bs.getBCNM(), bs.getCCCD(), bs.getBSCHUR(), bs.getRGUR(), bs.getCKBGDY() });
+		String sql = "insert into SYBSCD(BSID,APCD,BSCD,SVDP,BSDS,BKCD,PYDY,BCNM,CCCD,BSCHUR,BSCHDT,RGDT,RGUR,CKBGDY,AJCODE,TENDERID,PROJECTTYPE,PRINNAME,PRINTEL,BSADDRESS,LICENSEKEY,STARTDATE,ENDDATE,PROJECTCOST,SALARYCOST)"
+				+ " values(?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		jdbc.update(sql,
+				new Object[] { bs.getBSID(), bs.getAPCD(), bs.getBSCD(), bs.getSVDP(), bs.getBSDS(), bs.getBKCD(),
+						bs.getPYDY(), bs.getBCNM(), bs.getCCCD(), bs.getBSCHUR(), bs.getRGUR(), bs.getCKBGDY(),
+						bs.getAJCODE(), bs.getTENDERID(), bs.getPROJECTTYPE(), bs.getPRINNAME(), bs.getPRINTEL(),
+						bs.getBSADDRESS(), bs.getLICENSEKEY(), bs.getSTARTDATE(), bs.getENDDATE(), bs.getPROJECTCOST(),
+						bs.getSALARYCOST() });
 		return;
 	}
-	
+
 	public void insertAttendbscd(Sybscd bs) {
 		String sql = "insert into attend.sys_branch(sz_name,ng_parent_id,sz_set_id,sz_code,nt_order,bt_inherit,nt_state,sz_branch_path,nt_branch_level,ts_create)"
 				+ " values(?,2,?,?,10,1,1,?,3,now())";
-		jdbc.update(sql,new Object[] {bs.getBSDS(),bs.getBSCD(),bs.getBSCD(),",1,2,"});
+		jdbc.update(sql, new Object[] { bs.getBSDS(), bs.getBSCD(), bs.getBSCD(), ",1,2," });
 	}
 
 	public List<Map<String, Object>> qrySybscd(String apcd, String bscd) {
@@ -548,16 +569,19 @@ public class Data {
 	}
 
 	public int updateSybscdByBs(Sybscd bs) {
-		String sql = "update SYBSCD set SVDP='" + bs.getSVDP() + "',BSDS='" + bs.getBSDS() + "',BKCD='" + bs.getBKCD()
-				+ "',PYDY=" + bs.getPYDY() + ",BCNM='" + bs.getBCNM() + "',CCCD='" + bs.getCCCD() + "',BSCHUR='"
-				+ bs.getBSCHUR() + "',BSCHDT=now(),CKBGDY='" + bs.getCKBGDY() + "' where APCD='" + bs.getAPCD()
-				+ "' and BSCD='" + bs.getBSCD() + "'";
-		return jdbc.update(sql);
+		String sql = "update SYBSCD set SVDP=?,BSDS=?,BKCD=?',PYDY=?,BCNM=?,CCCD=?,BSCHUR=?,BSCHDT=now(),CKBGDY=?,"
+				+ "AJCODE=?,TENDERID=?,PROJECTTYPE=?,PRINNAME=?,PRINTEL=?,BSADDRESS=?,LICENSEKEY=?,STARTDATE=?,ENDDATE=?,PROJECTCOST=?,SALARYCOST=?"
+				+ " where APCD=? and BSCD=?";
+		return jdbc.update(sql,
+				new Object[] { bs.getSVDP(), bs.getBSDS(), bs.getBKCD(), bs.getPYDY(), bs.getBCNM(), bs.getCCCD(),
+						bs.getBSCHUR(), bs.getCKBGDY(), bs.getAJCODE(), bs.getTENDERID(), bs.getPROJECTTYPE(),
+						bs.getPRINNAME(), bs.getPRINTEL(), bs.getBSADDRESS(), bs.getLICENSEKEY(), bs.getSTARTDATE(),
+						bs.getENDDATE(), bs.getPROJECTCOST(), bs.getSALARYCOST(), bs.getAPCD(), bs.getBSCD() });
 	}
-	
+
 	public int updateAttendbscd(Sybscd bs) {
-		String sql = "update attend.sys_branch set sz_name=?,sz_branch_path, where sz_set_id=?";
-		return jdbc.update(sql,new Object[] {bs.getBSDS(),bs.getBSCDPATH(),bs.getBSCD()});
+		String sql = "update attend.sys_branch set sz_name=?,sz_branch_path=? where sz_set_id=?";
+		return jdbc.update(sql, new Object[] { bs.getBSDS(), bs.getBSCDPATH(), bs.getBSCD() });
 	}
 
 	public int updateSybscdByBank(Sybscd bs) {
@@ -568,8 +592,9 @@ public class Data {
 	}
 
 	public int updataSybscdByDt(Sybscd bs) {
-		String sql = "update SYBSCD set INDT=?,DTDT=now(),DTUR=?" + " where APCD=? and BSCD=?";
-		return jdbc.update(sql, new Object[] { bs.getINDT(), bs.getDTUR(), bs.getAPCD(), bs.getBSCD() });
+		String sql = "update SYBSCD set INDT=?,DTDT=now(),DTUR=?,ENDDATE=? where APCD=? and BSCD=?";
+		return jdbc.update(sql,
+				new Object[] { bs.getINDT(), bs.getDTUR(), bs.getENDDATE(), bs.getAPCD(), bs.getBSCD() });
 	}
 
 	public void insertSycdtb(Sycdtb cd) {
@@ -613,7 +638,7 @@ public class Data {
 				new Object[] { wker.getIDCDNO(), wker.getNAME(), wker.getLCCD(), wker.getAPCD(), wker.getBSCD(),
 						wker.getRGUR(), wker.getBKCD(), wker.getBKAN(), wker.getWKKD(), wker.getSZ_EMPLOY_ID(),
 						wker.getINONEMON(), wker.getLSCD(), wker.getWORKERTYPE(), wker.getDAYSALARY(),
-						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(),wker.getEMPDATE() });
+						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(), wker.getEMPDATE() });
 		return;
 	}
 
@@ -629,8 +654,8 @@ public class Data {
 		return jdbc.update(sql,
 				new Object[] { wker.getNAME(), wker.getLCCD(), wker.getRGUR(), wker.getBKCD(), wker.getBKAN(),
 						wker.getWKKD(), wker.getINONEMON(), wker.getLSCD(), wker.getWORKERTYPE(), wker.getDAYSALARY(),
-						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(), wker.getEMPDATE(), wker.getAPCD(), wker.getBSCD(),
-						wker.getIDCDNO() });
+						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(), wker.getEMPDATE(), wker.getAPCD(),
+						wker.getBSCD(), wker.getIDCDNO() });
 	}
 
 	public List<Map<String, Object>> qryWkerbs(String apcd, String bscd, String idcdno) {
@@ -677,6 +702,39 @@ public class Data {
 	public void delOplist(String opid) {
 		String sql = "delete from oplist where opid=?";
 		jdbc.update(sql, new Object[] { opid });
+	}
+	
+	public void insertZyjn(String idcdno,Zyjn jn) {
+		String sql="insert into zyjn(IDCDNO,JNID,JNNAME,REMARK)"
+				+ " values(?,?,?,?)";
+		jdbc.update(sql,new Object[] {idcdno,jn.getJNID(),jn.getJNNAME(),jn.getREMARK()});
+	}
+	
+	public void delZyjn(String idcdno) {
+		String sql="delete from zyjn where IDCDNO=?";
+		jdbc.update(sql,new Object[] {idcdno});
+	}
+	
+	public void insertPxxx(String apcd,String bscd,String idcdno,Pxxx px) {
+		String sql="insert into pxxx(IDCDNO,PXID,PXTITLE,APCD,BSCD,STARTDATE,ENDDATE,REMARK)"
+				+ " values(?,?,?,?,?,?,?,?)";
+		jdbc.update(sql,new Object[] {idcdno,px.getPXID(),px.getPXTITLE(),apcd,bscd,px.getSTARTDATE(),px.getENDDATE(),px.getREMARK()});
+	}
+	
+	public void delPxxx(String apcd,String bscd,String idcdno) {
+		String sql="delete from pxxx where APCD=? and BSCD=? and IDCDNO=?";
+		jdbc.update(sql,new Object[] {apcd,bscd,idcdno});
+	}
+	
+	public void insertCyjl(String apcd,String bscd,String idcdno,Cyjl jl) {
+		String sql="insert into cyjl(IDCDNO,JLID,APCD,BSCD,STARTDATE,ENDDATE,WKKD,REMARK"
+				+ " values(?,?,?,?,?,?,?,?)";
+		jdbc.update(sql,new Object[] {idcdno,jl.getJLID(),apcd,bscd,jl.getSTARTDATE(),jl.getENDDATE(),jl.getWKKD(),jl.getREMARK()});
+	}
+	
+	public void delCyjl(String apcd,String bscd,String idcdno) {
+		String sql="delete from cyjl where APCD=? and BSCD=? and IDCDNO=?";
+		jdbc.update(sql,new Object[] {apcd,bscd,idcdno});
 	}
 
 	public void updateOplistresult(String opid, String result) {
@@ -736,6 +794,11 @@ public class Data {
 				wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(), wker.getHOMEADD(), wker.getETHNIC(),
 				wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(), wker.getPIC5(), wker.getIDCDNO() });
 	}
+	
+	public int wkerleave(String apcd,String bscd,String wkid,String disdate) {
+		String sql="update WKER_BS set INEMP='2',DISDATE=? where APCD=?,BSCD=?,SZ_EMPLOY_ID=?";
+		return jdbc.update(sql,new Object[] {disdate,apcd,bscd,wkid});
+	}
 
 	public int updateAttendWker(Wker wker) {
 		if (wker.getAPCD().equals("HW") || wker.getAPCD().equals("ZK")) {
@@ -759,17 +822,17 @@ public class Data {
 	}
 
 	public List<Map<String, Object>> qryAttendUser(String apcd, String employid) {
-		if (apcd.equals("HW") || apcd.equals("ZK")||apcd.equals("ZQ")) {
+		if (apcd.equals("HW") || apcd.equals("ZK") || apcd.equals("ZQ")) {
 			String sql = "select * from attend.sys_user where sz_employ_id=? and nt_user_state>0";
 			return jdbc.queryForList(sql, new Object[] { employid });
 		}
 		return null;
 	}
-	
-	public List<Map<String,Object>>qryAttendUserbyidcdno(String apcd,String idcdno){
-		if(apcd.equals("HW")||apcd.equals("ZK")||apcd.equals("ZQ")) {
-			String sql="select * from attend.sys_user where sz_card_id=? and nt_user_state>0";
-			return jdbc.queryForList(sql,new Object[] {idcdno});
+
+	public List<Map<String, Object>> qryAttendUserbyidcdno(String apcd, String idcdno) {
+		if (apcd.equals("HW") || apcd.equals("ZK") || apcd.equals("ZQ")) {
+			String sql = "select * from attend.sys_user where sz_card_id=? and nt_user_state>0";
+			return jdbc.queryForList(sql, new Object[] { idcdno });
 		}
 		return null;
 	}
@@ -1027,8 +1090,8 @@ public class Data {
 
 	public List<Map<String, Object>> qryAttendcheckon(String apcd, String bscd, String starttime, String endtime) {
 		if (apcd.equals("HW") || apcd.equals("ZK")) {
-			String sql = "SELECT\r\n" + "	DATE_FORMAT( stat_card.ts_card, '%Y%m%d%H%i%s' ) AS ts_card,\r\n"
-					+ "	sys_user.sz_card_id,\r\n" + "	sys_user.sz_name,\r\n" + "	g.post\r\n" + "FROM\r\n"
+			String sql = "SELECT DATE_FORMAT( stat_card.ts_card, '%Y%m%d%H%i%s' ) AS ts_card,"
+					+ "	sys_user.sz_card_id, sys_user.sz_name,sys_user.sz_employ_id g.post FROM\r\n"
 					+ "	attend.stat_card\r\n"
 					+ "	LEFT JOIN attend.sys_user ON stat_card.ng_user_id = sys_user.ng_id\r\n" + "	LEFT JOIN (\r\n"
 					+ "SELECT\r\n" + "	e.ng_user_id,\r\n" + "	e.ng_branch_id,\r\n" + "	f.sz_name post \r\n"
