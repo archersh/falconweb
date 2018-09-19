@@ -332,6 +332,9 @@ public class WebserviceImpl implements WebserviceInterface {
 			//工人离职
 			if (method.equals("wkerleave"))
 				res=sh.wkerleave(userid,applydata,data);
+			//银行流水
+			if (method.equals("bankrecord"))
+				res=sh.bankrecord(userid,applydata,data);
 			// if (method.equals("test")) {
 			// schedle.importWkds();
 			// }

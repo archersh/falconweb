@@ -1,5 +1,6 @@
 package cn.com.sailin.falconweb.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -430,10 +431,20 @@ public class Data {
 		String sql = "select * from SYCDTB where SYCDTB='BKCD'";
 		return jdbc.queryForList(sql);
 	}
-	
-	public List<Map<String,Object>> qryZyjn(String idcdno){
-		String sql="select * from ZYJN where idcdno=?";
-		return jdbc.queryForList(sql,new Object[] {idcdno});
+
+	public List<Map<String, Object>> qryZyjn(String idcdno) {
+		String sql = "select * from ZYJN where idcdno=?";
+		return jdbc.queryForList(sql, new Object[] { idcdno });
+	}
+
+	public List<Map<String, Object>> qryCyjl(String apcd, String bscd, String idcdno) {
+		String sql = "select * from CYJL where APCD=? and BSCD=? and IDCDNO=?";
+		return jdbc.queryForList(sql, new Object[] { apcd, bscd, idcdno });
+	}
+
+	public List<Map<String, Object>> qryPxxx(String apcd, String bscd, String idcdno) {
+		String sql = "select * from PXXX where APCD=? and BSCD=? and IDCDNO=?";
+		return jdbc.queryForList(sql, new Object[] { apcd, bscd, idcdno });
 	}
 
 	public String getSycdds(String syscd, String sysid) {
@@ -485,7 +496,7 @@ public class Data {
 		return jdbc.queryForList(sql);
 
 	}
-	
+
 	public List<Map<String, Object>> qryAttendWker(String apcd, String bscd) {
 		if (apcd.equals("HW") || apcd.equals("ZK")) {
 			String sql = "SELECT attend.sys_user.sz_card_id,attend.sys_user.sz_name,"
@@ -684,13 +695,14 @@ public class Data {
 	}
 
 	public void insertWker(Wker wker) {
-		String sql = "insert into WKER(IDCDNO,NAME,USERPASS,RGDT,RGUR,PXQK,ZYJN,CYJL,INDY,INSEX,BRDT,HOMEADD,ETHNIC,PIC1,PIC2,PIC3,PIC4,PIC5)"
-				+ "values(?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		jdbc.update(sql,
-				new Object[] { wker.getIDCDNO(), wker.getNAME(), wker.getUSERPASS(), wker.getRGUR(), wker.getPXQK(),
-						wker.getZYJN(), wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(),
-						wker.getHOMEADD(), wker.getETHNIC(), wker.getPIC1(), wker.getPIC2(), wker.getPIC3(),
-						wker.getPIC4(), wker.getPIC5() });
+		String sql = "insert into WKER(IDCDNO,NAME,USERPASS,RGDT,RGUR,PXQK,ZYJN,CYJL,INDY,INSEX,BRDT,HOMEADD,ETHNIC,PIC1,PIC2,PIC3,PIC4,PIC5,"
+				+ "REGADDRESS,IDSTARTDATE,IDENDDATE,TEL,EDUCATION,INMARRY,INMIN,HOUSEHOLDTYPE)"
+				+ "values(?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		jdbc.update(sql, new Object[] { wker.getIDCDNO(), wker.getNAME(), wker.getUSERPASS(), wker.getRGUR(),
+				wker.getPXQK(), wker.getZYJN(), wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(),
+				wker.getHOMEADD(), wker.getETHNIC(), wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(),
+				wker.getPIC5(), wker.getREGADDRESS(), wker.getIDSTARTDATE(), wker.getIDENDDATE(), wker.getTEL(),
+				wker.getEDUCATION(), wker.getINMARRY(), wker.getINMIN(), wker.getHOUSEHOLDTYPE() });
 		return;
 	}
 
@@ -699,42 +711,48 @@ public class Data {
 		jdbc.update(sql, new Object[] { apcd, opid, type, content });
 	}
 
+	public void insertOplist(String apcd, String bscd, String opid, String type, String content) {
+		String sql = "insert into oplist(apcd,bscd,opid,type,content) values(?,?,?,?,?)";
+		jdbc.update(sql, new Object[] { apcd, bscd, opid, type, content });
+	}
+
 	public void delOplist(String opid) {
 		String sql = "delete from oplist where opid=?";
 		jdbc.update(sql, new Object[] { opid });
 	}
-	
-	public void insertZyjn(String idcdno,Zyjn jn) {
-		String sql="insert into zyjn(IDCDNO,JNID,JNNAME,REMARK)"
-				+ " values(?,?,?,?)";
-		jdbc.update(sql,new Object[] {idcdno,jn.getJNID(),jn.getJNNAME(),jn.getREMARK()});
+
+	public void insertZyjn(String idcdno, Zyjn jn) {
+		String sql = "insert into zyjn(IDCDNO,JNID,JNNAME,REMARK)" + " values(?,?,?,?)";
+		jdbc.update(sql, new Object[] { idcdno, jn.getJNID(), jn.getJNNAME(), jn.getREMARK() });
 	}
-	
+
 	public void delZyjn(String idcdno) {
-		String sql="delete from zyjn where IDCDNO=?";
-		jdbc.update(sql,new Object[] {idcdno});
+		String sql = "delete from zyjn where IDCDNO=?";
+		jdbc.update(sql, new Object[] { idcdno });
 	}
-	
-	public void insertPxxx(String apcd,String bscd,String idcdno,Pxxx px) {
-		String sql="insert into pxxx(IDCDNO,PXID,PXTITLE,APCD,BSCD,STARTDATE,ENDDATE,REMARK)"
+
+	public void insertPxxx(String apcd, String bscd, String idcdno, Pxxx px) {
+		String sql = "insert into pxxx(IDCDNO,PXID,PXTITLE,APCD,BSCD,STARTDATE,ENDDATE,REMARK)"
 				+ " values(?,?,?,?,?,?,?,?)";
-		jdbc.update(sql,new Object[] {idcdno,px.getPXID(),px.getPXTITLE(),apcd,bscd,px.getSTARTDATE(),px.getENDDATE(),px.getREMARK()});
+		jdbc.update(sql, new Object[] { idcdno, px.getPXID(), px.getPXTITLE(), apcd, bscd, px.getSTARTDATE(),
+				px.getENDDATE(), px.getREMARK() });
 	}
-	
-	public void delPxxx(String apcd,String bscd,String idcdno) {
-		String sql="delete from pxxx where APCD=? and BSCD=? and IDCDNO=?";
-		jdbc.update(sql,new Object[] {apcd,bscd,idcdno});
+
+	public void delPxxx(String apcd, String bscd, String idcdno) {
+		String sql = "delete from pxxx where APCD=? and BSCD=? and IDCDNO=?";
+		jdbc.update(sql, new Object[] { apcd, bscd, idcdno });
 	}
-	
-	public void insertCyjl(String apcd,String bscd,String idcdno,Cyjl jl) {
-		String sql="insert into cyjl(IDCDNO,JLID,APCD,BSCD,STARTDATE,ENDDATE,WKKD,REMARK"
+
+	public void insertCyjl(String apcd, String bscd, String idcdno, Cyjl jl) {
+		String sql = "insert into cyjl(IDCDNO,JLID,APCD,BSCD,STARTDATE,ENDDATE,WKKD,REMARK"
 				+ " values(?,?,?,?,?,?,?,?)";
-		jdbc.update(sql,new Object[] {idcdno,jl.getJLID(),apcd,bscd,jl.getSTARTDATE(),jl.getENDDATE(),jl.getWKKD(),jl.getREMARK()});
+		jdbc.update(sql, new Object[] { idcdno, jl.getJLID(), apcd, bscd, jl.getSTARTDATE(), jl.getENDDATE(),
+				jl.getWKKD(), jl.getREMARK() });
 	}
-	
-	public void delCyjl(String apcd,String bscd,String idcdno) {
-		String sql="delete from cyjl where APCD=? and BSCD=? and IDCDNO=?";
-		jdbc.update(sql,new Object[] {apcd,bscd,idcdno});
+
+	public void delCyjl(String apcd, String bscd, String idcdno) {
+		String sql = "delete from cyjl where APCD=? and BSCD=? and IDCDNO=?";
+		jdbc.update(sql, new Object[] { apcd, bscd, idcdno });
 	}
 
 	public void updateOplistresult(String opid, String result) {
@@ -745,6 +763,13 @@ public class Data {
 	public List<Map<String, Object>> qryOplistbytype(String type) {
 		String sql = "select * from oplist where type=? and ifnull(result,'')='' order by opid";
 		return jdbc.queryForList(sql, new Object[] { type });
+	}
+
+	public List<Map<String, Object>> qryOplistupload() {
+		String sql = "select * from oplist where ifnull(result,'')=''"
+				+ " and type in ('uploadproject','uploadhuman','deletehuman','uploadattend','uploadexprience','uploadtrain','deletetrain','uploadsalary','uploadbank')"
+				+ " order by opid";
+		return jdbc.queryForList(sql);
 	}
 
 	public void insertAttendWker(Wker wker) {
@@ -788,16 +813,19 @@ public class Data {
 	}
 
 	public int updateWker(Wker wker) {
-		String sql = "update WKER set NAME=?,RGDT=now(),RGUR=?,PXQK=?,ZYJN=?,CYJL=?,INDY=?,INSEX=?,BRDT=?,HOMEADD=?,ETHNIC=?,PIC1=?,PIC2=?,PIC3=?,PIC4=?,PIC5=?"
+		String sql = "update WKER set NAME=?,RGDT=now(),RGUR=?,PXQK=?,ZYJN=?,CYJL=?,INDY=?,INSEX=?,BRDT=?,HOMEADD=?,ETHNIC=?,PIC1=?,PIC2=?,PIC3=?,PIC4=?,PIC5=?,"
+				+ "REGADDRESS=?,IDSTARTDATE=?,IDENDDATE=?,TEL=?,EDUCATION=?,INMARRY=?,INMIN=?,HOUSEHOLDTYPE=?"
 				+ " where IDCDNO=?";
 		return jdbc.update(sql, new Object[] { wker.getNAME(), wker.getRGUR(), wker.getPXQK(), wker.getZYJN(),
 				wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(), wker.getHOMEADD(), wker.getETHNIC(),
-				wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(), wker.getPIC5(), wker.getIDCDNO() });
+				wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(), wker.getPIC5(), wker.getREGADDRESS(),
+				wker.getIDSTARTDATE(), wker.getIDENDDATE(), wker.getTEL(), wker.getEDUCATION(), wker.getINMARRY(),
+				wker.getINMIN(), wker.getHOUSEHOLDTYPE(), wker.getIDCDNO() });
 	}
-	
-	public int wkerleave(String apcd,String bscd,String wkid,String disdate) {
-		String sql="update WKER_BS set INEMP='2',DISDATE=? where APCD=?,BSCD=?,SZ_EMPLOY_ID=?";
-		return jdbc.update(sql,new Object[] {disdate,apcd,bscd,wkid});
+
+	public int wkerleave(String apcd, String bscd, String wkid, String disdate) {
+		String sql = "update WKER_BS set INEMP='2',DISDATE=? where APCD=?,BSCD=?,SZ_EMPLOY_ID=?";
+		return jdbc.update(sql, new Object[] { disdate, apcd, bscd, wkid });
 	}
 
 	public int updateAttendWker(Wker wker) {
@@ -1247,4 +1275,44 @@ public class Data {
 		return jdbc.update(sql, new Object[] { wktm.getWKKD(), wktm.getBZ(), wktm.getINTIME(), wktm.getOUTTIME(),
 				wktm.getNGID(), wktm.getAPCD(), wktm.getBSCD(), wktm.getSZ_EMPLOY_ID() });
 	}
+
+	public List<Map<String, Object>> qryUploadconfig(String apcd, String bscd, String method) {
+		String sql = "select * from uploadconfig where APCD=? and BSCD=? and METHOD=?";
+		return jdbc.queryForList(sql, new Object[] { apcd, bscd, method });
+	}
+
+	public void insertBankrecord(String userid, JSONObject jo) {
+		String sql = "insert into bankrecord(APCD,BSCD,RECORDID,BKCD,ACCOUNT,RECORDTIME,STORENUM,PAYNUM,REMARK,DTDT,DTUSER)"
+				+ " values(?,?,?,?,?,?,?,?,?,now(),?)";
+		jdbc.update(sql,
+				new Object[] { Code.getFieldVal(jo, "APCD", ""), Code.getFieldVal(jo, "BSCD", ""),
+						Code.getFieldVal(jo, "RECORDID", ""), Code.getFieldVal(jo, "BKCD", ""),
+						Code.getFieldVal(jo, "ACCOUNT", ""), Code.getFieldVal(jo, "RECORDTIME", ""),
+						Code.getFieldVal(jo, "STORENUM", ""), Code.getFieldVal(jo, "PAYNUM", ""),
+						Code.getFieldVal(jo, "REMARK", ""), userid });
+	}
+
+	public int delBankrecord(String recordid) {
+		String sql = "delete from bankrecord where RECORDID=?";
+		return jdbc.update(sql, new Object[] { recordid });
+	}
+
+	public List<Map<String, Object>> qryUploadtotalattend(String sqnb) {
+		String sql="SELECT	sum( a.WKDS ) as TOTAL,	a.IDCDNO FROM wkds a"
+				+ " WHERE ( a.APCD, a.BSCD, a.IDCDNO ) IN ( SELECT b.APCD, b.BSCD, b.IDCDNO FROM acpyitem b WHERE b.SQNB = ? )" 
+				+ " group by a.IDCDNO";
+		return jdbc.queryForList(sql,new Object[] {sqnb});
+	}
+	
+	public List<Map<String,Object>> qryUploadtotalsalary(String sqnb){
+		String sql = "SELECT sum( a.ACPY ) as TOTAL,a.IDCDNO FROM acpyitem a WHERE	INBKCFM = 'Y'"
+				+ " and ( a.APCD, a.BSCD, a.IDCDNO ) IN ( SELECT b.APCD, b.BSCD, b.IDCDNO FROM acpyitem b WHERE b.SQNB =? group by a.IDCDNO";
+		return jdbc.queryForList(sql,new Object[] {sqnb});
+	}
+	
+	public List<Map<String,Object>> qryUploadwkds(String sqnb){
+		String sql = "SELECT a.IDCDNO, a.WKDS FROM wkds a WHERE	( a.APCD, a.BSCD, a.IDCDNO ) IN ( SELECT b.APCD, b.BSCD, b.IDCDNO FROM acpyitem b WHERE b.SQNB = ? )";
+		return jdbc.queryForList(sql,new Object[] {sqnb});
+	}
+
 }

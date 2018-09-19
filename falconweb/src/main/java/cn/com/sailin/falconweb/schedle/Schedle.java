@@ -94,7 +94,7 @@ public class Schedle {
 			data.updateLog(day, pid, "Error:" + e.getMessage());
 		}
 	}
-	
+
 	@Scheduled(cron = "0 30 1 * * ?")
 	public void uploadWkds() {
 		String day = Code.getWeek(new Date());
@@ -108,8 +108,8 @@ public class Schedle {
 				Calendar endday = Calendar.getInstance();
 				String temp = _ft.format(today.getTime());
 				endday.set(Integer.parseInt(temp.substring(0, 4)), Integer.parseInt(temp.substring(4, 6)) - 1,
-						Integer.parseInt(temp.substring(6,8)));
-				Calendar startday=(Calendar)endday.clone();
+						Integer.parseInt(temp.substring(6, 8)));
+				Calendar startday = (Calendar) endday.clone();
 				startday.add(Calendar.DATE, -1);
 
 				Map<String, String> mbs = new HashMap<String, String>();
@@ -151,24 +151,12 @@ public class Schedle {
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
 	public void uploadInfo() {
-		uploaditem("uploadproject");
-		uploaditem("uploadhuman");
-		uploaditem("deletehuman");
-		uploaditem("uploadattend");
-		uploaditem("uploadexprience");
-		uploaditem("deleteexprience");
-		uploaditem("uploadtrain");
-		uploaditem("deletetrain");
-		uploaditem("uploadsalary");
-		uploaditem("uploadbank");
-	}
-
-	private void uploaditem(String optype) {
 
 		try {
-			List<Map<String, Object>> list = data.qryOplistbytype(optype);
-			Uploaddata up = Uploaddata.buildObject(optype);
+			List<Map<String, Object>> list = data.qryOplistupload();
 			for (Map<String, Object> m : list) {
+				Uploaddata up = Uploaddata.buildObject(Code.getFieldVal(m, "apcd", ""), Code.getFieldVal(m, "bscd", ""),
+						Code.getFieldVal(m, "type", ""), data);
 				up.setContent(Code.getFieldVal(m, "content", ""));
 				JSONObject jo = JSON.parseObject(uploadpost(up));
 				if (!Code.getFieldVal(jo, "MSGID", "").equals("0000")) {

@@ -35,6 +35,8 @@ import cn.com.sailin.falconweb.model.Bs_lc;
 import cn.com.sailin.falconweb.model.Bs_ls;
 import cn.com.sailin.falconweb.model.Bscollinfo;
 import cn.com.sailin.falconweb.model.CallResult;
+import cn.com.sailin.falconweb.model.Cyjl;
+import cn.com.sailin.falconweb.model.Pxxx;
 import cn.com.sailin.falconweb.model.Spanbl;
 import cn.com.sailin.falconweb.model.Statcard;
 import cn.com.sailin.falconweb.model.Sybscd;
@@ -42,6 +44,7 @@ import cn.com.sailin.falconweb.model.Sycdtb;
 import cn.com.sailin.falconweb.model.Wkds;
 import cn.com.sailin.falconweb.model.Wker;
 import cn.com.sailin.falconweb.model.Wkerzk;
+import cn.com.sailin.falconweb.model.Zyjn;
 
 public class sh {
 
@@ -568,6 +571,8 @@ public class sh {
 				doBscoll(month, apcd, bscd, data);
 			}
 
+			uploadsalary(sqnb,data);
+			
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1336,6 +1341,21 @@ public class sh {
 			data.insertWkerlog(wker);
 			data.delWkerbs(apcd, bscd, idcdno);
 
+			// 职业技能
+			data.delZyjn(wker.getIDCDNO());
+
+			// 从业记录
+			// 删除平台数据
+			deleteexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+			// 培训记录
+			// 删除平台数据
+			deletetrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+
+			// 删除平台数据
+			deletehuman(wker.getAPCD(), wker.getBSCD(), idcdno, employid, data);
+
 			// 添加中控操作
 			if (wker.getAPCD().equals("ZK")) {
 
@@ -1510,6 +1530,29 @@ public class sh {
 				}
 			}
 
+			// 职业技能
+			data.delZyjn(wker.getIDCDNO());
+			for (Zyjn jn : wker.getJN()) {
+				data.insertZyjn(wker.getIDCDNO(), jn);
+			}
+
+			// 从业记录
+			// 删除平台数据
+			deleteexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+			// 添加数据
+			for (Cyjl jl : wker.getJL()) {
+				data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+			}
+			// 培训记录
+			// 删除平台数据
+			deletetrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+			// 添加数据
+			for (Pxxx px : wker.getPX()) {
+				data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+			}
+
 			// 添加中控操作
 			if (wker.getAPCD().equals("ZK")) {
 				String opid = data.getNextval("OPID");
@@ -1535,6 +1578,12 @@ public class sh {
 
 				data.insertOplist(wker.getAPCD(), opid, "wkerupdate", JSON.toJSONString(ja));
 			}
+
+			// 上传数据
+			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadtrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1581,6 +1630,29 @@ public class sh {
 			if (!res.equals(""))
 				return Code.resultError("1111", res);
 
+			// 职业技能
+			data.delZyjn(wker.getIDCDNO());
+			for (Zyjn jn : wker.getJN()) {
+				data.insertZyjn(wker.getIDCDNO(), jn);
+			}
+
+			// 从业记录
+			// 删除平台数据
+			deleteexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+			// 添加数据
+			for (Cyjl jl : wker.getJL()) {
+				data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+			}
+			// 培训记录
+			// 删除平台数据
+			deletetrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			data.delPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
+			// 添加数据
+			for (Pxxx px : wker.getPX()) {
+				data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+			}
+
 			// 添加中控操作
 			if (wker.getAPCD().equals("ZK")) {
 				String opid = data.getNextval("OPID");
@@ -1606,6 +1678,11 @@ public class sh {
 
 				data.insertOplist(wker.getAPCD(), opid, "wkerupdate", JSON.toJSONString(ja));
 			}
+
+			// 上传数据
+			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadtrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 
 			return Code.resultSuccess();
 
@@ -2273,6 +2350,8 @@ public class sh {
 				wk.put("BSCD", bscd);
 				wk.put("DATE", recorddate);
 				wk.put("AJCODE", ajcode);
+				wk.put("APCD", apcd);
+				wk.put("BSCD", bscd);
 				uploadattend(wk, data);
 			}
 			return Code.resultSuccess();
@@ -2496,6 +2575,23 @@ public class sh {
 				return Code.resultError("1111", "离职日期不能为空");
 			if (data.wkerleave(apcd, bscd, wkid, disdate) == 0)
 				return Code.resultError("2222", "没有更改数据");
+
+			if (apcd.equals("ZK")) {
+
+				JSONObject wk = new JSONObject();
+				wk.put("pin", wkid);
+				wk.put("leavedate", disdate);
+				wk.put("leavetype", "0");
+				wk.put("reason", "");
+
+				String opid = data.getNextval("OPID");
+				data.insertOplist(apcd, opid, "wkerleave", wk.toJSONString());
+
+			}
+
+			// 上传数据到平台
+			uploadhuman(apcd, bscd, wkid, data);
+
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2542,7 +2638,7 @@ public class sh {
 			jo.put("salary_cost", Code.getFieldVal(bs, "SALARYCOST", ""));
 			jo.put("bank", data.getSycdds("BKCD", Code.getFieldVal(bs, "BKCD", "")));
 			String opid = data.getNextval("OPID");
-			data.insertOplist("", opid, "uploadproject", "[" + jo.toJSONString() + "]");
+			data.insertOplist(apcd, bscd, opid, "uploadproject", "[" + jo.toJSONString() + "]");
 		}
 	}
 
@@ -2634,20 +2730,33 @@ public class sh {
 				jo.put("is_migrant_worker", ismigrantworker);
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist("", opid, "uploadhuman", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "uploadhuman", "[" + jo.toJSONString() + "]");
 			}
 		}
 	}
 
-	private static void deletehuman(String wkerid, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_id", "");
-		jo.put("worker_id", "");
-		jo.put("project_num", "");
-		jo.put("worker_name", "");
+	private static void deletehuman(String apcd, String bscd, String idcdno, String wkid, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "deletehuman", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String workername = "";
+			List<Map<String, Object>> lwk = data.qryWker(idcdno);
+			if (lwk.size() > 0) {
+				workername = Code.getFieldVal(lwk.get(0), "NAME", "");
+			}
+
+			JSONObject jo = new JSONObject();
+			jo.put("project_id", bscd);
+			jo.put("worker_id", wkid);
+			jo.put("project_num", projectnum);
+			jo.put("worker_name", workername);
+
+			String opid = data.getNextval("OPID");
+			data.insertOplist(apcd, bscd, opid, "deletehuman", "[" + jo.toJSONString() + "]");
+		}
 	}
 
 	private static void uploadattend(Map<String, Object> m, Data data) {
@@ -2662,109 +2771,313 @@ public class sh {
 		jo.put("time_count", String.valueOf(f));
 
 		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "uploadattend", "[" + jo.toJSONString() + "]");
+		data.insertOplist(Code.getFieldVal(m, "APCD", ""), Code.getFieldVal(m, "BSCD", ""), opid, "uploadattend",
+				"[" + jo.toJSONString() + "]");
 	}
 
-	private static void uploadexprience(Map<String, Object> m, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", Code.getFieldVal(m, "bscd", ""));
-		jo.put("project_name", "");
-		jo.put("license_key", "");
-		jo.put("worker_exprience_id", "");
-		jo.put("id_card", "");
-		jo.put("worker_name", "");
-		jo.put("begin_time", "");
-		jo.put("end_time", "");
-		jo.put("profession_id", "");
+	private static void uploadexprience(String apcd, String bscd, String idcdno, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "uploadexprience", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> ljl = data.qryCyjl(apcd, bscd, idcdno);
+
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+			String licensekey = Code.getFieldVal(lbs.get(0), "LICENSEKEY", "");
+
+			String workername = "";
+			List<Map<String, Object>> lwk = data.qryWker(idcdno);
+			if (lwk.size() > 0) {
+				workername = Code.getFieldVal(lwk.get(0), "NAME", "");
+			}
+
+			for (Map<String, Object> jl : ljl) {
+				JSONObject jo = new JSONObject();
+				jo.put("project_num", projectnum);
+				jo.put("project_id", bscd);
+				jo.put("project_name", projectname);
+				jo.put("license_key", licensekey);
+				jo.put("worker_exprience_id", Code.getFieldVal(jl, "JLID", ""));
+				jo.put("id_card", idcdno);
+				jo.put("worker_name", workername);
+				jo.put("begin_time", Code.getFieldVal(jl, "STARTDATE", ""));
+				jo.put("end_time", Code.getFieldVal(jl, "ENDDATE", ""));
+				jo.put("profession_id", Code.getFieldVal(jl, "WKKD", ""));
+
+				String opid = data.getNextval("OPID");
+				data.insertOplist("", opid, "uploadexprience", "[" + jo.toJSONString() + "]");
+			}
+		}
+
 	}
 
-	private static void deleteexprience(String id, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", "");
-		jo.put("project_name", "");
-		jo.put("license_key", "");
-		jo.put("worker_exprience_id", "");
-		jo.put("id_card", "");
-		jo.put("worker_name", "");
-		jo.put("profession_id", "");
+	private static void deleteexprience(String apcd, String bscd, String idcdno, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "deleteexprience", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> ljl = data.qryCyjl(apcd, bscd, idcdno);
+
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+			String licensekey = Code.getFieldVal(lbs.get(0), "LICENSEKEY", "");
+
+			String workername = "";
+			List<Map<String, Object>> lwk = data.qryWker(idcdno);
+			if (lwk.size() > 0) {
+				workername = Code.getFieldVal(lwk.get(0), "NAME", "");
+			}
+
+			for (Map<String, Object> jl : ljl) {
+
+				JSONObject jo = new JSONObject();
+				jo.put("project_num", projectnum);
+				jo.put("project_id", bscd);
+				jo.put("project_name", projectname);
+				jo.put("license_key", licensekey);
+				jo.put("worker_exprience_id", Code.getFieldVal(jl, "JLID", ""));
+				jo.put("id_card", idcdno);
+				jo.put("worker_name", workername);
+				jo.put("profession_id", Code.getFieldVal(jl, "WKKD", ""));
+
+				String opid = data.getNextval("OPID");
+				data.insertOplist("", opid, "deleteexprience", "[" + jo.toJSONString() + "]");
+			}
+		}
 
 	}
 
-	private static void uploadtrain(String id, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", "");
-		jo.put("project_name", "");
-		jo.put("worker_train_id", "");
-		jo.put("id_card", "");
-		jo.put("worker_name", "");
-		jo.put("begin_time", "");
-		jo.put("end_time", "");
-		jo.put("train_name", "");
-		jo.put("remark", "");
+	private static void uploadtrain(String apcd, String bscd, String idcdno, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "uploadtrain", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> lpx = data.qryPxxx(apcd, bscd, idcdno);
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+
+			String workername = "";
+			List<Map<String, Object>> lwk = data.qryWker(idcdno);
+			if (lwk.size() > 0) {
+				workername = Code.getFieldVal(lwk.get(0), "NAME", "");
+			}
+
+			for (Map<String, Object> px : lpx) {
+				JSONObject jo = new JSONObject();
+				jo.put("project_num", projectnum);
+				jo.put("project_id", bscd);
+				jo.put("project_name", projectname);
+				jo.put("worker_train_id", Code.getFieldVal(px, "PXID", ""));
+				jo.put("id_card", idcdno);
+				jo.put("worker_name", workername);
+				jo.put("begin_time", Code.getFieldVal(px, "STARTDATE", ""));
+				jo.put("end_time", Code.getFieldVal(px, "ENDDATE", ""));
+				jo.put("train_name", Code.getFieldVal(px, "PXTITLE", ""));
+				jo.put("remark", Code.getFieldVal(px, "REMARK", ""));
+
+				String opid = data.getNextval("OPID");
+				data.insertOplist("", opid, "uploadtrain", "[" + jo.toJSONString() + "]");
+
+			}
+		}
 	}
 
-	private static void deletetrain(String id, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", "");
-		jo.put("project_name", "");
-		jo.put("worker_train_id", "");
-		jo.put("id_card", "");
-		jo.put("worker_name", "");
-		jo.put("begin_time", "");
-		jo.put("end_time", "");
-		jo.put("train_name", "");
-		jo.put("remark", "");
+	private static void deletetrain(String apcd, String bscd, String idcdno, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "deletetrain", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> lpx = data.qryPxxx(apcd, bscd, idcdno);
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+
+			String workername = "";
+			List<Map<String, Object>> lwk = data.qryWker(idcdno);
+			if (lwk.size() > 0) {
+				workername = Code.getFieldVal(lwk.get(0), "NAME", "");
+			}
+
+			for (Map<String, Object> px : lpx) {
+				JSONObject jo = new JSONObject();
+				jo.put("project_num", projectnum);
+				jo.put("project_id", bscd);
+				jo.put("project_name", projectname);
+				jo.put("worker_train_id", Code.getFieldVal(px, "PXID", ""));
+				jo.put("id_card", idcdno);
+				jo.put("worker_name", workername);
+				jo.put("train_name", Code.getFieldVal(px, "PXTITLE", ""));
+
+				String opid = data.getNextval("OPID");
+				data.insertOplist(apcd, opid, "deletetrain", "[" + jo.toJSONString() + "]");
+			}
+		}
+
+	}
+	
+	public static HashMap<String,Map<String,String>> qryUploadsalarysum(String sqnb,Data data){
+		HashMap<String,Map<String,String>> sumdata=new HashMap<String,Map<String,String>>();
+		
+		List<Map<String,Object>> lattend=data.qryUploadtotalattend(sqnb);
+		
+		if (lattend.size()>0) {
+			for (Map<String,Object> attend:lattend) {
+				Map<String,String> item=new HashMap<String,String>();
+				item.put("IDCDNO", Code.getFieldVal(attend, "IDCDNO", ""));
+				item.put("ATTEND", Code.getFieldVal(attend, "TOTAL", "0"));
+				
+				sumdata.put(Code.getFieldVal(attend, "IDCDNO", ""), item);
+			}
+		}
+		
+		List<Map<String,Object>> lsalary=data.qryUploadtotalsalary(sqnb);
+		if (lsalary.size()>0) {
+			for (Map<String,Object> salary:lsalary) {
+				Map<String,String> item = sumdata.get(Code.getFieldVal(salary, "IDCDNO", ""));
+				if (item==null) {
+					item=new HashMap<String,String>();
+					item.put("IDCDNO", Code.getFieldVal(salary, "IDCDNO", ""));
+					item.put("ATTEND", "0");
+				}
+				item.put("SALARY", Code.getFieldVal(salary, "TOTAL", "0"));
+				
+				sumdata.put(Code.getFieldVal(salary, "IDCDNO", ""), item);
+			}
+		}
+		
+		List<Map<String,Object>> lwkds=data.qryUploadwkds(sqnb);
+		if (lwkds.size()>0) {
+			for (Map<String,Object> wkds:lwkds) {
+				Map<String,String> item=sumdata.get(Code.getFieldVal(wkds, "IDCDNO", ""));
+				if (item==null) {
+					item = new HashMap<String,String>();
+					item.put("IDCDNO", Code.getFieldVal(wkds, "IDCDNO", ""));
+					item.put("ATTEND", "0");
+					item.put("SALARY", "0");
+				}
+				item.put("WKDS", Code.getFieldVal(wkds, "WKDS", ""));
+				
+				sumdata.put(Code.getFieldVal(wkds, "IDCDNO", ""),item);
+			}
+		}
+		
+		return sumdata;
 	}
 
-	private static void uploadsalary(String id, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", "");
-		jo.put("project_name", "");
-		jo.put("worker_salary_id", "");
-		jo.put("data_time", "");
-		jo.put("month", "");
-		jo.put("worker_id", "");
-		jo.put("worker_name", "");
-		jo.put("id_card", "");
-		jo.put("bank_no", "");
-		jo.put("mobile", "");
-		jo.put("send_amount", "");
-		jo.put("paid_amount", "");
-		jo.put("goods_status", "");
-		jo.put("attendance_month_num", "");
-		jo.put("attendance_total_num", "");
-		jo.put("total_salary", "");
+	private static void uploadsalary(String sqnb, Data data) {
 
-		String opid = data.getNextval("OPID");
-		data.insertOplist("", opid, "uploadsalary", "[" + jo.toJSONString() + "]");
+		List<Map<String, Object>> lacpy = data.qryAcpy(sqnb);
+		
+		HashMap<String,Map<String,String>> sumdata=qryUploadsalarysum(sqnb,data);
+
+		if (lacpy.size() > 0) {
+
+			String apcd = Code.getFieldVal(lacpy.get(0), "APCD", "");
+			String bscd = Code.getFieldVal(lacpy.get(0), "BSCD", "");
+			List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+			if (lbs.size() > 0) {
+				String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+				String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+
+				for (Map<String, Object> acpy : lacpy) {
+
+					JSONObject jo = new JSONObject();
+					jo.put("project_num", projectnum);
+					jo.put("project_id", bscd);
+					jo.put("project_name", projectname);
+					
+					String month=Code.getFieldVal(acpy, "MONTH", "");
+					String idcdno=Code.getFieldVal(acpy, "IDCDNO", "");
+					jo.put("worker_salary_id", month+idcdno);
+					jo.put("data_time", "");
+					jo.put("month", month.substring(0, 4) + "-" + month.substring(4,6));
+					
+					List<Map<String,Object>> lwkbs=data.qryWkerbs(apcd, bscd,idcdno);
+					String wkid="";
+					if (lwkbs.size()>0) wkid=Code.getFieldVal(lwkbs.get(0), "SZ_EMPLOY_ID", "");
+					jo.put("worker_id", wkid);
+					jo.put("worker_name",Code.getFieldVal(acpy, "NAME", ""));
+					jo.put("id_card", idcdno);
+					jo.put("bank_no", Code.getFieldVal(acpy, "BKAN", ""));
+					
+					List<Map<String,Object>> lwk=data.qryWker(idcdno);
+					String tel="";
+					if (lwk.size()>0) tel=Code.getFieldVal(lwk.get(0),"TEL", "");
+					jo.put("mobile", tel);
+					
+					jo.put("send_amount", Code.getFieldVal(acpy, "ACPY", ""));
+					String paidamount="";
+					if (Code.getFieldVal(acpy, "INBKCFM", "N").equals("Y")) paidamount=Code.getFieldVal(acpy, "ACPY", "");
+					jo.put("paid_amount", paidamount);
+					String gdstatus="1";
+					if (!paidamount.equals("")) gdstatus="2"; 
+					jo.put("goods_status", gdstatus);
+					
+					Map<String,String> item=sumdata.get(idcdno);
+					String attend="";
+					String salary="";
+					String wkds="";
+					if (item!=null) {
+						attend=item.get("ATTEND");
+						salary=item.get("SALARY");
+						wkds=item.get("WKDS");
+					}
+					jo.put("attendance_month_num", wkds);
+					jo.put("attendance_total_num", attend);
+					jo.put("total_salary", salary);
+
+					String opid = data.getNextval("OPID");
+					data.insertOplist("", opid, "uploadsalary", "[" + jo.toJSONString() + "]");
+				}
+			}
+		}
 	}
 
-	private static void uploadbank(String id, Data data) {
-		JSONObject jo = new JSONObject();
-		jo.put("project_num", "");
-		jo.put("project_id", "");
-		jo.put("project_name", "");
-		jo.put("bank_transation_id", "");
-		jo.put("bank_account", "");
-		jo.put("date_time", "");
-		jo.put("account_store", "");
-		jo.put("account_pay", "");
+	private static void uploadbank(JSONObject bkrec, Data data) {
+
+		String apcd = Code.getFieldVal(bkrec, "APCD", "");
+		String bscd = Code.getFieldVal(bkrec, "BSCD", "");
+		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
+
+		if (lbs.size() > 0) {
+			String projectnum = Code.getFieldVal(lbs.get(0), "AJCODE", "");
+			String projectname = Code.getFieldVal(lbs.get(0), "BSDS", "");
+
+			JSONObject jo = new JSONObject();
+			jo.put("project_num", projectnum);
+			jo.put("project_id", bscd);
+			jo.put("project_name", projectname);
+			jo.put("bank_transation_id", Code.getFieldVal(bkrec, "RECORDID", ""));
+			jo.put("bank_account", Code.getFieldVal(bkrec, "ACCOUNT", ""));
+			jo.put("date_time", Code.getFieldVal(bkrec, "RECORDTIME", ""));
+			jo.put("account_store", Code.getFieldVal(bkrec, "STORENUM", ""));
+			jo.put("account_pay", Code.getFieldVal(bkrec, "PAYNUM", ""));
+
+			String opid = data.getNextval("OPID");
+			data.insertOplist(apcd, bscd, opid, "uploadbank", "[" + jo.toJSONString() + "]");
+		}
 	}
+
+	public static String bankrecord(String userid, String applydata, Data data) {
+
+		try {
+			JSONArray ja = JSON.parseArray(applydata);
+
+			for (int i = 0; i < ja.size(); i++) {
+				JSONObject jo = ja.getJSONObject(i);
+				data.delBankrecord(Code.getFieldVal(jo, "RECORDID", ""));
+				data.insertBankrecord(userid, jo);
+				uploadbank(jo, data);
+			}
+			return Code.resultSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", "导入银行流水有误" + e.getMessage());
+		}
+
+	}
+
 }
