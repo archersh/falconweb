@@ -162,6 +162,9 @@ public class Schedle {
 				if (!Code.getFieldVal(jo, "MSGID", "").equals("0000")) {
 					data.updateOplistresult(Code.getFieldVal(m, "opid", ""), jo.toJSONString());
 				} else {
+					data.insertOplistsuccess(Code.getFieldVal(m, "apcd", ""), Code.getFieldVal(m, "bscd", ""),
+							Code.getFieldVal(m, "opid", ""), Code.getFieldVal(m, "type", ""),
+							Code.getFieldVal(m, "content", ""));
 					data.delOplist(Code.getFieldVal(m, "opid", ""));
 				}
 			}
@@ -176,7 +179,7 @@ public class Schedle {
 			m.put("user", up.getUser());
 			m.put("pass", up.getPass());
 			m.put("content", up.getContent());
-			String req = Code.postHttp(up.getUrl(), m);
+			String req = Code.postUploadHttp(up.getUrl(), m);
 			JSONObject jo = JSON.parseObject(req);
 			if (jo.getString("statusCode").equals("200")) {
 				return Code.resultSuccess();

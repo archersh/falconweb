@@ -571,8 +571,8 @@ public class sh {
 				doBscoll(month, apcd, bscd, data);
 			}
 
-			uploadsalary(sqnb,data);
-			
+			uploadsalary(sqnb, data);
+
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1113,6 +1113,18 @@ public class sh {
 			bs.setCCCD(obj.getString("CCCD"));
 			bs.setBSCHUR(userid);
 			bs.setCKBGDY(Code.getFieldVal(obj, "CKBGDY", "1"));
+			bs.setAJCODE(Code.getFieldVal(obj, "AJCODE", ""));
+			bs.setTENDERID(Code.getFieldVal(obj, "TENDERID", ""));
+			;// 中标编号
+			bs.setPROJECTTYPE(Code.getFieldVal(obj, "PROJECTTYPE", ""));// 项目类别
+			bs.setPRINNAME(Code.getFieldVal(obj, "PRINNAME", ""));// 负责人名称
+			bs.setPRINTEL(Code.getFieldVal(obj, "PRINTEL", ""));// 负责人电话
+			bs.setBSADDRESS(Code.getFieldVal(obj, "BSADDRESS", ""));// 详细地址
+			bs.setLICENSEKEY(Code.getFieldVal(obj, "LICENSEKEY", ""));// 施工许可证号
+			bs.setSTARTDATE(Code.getFieldVal(obj, "STARTDATE", ""));// 项目开始时间
+			bs.setENDDATE(Code.getFieldVal(obj, "ENDDATE", ""));// 项目结束时间
+			bs.setPROJECTCOST(Code.getFieldVal(obj, "PROJECTCOST", ""));// 工程造价
+			bs.setSALARYCOST(Code.getFieldVal(obj, "SALARYCOST", ""));// 工资性工程款
 
 			List<Map<String, Object>> list = data.qrySybscd(bs.getAPCD(), bs.getBSCD());
 			if (list.size() == 0)
@@ -1156,6 +1168,7 @@ public class sh {
 			bs.setSPAN(obj.getString("SPAN"));
 			bs.setSPANRQBL(obj.getString("SPANRQBL"));
 			bs.setBLWNDY(obj.getString("BLWNDY"));
+			bs.setSPANPREBL(Code.getFieldVal(obj, "SPANPREBL", ""));
 			bs.setBKCHUR(userid);
 
 			List<Map<String, Object>> list = data.qrySybscd(bs.getAPCD(), bs.getBSCD());
@@ -1188,8 +1201,11 @@ public class sh {
 			bs.setINDT(Code.getFieldVal(obj, "INDT", ""));
 			if (bs.getINDT().equals(""))
 				return Code.resultError("1111", "是否撤除不能为空");
+			bs.setENDDATE(Code.getFieldVal(obj, "ENDDATE", ""));
+			if (bs.getENDDATE().equals(""))
+				return Code.resultError("1111", "项目结束时间不能为空");
 			bs.setDTUR(userid);
-			if (data.updataSybscdByDt(bs) == 0)
+			if (data.updateSybscdByDt(bs) == 0)
 				return Code.resultError("2222", "没有更改数据");
 
 			uploadproject(bs.getAPCD(), bs.getBSCD(), data);
@@ -1532,8 +1548,10 @@ public class sh {
 
 			// 职业技能
 			data.delZyjn(wker.getIDCDNO());
-			for (Zyjn jn : wker.getJN()) {
-				data.insertZyjn(wker.getIDCDNO(), jn);
+			if (wker.getJN() != null) {
+				for (Zyjn jn : wker.getJN()) {
+					data.insertZyjn(wker.getIDCDNO(), jn);
+				}
 			}
 
 			// 从业记录
@@ -1541,16 +1559,20 @@ public class sh {
 			deleteexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			data.delCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
 			// 添加数据
-			for (Cyjl jl : wker.getJL()) {
-				data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+			if (wker.getJL() != null) {
+				for (Cyjl jl : wker.getJL()) {
+					data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+				}
 			}
 			// 培训记录
 			// 删除平台数据
 			deletetrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			data.delPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
 			// 添加数据
-			for (Pxxx px : wker.getPX()) {
-				data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+			if (wker.getPX() != null) {
+				for (Pxxx px : wker.getPX()) {
+					data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+				}
 			}
 
 			// 添加中控操作
@@ -1580,14 +1602,14 @@ public class sh {
 			}
 
 			// 上传数据
-			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getSZ_EMPLOY_ID(), data);
 			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			uploadtrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			// TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Code.resultError("1111", "添加员工信息出错" + e.getMessage());
 		}
 	}
@@ -1632,8 +1654,10 @@ public class sh {
 
 			// 职业技能
 			data.delZyjn(wker.getIDCDNO());
-			for (Zyjn jn : wker.getJN()) {
-				data.insertZyjn(wker.getIDCDNO(), jn);
+			if (wker.getJN() != null) {
+				for (Zyjn jn : wker.getJN()) {
+					data.insertZyjn(wker.getIDCDNO(), jn);
+				}
 			}
 
 			// 从业记录
@@ -1641,16 +1665,20 @@ public class sh {
 			deleteexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			data.delCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
 			// 添加数据
-			for (Cyjl jl : wker.getJL()) {
-				data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+			if (wker.getJL() != null) {
+				for (Cyjl jl : wker.getJL()) {
+					data.insertCyjl(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), jl);
+				}
 			}
 			// 培训记录
 			// 删除平台数据
 			deletetrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			data.delPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO());
 			// 添加数据
-			for (Pxxx px : wker.getPX()) {
-				data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+			if (wker.getPX() != null) {
+				for (Pxxx px : wker.getPX()) {
+					data.insertPxxx(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), px);
+				}
 			}
 
 			// 添加中控操作
@@ -1680,7 +1708,7 @@ public class sh {
 			}
 
 			// 上传数据
-			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
+			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getSZ_EMPLOY_ID(), data);
 			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 			uploadtrain(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
 
@@ -2399,9 +2427,9 @@ public class sh {
 			for (int i = 0; i < array.size(); i++) {
 				JSONObject bk = array.getJSONObject(i);
 
-				if (data.updateAcpyitembkcfm(sqnb, lccd, Code.getFieldVal(bk, "BKAN", ""),
-						Code.getFieldVal(bk, "STATE", ""), Code.getFieldVal(bk, "ERRCODE", ""),
-						Code.getFieldVal(bk, "ERRMSG", "")) == 0)
+				if (data.updateAcpyitembkcfm(sqnb, lccd, Code.getFieldVal(bk, "IDCDNO", ""),
+						Code.getFieldVal(bk, "BKAN", ""), Code.getFieldVal(bk, "STATE", ""),
+						Code.getFieldVal(bk, "ERRCODE", ""), Code.getFieldVal(bk, "ERRMSG", "")) == 0)
 					set.add(Code.getFieldVal(bk, "BKAN", ""));
 
 			}
@@ -2523,6 +2551,10 @@ public class sh {
 						sc.setTs_card(Code.getFieldVal(ji, "checktime", ""));
 						data.delAttendData(apcd, sc.getApid());
 						data.insertAttendData(apcd, sc);
+						
+						//写设备人脸识别
+						List<Map<String,Object>> l=data.qryAttenddevfeature(sc.getNg_user_id());
+						if (l.size()==0) data.insertAttenddevfeature(sc.getNg_user_id());
 					}
 				}
 			}
@@ -2595,6 +2627,7 @@ public class sh {
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Code.resultError("1111", "离职有误" + e.getMessage());
 		}
 	}
@@ -2638,7 +2671,7 @@ public class sh {
 			jo.put("salary_cost", Code.getFieldVal(bs, "SALARYCOST", ""));
 			jo.put("bank", data.getSycdds("BKCD", Code.getFieldVal(bs, "BKCD", "")));
 			String opid = data.getNextval("OPID");
-			data.insertOplist(apcd, bscd, opid, "uploadproject", "[" + jo.toJSONString() + "]");
+			data.insertOplist(apcd, bscd, opid, "newuploadproject", "[" + jo.toJSONString() + "]");
 		}
 	}
 
@@ -2666,7 +2699,7 @@ public class sh {
 				jo.put("worker_name", Code.getFieldVal(wk, "NAME", ""));
 				jo.put("cooperator_unit_name", data.getSycdds("LCCD", Code.getFieldVal(wkbs, "LCCD", "")));
 				jo.put("group_name", data.getSycdds("BZCD", Code.getFieldVal(wkbs, "BZ", "")));
-				jo.put("profession_id", Code.getFieldVal(wkbs, "WKKD", ""));
+				jo.put("profession_id", Code.getFieldVal(wkbs, "WKKDSV", ""));
 				if (Code.getFieldVal(wk, "INSEX", "").equals("男"))
 					jo.put("gender_code", "1");
 				if (Code.getFieldVal(wk, "INSEX", "").equals("女"))
@@ -2690,7 +2723,12 @@ public class sh {
 					indy = "1";// 团员
 				jo.put("political_status", indy);
 				jo.put("marital_status", Code.getFieldVal(wk, "INMARRY", ""));
-				jo.put("is_minority", Code.getFieldVal(wk, "INMIN", ""));
+				String inmin = Code.getFieldVal(wk, "INMIN", "");
+				if (inmin.equals("Y"))
+					inmin = "1";
+				if (inmin.equals("N"))
+					inmin = "0";
+				jo.put("is_minority", inmin);
 				jo.put("nation", Code.getFieldVal(wk, "ETHNIC", ""));
 				jo.put("address", Code.getFieldVal(wk, "HOMEADD", ""));
 				jo.put("worker_photo", "");
@@ -2730,7 +2768,7 @@ public class sh {
 				jo.put("is_migrant_worker", ismigrantworker);
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist(apcd, bscd, opid, "uploadhuman", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "newuploadhuman", "[" + jo.toJSONString() + "]");
 			}
 		}
 	}
@@ -2755,7 +2793,7 @@ public class sh {
 			jo.put("worker_name", workername);
 
 			String opid = data.getNextval("OPID");
-			data.insertOplist(apcd, bscd, opid, "deletehuman", "[" + jo.toJSONString() + "]");
+			data.insertOplist(apcd, bscd, opid, "newdeletehuman", "[" + jo.toJSONString() + "]");
 		}
 	}
 
@@ -2765,13 +2803,23 @@ public class sh {
 		jo.put("record_date", Code.getFieldVal(m, "DATE", ""));
 		jo.put("worker_id", Code.getFieldVal(m, "WKID", ""));
 		jo.put("project_num", Code.getFieldVal(m, "AJCODE", ""));
-		jo.put("on_time", Code.getFieldVal(m, "STARTTIME", ""));
-		jo.put("off_time", Code.getFieldVal(m, "ENDTIME", ""));
+		String temp = Code.getFieldVal(m, "STARTTIME", "");
+		if (!temp.equals("")) {
+			temp = temp.substring(0, 4) + "-" + temp.substring(4, 6) + "-" + temp.substring(6, 8) + " "
+					+ temp.substring(8, 10) + ":" + temp.substring(10, 12) + ":" + temp.substring(12, 14);
+		}
+		jo.put("on_time", temp);
+		temp = Code.getFieldVal(m, "ENDTIME", "");
+		if (!temp.equals("")) {
+			temp = temp.substring(0, 4) + "-" + temp.substring(4, 6) + "-" + temp.substring(6, 8) + " "
+					+ temp.substring(8, 10) + ":" + temp.substring(10, 12) + ":" + temp.substring(12, 14);
+		}
+		jo.put("off_time", temp);
 		float f = (Float) m.get("WKTIME");
 		jo.put("time_count", String.valueOf(f));
 
 		String opid = data.getNextval("OPID");
-		data.insertOplist(Code.getFieldVal(m, "APCD", ""), Code.getFieldVal(m, "BSCD", ""), opid, "uploadattend",
+		data.insertOplist(Code.getFieldVal(m, "APCD", ""), Code.getFieldVal(m, "BSCD", ""), opid, "newuploadattend",
 				"[" + jo.toJSONString() + "]");
 	}
 
@@ -2807,7 +2855,7 @@ public class sh {
 				jo.put("profession_id", Code.getFieldVal(jl, "WKKD", ""));
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist("", opid, "uploadexprience", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "newuploadexprience", "[" + jo.toJSONString() + "]");
 			}
 		}
 
@@ -2844,7 +2892,7 @@ public class sh {
 				jo.put("profession_id", Code.getFieldVal(jl, "WKKD", ""));
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist("", opid, "deleteexprience", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "newdeleteexprience", "[" + jo.toJSONString() + "]");
 			}
 		}
 
@@ -2879,7 +2927,7 @@ public class sh {
 				jo.put("remark", Code.getFieldVal(px, "REMARK", ""));
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist("", opid, "uploadtrain", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "newuploadtrain", "[" + jo.toJSONString() + "]");
 
 			}
 		}
@@ -2911,66 +2959,66 @@ public class sh {
 				jo.put("train_name", Code.getFieldVal(px, "PXTITLE", ""));
 
 				String opid = data.getNextval("OPID");
-				data.insertOplist(apcd, opid, "deletetrain", "[" + jo.toJSONString() + "]");
+				data.insertOplist(apcd, bscd, opid, "newdeletetrain", "[" + jo.toJSONString() + "]");
 			}
 		}
 
 	}
-	
-	public static HashMap<String,Map<String,String>> qryUploadsalarysum(String sqnb,Data data){
-		HashMap<String,Map<String,String>> sumdata=new HashMap<String,Map<String,String>>();
-		
-		List<Map<String,Object>> lattend=data.qryUploadtotalattend(sqnb);
-		
-		if (lattend.size()>0) {
-			for (Map<String,Object> attend:lattend) {
-				Map<String,String> item=new HashMap<String,String>();
+
+	public static HashMap<String, Map<String, String>> qryUploadsalarysum(String sqnb, Data data) {
+		HashMap<String, Map<String, String>> sumdata = new HashMap<String, Map<String, String>>();
+
+		List<Map<String, Object>> lattend = data.qryUploadtotalattend(sqnb);
+
+		if (lattend.size() > 0) {
+			for (Map<String, Object> attend : lattend) {
+				Map<String, String> item = new HashMap<String, String>();
 				item.put("IDCDNO", Code.getFieldVal(attend, "IDCDNO", ""));
 				item.put("ATTEND", Code.getFieldVal(attend, "TOTAL", "0"));
-				
+
 				sumdata.put(Code.getFieldVal(attend, "IDCDNO", ""), item);
 			}
 		}
-		
-		List<Map<String,Object>> lsalary=data.qryUploadtotalsalary(sqnb);
-		if (lsalary.size()>0) {
-			for (Map<String,Object> salary:lsalary) {
-				Map<String,String> item = sumdata.get(Code.getFieldVal(salary, "IDCDNO", ""));
-				if (item==null) {
-					item=new HashMap<String,String>();
+
+		List<Map<String, Object>> lsalary = data.qryUploadtotalsalary(sqnb);
+		if (lsalary.size() > 0) {
+			for (Map<String, Object> salary : lsalary) {
+				Map<String, String> item = sumdata.get(Code.getFieldVal(salary, "IDCDNO", ""));
+				if (item == null) {
+					item = new HashMap<String, String>();
 					item.put("IDCDNO", Code.getFieldVal(salary, "IDCDNO", ""));
 					item.put("ATTEND", "0");
 				}
 				item.put("SALARY", Code.getFieldVal(salary, "TOTAL", "0"));
-				
+
 				sumdata.put(Code.getFieldVal(salary, "IDCDNO", ""), item);
 			}
 		}
-		
-		List<Map<String,Object>> lwkds=data.qryUploadwkds(sqnb);
-		if (lwkds.size()>0) {
-			for (Map<String,Object> wkds:lwkds) {
-				Map<String,String> item=sumdata.get(Code.getFieldVal(wkds, "IDCDNO", ""));
-				if (item==null) {
-					item = new HashMap<String,String>();
+
+		List<Map<String, Object>> lwkds = data.qryUploadwkds(sqnb);
+		if (lwkds.size() > 0) {
+			for (Map<String, Object> wkds : lwkds) {
+				Map<String, String> item = sumdata.get(Code.getFieldVal(wkds, "IDCDNO", ""));
+				if (item == null) {
+					item = new HashMap<String, String>();
 					item.put("IDCDNO", Code.getFieldVal(wkds, "IDCDNO", ""));
 					item.put("ATTEND", "0");
 					item.put("SALARY", "0");
 				}
 				item.put("WKDS", Code.getFieldVal(wkds, "WKDS", ""));
-				
-				sumdata.put(Code.getFieldVal(wkds, "IDCDNO", ""),item);
+
+				sumdata.put(Code.getFieldVal(wkds, "IDCDNO", ""), item);
 			}
 		}
-		
+
 		return sumdata;
 	}
 
 	private static void uploadsalary(String sqnb, Data data) {
 
 		List<Map<String, Object>> lacpy = data.qryAcpy(sqnb);
-		
-		HashMap<String,Map<String,String>> sumdata=qryUploadsalarysum(sqnb,data);
+
+		HashMap<String, Map<String, String>> sumdata = qryUploadsalarysum(sqnb, data);
 
 		if (lacpy.size() > 0) {
 
@@ -2988,49 +3036,53 @@ public class sh {
 					jo.put("project_num", projectnum);
 					jo.put("project_id", bscd);
 					jo.put("project_name", projectname);
-					
-					String month=Code.getFieldVal(acpy, "MONTH", "");
-					String idcdno=Code.getFieldVal(acpy, "IDCDNO", "");
-					jo.put("worker_salary_id", month+idcdno);
+
+					String month = Code.getFieldVal(acpy, "MONTH", "");
+					String idcdno = Code.getFieldVal(acpy, "IDCDNO", "");
+					jo.put("worker_salary_id", month + idcdno);
 					jo.put("data_time", "");
-					jo.put("month", month.substring(0, 4) + "-" + month.substring(4,6));
-					
-					List<Map<String,Object>> lwkbs=data.qryWkerbs(apcd, bscd,idcdno);
-					String wkid="";
-					if (lwkbs.size()>0) wkid=Code.getFieldVal(lwkbs.get(0), "SZ_EMPLOY_ID", "");
+					jo.put("month", month.substring(0, 4) + "-" + month.substring(4, 6));
+
+					List<Map<String, Object>> lwkbs = data.qryWkerbs(apcd, bscd, idcdno);
+					String wkid = "";
+					if (lwkbs.size() > 0)
+						wkid = Code.getFieldVal(lwkbs.get(0), "SZ_EMPLOY_ID", "");
 					jo.put("worker_id", wkid);
-					jo.put("worker_name",Code.getFieldVal(acpy, "NAME", ""));
+					jo.put("worker_name", Code.getFieldVal(acpy, "NAME", ""));
 					jo.put("id_card", idcdno);
 					jo.put("bank_no", Code.getFieldVal(acpy, "BKAN", ""));
-					
-					List<Map<String,Object>> lwk=data.qryWker(idcdno);
-					String tel="";
-					if (lwk.size()>0) tel=Code.getFieldVal(lwk.get(0),"TEL", "");
+
+					List<Map<String, Object>> lwk = data.qryWker(idcdno);
+					String tel = "";
+					if (lwk.size() > 0)
+						tel = Code.getFieldVal(lwk.get(0), "TEL", "");
 					jo.put("mobile", tel);
-					
+
 					jo.put("send_amount", Code.getFieldVal(acpy, "ACPY", ""));
-					String paidamount="";
-					if (Code.getFieldVal(acpy, "INBKCFM", "N").equals("Y")) paidamount=Code.getFieldVal(acpy, "ACPY", "");
+					String paidamount = "";
+					if (Code.getFieldVal(acpy, "INBKCFM", "N").equals("Y"))
+						paidamount = Code.getFieldVal(acpy, "ACPY", "");
 					jo.put("paid_amount", paidamount);
-					String gdstatus="1";
-					if (!paidamount.equals("")) gdstatus="2"; 
+					String gdstatus = "1";
+					if (!paidamount.equals(""))
+						gdstatus = "2";
 					jo.put("goods_status", gdstatus);
-					
-					Map<String,String> item=sumdata.get(idcdno);
-					String attend="";
-					String salary="";
-					String wkds="";
-					if (item!=null) {
-						attend=item.get("ATTEND");
-						salary=item.get("SALARY");
-						wkds=item.get("WKDS");
+
+					Map<String, String> item = sumdata.get(idcdno);
+					String attend = "";
+					String salary = "";
+					String wkds = "";
+					if (item != null) {
+						attend = item.get("ATTEND");
+						salary = item.get("SALARY");
+						wkds = item.get("WKDS");
 					}
 					jo.put("attendance_month_num", wkds);
 					jo.put("attendance_total_num", attend);
 					jo.put("total_salary", salary);
 
 					String opid = data.getNextval("OPID");
-					data.insertOplist("", opid, "uploadsalary", "[" + jo.toJSONString() + "]");
+					data.insertOplist("", opid, "newuploadsalary", "[" + jo.toJSONString() + "]");
 				}
 			}
 		}
@@ -3057,7 +3109,7 @@ public class sh {
 			jo.put("account_pay", Code.getFieldVal(bkrec, "PAYNUM", ""));
 
 			String opid = data.getNextval("OPID");
-			data.insertOplist(apcd, bscd, opid, "uploadbank", "[" + jo.toJSONString() + "]");
+			data.insertOplist(apcd, bscd, opid, "newuploadbank", "[" + jo.toJSONString() + "]");
 		}
 	}
 
@@ -3075,6 +3127,7 @@ public class sh {
 			return Code.resultSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Code.resultError("1111", "导入银行流水有误" + e.getMessage());
 		}
 

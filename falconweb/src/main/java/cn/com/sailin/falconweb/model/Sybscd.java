@@ -72,6 +72,17 @@ public class Sybscd {
 	
 	private String SALARYCOST;//工资性工程款
 	
+	private String SPANPREBL;//专用账户预付款额度(银行)
+	
+	@JSONField(name="SPANPREBL")	
+	public String getSPANPREBL() {
+		return SPANPREBL;
+	}
+
+	public void setSPANPREBL(String sPANPREBL) {
+		SPANPREBL = sPANPREBL;
+	}
+
 	@JSONField(name="AJCODE")
 	public String getAJCODE() {
 		return AJCODE;

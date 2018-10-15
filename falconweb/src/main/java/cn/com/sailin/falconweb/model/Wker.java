@@ -106,6 +106,17 @@ public class Wker {
 	
 	private List<Zyjn> JN;
 	
+	private String WKKDSV;//住建工种
+	
+	@JSONField(name="WKKDSV")	
+	public String getWKKDSV() {
+		return WKKDSV;
+	}
+
+	public void setWKKDSV(String wKKDSV) {
+		WKKDSV = wKKDSV;
+	}
+
 	@JSONField(name="IDSTARTDATE")	
 	public String getIDSTARTDATE() {
 		return IDSTARTDATE;

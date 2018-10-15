@@ -335,6 +335,10 @@ public class WebserviceImpl implements WebserviceInterface {
 			//银行流水
 			if (method.equals("bankrecord"))
 				res=sh.bankrecord(userid,applydata,data);
+			
+			//测试上传考勤数据
+			if (method.equals("testuploadwkds"))
+				res=sh.uploadwkds(userid, applydata, data);
 			// if (method.equals("test")) {
 			// schedle.importWkds();
 			// }

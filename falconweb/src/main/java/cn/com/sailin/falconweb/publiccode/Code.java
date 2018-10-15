@@ -1,12 +1,14 @@
 package cn.com.sailin.falconweb.publiccode;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,14 +23,19 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import cn.com.sailin.falconweb.model.CallResult;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Code {
-	
+
 	public static SimpleDateFormat dtft = new SimpleDateFormat("yyyyMMddHHmmss");
-	
-	public static SimpleDateFormat dtftzk=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
-	public static String ZeroDatetime="19000101000000";
+
+	public static SimpleDateFormat dtftzk = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	public static String ZeroDatetime = "19000101000000";
 
 	public static String md5(String text) {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -116,6 +123,22 @@ public class Code {
 			}
 		}
 		return null;
+	}
+
+	public static String postUploadHttp(String url, Map<String, String> param) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		RequestBody body = RequestBody.create(mediaType, "user=" + param.get("user") + "&pass=" + param.get("pass")
+				+ "&content=" + URLEncoder.encode(param.get("content"), "utf-8"));
+		Request request = new Request.Builder()
+				.url(url).post(body)
+				.addHeader("Content-Type", "application/x-www-form-urlencoded").addHeader("Cache-Control", "no-cache")
+				.addHeader("Postman-Token", "9e99036c-287e-425e-b6b1-b1630258ab7b").build();
+
+		Response response = client.newCall(request).execute();
+
+		return response.body().string();
 	}
 
 	public static String postHttp(String url, Map<String, String> param) {
@@ -210,7 +233,7 @@ public class Code {
 		else
 			return m.get(key).toString().trim();
 	}
-	
+
 	public static String getFieldVal(JSONObject obj, String field, String def) {
 		try {
 			if (obj == null)
