@@ -74,6 +74,39 @@ public class Sybscd {
 	
 	private String SPANPREBL;//专用账户预付款额度(银行)
 	
+	private String LEASESTARTDATE;//软件租赁超始时间
+	
+	private String LEASEENDDATE;//软件租赁结束时间
+	
+	private String SOFTUSETYPE;
+	
+	@JSONField(name="SOFTUSETYPE")	
+	public String getSOFTUSETYPE() {
+		return SOFTUSETYPE;
+	}
+
+	public void setSOFTUSETYPE(String sOFTUSETYPE) {
+		SOFTUSETYPE = sOFTUSETYPE;
+	}
+
+	@JSONField(name="LEASESTARTDATE")	
+	public String getLEASESTARTDATE() {
+		return LEASESTARTDATE;
+	}
+
+	public void setLEASESTARTDATE(String lEASESTARTDATE) {
+		LEASESTARTDATE = lEASESTARTDATE;
+	}
+
+	@JSONField(name="LEASEENDDATE")
+	public String getLEASEENDDATE() {
+		return LEASEENDDATE;
+	}
+
+	public void setLEASEENDDATE(String lEASEENDDATE) {
+		LEASEENDDATE = lEASEENDDATE;
+	}
+
 	@JSONField(name="SPANPREBL")	
 	public String getSPANPREBL() {
 		return SPANPREBL;

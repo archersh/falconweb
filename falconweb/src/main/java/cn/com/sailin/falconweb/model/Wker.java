@@ -108,6 +108,50 @@ public class Wker {
 	
 	private String WKKDSV;//住建工种
 	
+	private String PERSONGUID;
+	
+	private String PIC3GUID;
+	
+	private String PIC4GUID;
+	
+	private String PIC5GUID;
+	
+	@JSONField(name="PERSONGUID")	
+	public String getPERSONGUID() {
+		return PERSONGUID;
+	}
+
+	public void setPERSONGUID(String pERSONGUID) {
+		PERSONGUID = pERSONGUID;
+	}
+
+	@JSONField(name="PIC3GUID")
+	public String getPIC3GUID() {
+		return PIC3GUID;
+	}
+
+	public void setPIC3GUID(String pIC3GUID) {
+		PIC3GUID = pIC3GUID;
+	}
+
+	@JSONField(name="PIC4GUID")
+	public String getPIC4GUID() {
+		return PIC4GUID;
+	}
+
+	public void setPIC4GUID(String pIC4GUID) {
+		PIC4GUID = pIC4GUID;
+	}
+
+	@JSONField(name="PIC5GUID")
+	public String getPIC5GUID() {
+		return PIC5GUID;
+	}
+
+	public void setPIC5GUID(String pIC5GUID) {
+		PIC5GUID = pIC5GUID;
+	}
+
 	@JSONField(name="WKKDSV")	
 	public String getWKKDSV() {
 		return WKKDSV;

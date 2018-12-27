@@ -1,5 +1,7 @@
 package cn.com.sailin.falconweb.publiccode;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -44,7 +46,13 @@ import cn.com.sailin.falconweb.model.Sycdtb;
 import cn.com.sailin.falconweb.model.Wkds;
 import cn.com.sailin.falconweb.model.Wker;
 import cn.com.sailin.falconweb.model.Wkerzk;
+import cn.com.sailin.falconweb.model.Yfdevice;
 import cn.com.sailin.falconweb.model.Zyjn;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class sh {
 
@@ -1125,6 +1133,9 @@ public class sh {
 			bs.setENDDATE(Code.getFieldVal(obj, "ENDDATE", ""));// 项目结束时间
 			bs.setPROJECTCOST(Code.getFieldVal(obj, "PROJECTCOST", ""));// 工程造价
 			bs.setSALARYCOST(Code.getFieldVal(obj, "SALARYCOST", ""));// 工资性工程款
+			bs.setLEASESTARTDATE(Code.getFieldVal(obj, "LEASESTARTDATE", ""));
+			bs.setLEASEENDDATE(Code.getFieldVal(obj, "LEASEENDDATE", ""));
+			bs.setSOFTUSETYPE(Code.getFieldVal(obj, "SOFTUSETYPE", ""));
 
 			List<Map<String, Object>> list = data.qrySybscd(bs.getAPCD(), bs.getBSCD());
 			if (list.size() == 0)
@@ -1483,6 +1494,14 @@ public class sh {
 				return Code.resultError("1111", "工号不能为空");
 			wker.setRGUR(userid);
 
+			// 检查银行卡号是否可用
+			if (!wker.getBKAN().trim().equals("")) {
+				String bk = data.hasBankcard(wker.getIDCDNO(), wker.getBKAN());
+				if (!bk.equals("Y")) {
+					return Code.resultError("1111", bk);
+				}
+			}
+
 			List<Map<String, Object>> lsTemp = null;
 			// 工种检查
 			lsTemp = data.qryAttendPostbyname("HW", wker.getWKNAME());
@@ -1601,6 +1620,36 @@ public class sh {
 				data.insertOplist(wker.getAPCD(), opid, "wkerupdate", JSON.toJSONString(ja));
 			}
 
+			// 写设备人脸识别
+			// if (!wker.getPIC3().trim().equals("") || !wker.getPIC4().trim().equals("")
+			// || !wker.getPIC5().trim().equals("")) {
+			// List<Map<String, Object>> wk = data.qryAttendUserbyidcdno(wker.getAPCD(),
+			// wker.getIDCDNO());
+			// if (wk.size() > 0) {
+			// Statcard sc = new Statcard();
+			// sc.setNg_user_id(Integer.parseInt(Code.getFieldVal(wk.get(0), "ng_id",
+			// "0")));
+			// // 写设备人脸识别
+			// List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+			// if (l.size() == 0)
+			// data.insertAttenddevfeature(sc.getNg_user_id());
+			// }
+			// }
+
+			// 写设备人脸识别
+			if (!wker.getPIC3().trim().equals("") || !wker.getPIC4().trim().equals("")
+					|| !wker.getPIC5().trim().equals("")) {
+				List<Map<String, Object>> wk = data.qryAttendUserbywkid(wker.getAPCD(), wker.getSZ_EMPLOY_ID());
+				if (wk.size() > 0) {
+					Statcard sc = new Statcard();
+					sc.setNg_user_id(Integer.parseInt(Code.getFieldVal(wk.get(0), "ng_id", "0")));
+					// 写设备人脸识别
+					List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+					if (l.size() == 0)
+						data.insertAttenddevfeature(sc.getNg_user_id());
+				}
+			}
+
 			// 上传数据
 			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getSZ_EMPLOY_ID(), data);
 			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
@@ -1618,6 +1667,14 @@ public class sh {
 		try {
 			Wker wker = JSON.parseObject(applydata, Wker.class);
 			wker.setRGUR(userid);
+
+			// 检查银行卡号是否可用
+			if (!wker.getBKAN().trim().equals("")) {
+				String bk = data.hasBankcard(wker.getIDCDNO(), wker.getBKAN());
+				if (!bk.equals("Y")) {
+					return Code.resultError("1111", bk);
+				}
+			}
 
 			List<Map<String, Object>> lsTemp = null;
 			// 工种检查
@@ -1707,6 +1764,20 @@ public class sh {
 				data.insertOplist(wker.getAPCD(), opid, "wkerupdate", JSON.toJSONString(ja));
 			}
 
+			// 写设备人脸识别
+			if (!wker.getPIC3().trim().equals("") || !wker.getPIC4().trim().equals("")
+					|| !wker.getPIC5().trim().equals("")) {
+				List<Map<String, Object>> wk = data.qryAttendUserbywkid(wker.getAPCD(), wker.getSZ_EMPLOY_ID());
+				if (wk.size() > 0) {
+					Statcard sc = new Statcard();
+					sc.setNg_user_id(Integer.parseInt(Code.getFieldVal(wk.get(0), "ng_id", "0")));
+					// 写设备人脸识别
+					List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+					if (l.size() == 0)
+						data.insertAttenddevfeature(sc.getNg_user_id());
+				}
+			}
+
 			// 上传数据
 			uploadhuman(wker.getAPCD(), wker.getBSCD(), wker.getSZ_EMPLOY_ID(), data);
 			uploadexprience(wker.getAPCD(), wker.getBSCD(), wker.getIDCDNO(), data);
@@ -1768,6 +1839,11 @@ public class sh {
 				data.delAttendData(apcd, sc.getApid());
 				data.insertAttendData(apcd, sc);
 
+				// 写设备人脸识别
+				List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+				if (l.size() == 0)
+					data.insertAttenddevfeature(sc.getNg_user_id());
+
 				return Code.resultSuccess();
 			} else {
 				return Code.resultError("1111", "没有该人员信息" + idcdno);
@@ -1778,6 +1854,84 @@ public class sh {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Code.resultError("1111", "添加考勤数据出错" + e.getMessage());
 		}
+	}
+
+	public static String yfattendSubmit(String userid, String applydata, Data data) {
+
+		try {
+			JSONObject jo = JSONObject.parseObject(applydata);
+
+			String userguid = Code.getFieldVal(jo, "personGuid", "");
+			if (userguid.equals(""))
+				return Code.resultError("1111", "用户不能为空");
+
+			String devsn = Code.getFieldVal(jo, "deviceKey", "");
+			if (devsn.equals(""))
+				return Code.resultError("1111", "设备不能为空");
+			List<Map<String, Object>> ldev = data.qryDevinfobydevsn(devsn);
+			String bscd = "";
+			String devname = "";
+			if (ldev.size() > 0) {
+				bscd = Code.getFieldVal(ldev.get(0), "BSCD", "");
+				devname = Code.getFieldVal(ldev.get(0), "DEVICENAME", "");
+			}
+			String idcdno = data.getIdcdnobyyf(userguid);
+			if (idcdno.equals(""))
+				return Code.resultError("1111", "找不到该用户信息");
+			if (bscd.equals(""))
+				return Code.resultError("1111", "找不到工地信息");
+			if (devname.equals(""))
+				return Code.resultError("1111", "找不到设备信息");
+			String showtime = Code.getFieldVal(jo, "showTime", "");
+			if (showtime.equals(""))
+				return Code.resultError("1111", "考勤时间不能为空");
+
+			String apcd = "YF";
+
+			String apid = data.getNextval("APID");
+
+			String employid = "";
+			List<Map<String, Object>> wkbs = data.qryWkerbs(apcd, bscd, idcdno);
+			if (wkbs.size() > 0) {
+				employid = Code.getFieldVal(wkbs.get(0), "SZ_EMPLOY_ID", "");
+			}
+			if (employid.equals(""))
+				return Code.resultError("1111", "没有该人员信息" + idcdno);
+
+			List<Map<String, Object>> wk = data.qryAttendUserbywkid(apcd, employid);
+
+			if (wk.size() > 0) {
+
+				Statcard sc = new Statcard();
+				sc.setApcd(apcd);
+				sc.setApid(Integer.parseInt(apid));
+				sc.setNg_branch_id(getAttendbranchid(apcd, bscd, data));
+				sc.setNg_dev_id(0);
+				sc.setNg_user_id(Integer.parseInt(Code.getFieldVal(wk.get(0), "ng_id", "0")));
+				sc.setSt_kind(0);
+				sc.setSz_dev_name(devname);
+				sc.setSz_employ_id(Code.getFieldVal(wk.get(0), "sz_employ_id", ""));
+				sc.setTs_card(showtime);
+				sc.setSz_photo_path(Code.getFieldVal(jo, "photoUrl", ""));
+				data.delAttendData(apcd, sc.getApid());
+				data.insertAttendData(apcd, sc);
+
+				// 写设备人脸识别
+				List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+				if (l.size() == 0)
+					data.insertAttenddevfeature(sc.getNg_user_id());
+
+				return Code.resultSuccess();
+			} else {
+				return Code.resultError("1111", "没有该人员信息" + idcdno);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Code.resultError("1111", "添加考勤数据出错" + e.getMessage());
+		}
+
 	}
 
 	public static String updatePassword(String userid, String applydata, Data data) {
@@ -2391,6 +2545,26 @@ public class sh {
 		}
 	}
 
+	public static String uploadhumanbybscd(String userid, String applydata, Data data) {
+
+		JSONObject obj = JSON.parseObject(applydata);
+		String apcd = Code.getFieldVal(obj, "apcd", "");
+		String bscd = Code.getFieldVal(obj, "bscd", "");
+		List<Map<String, Object>> lwk = data.qryWker(apcd, bscd);
+
+		for (Map<String, Object> wk : lwk) {
+			uploadhuman(apcd, bscd, Code.getFieldVal(wk, "SZ_EMPLOY_ID", ""), data);
+		}
+
+		return Code.resultSuccess();
+
+	}
+
+	public static String uploadsalarybysqnb(String userid, String applydata, Data data) {
+		uploadsalary(applydata, data);
+		return Code.resultSuccess();
+	}
+
 	public static String importBankback(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -2551,10 +2725,11 @@ public class sh {
 						sc.setTs_card(Code.getFieldVal(ji, "checktime", ""));
 						data.delAttendData(apcd, sc.getApid());
 						data.insertAttendData(apcd, sc);
-						
-						//写设备人脸识别
-						List<Map<String,Object>> l=data.qryAttenddevfeature(sc.getNg_user_id());
-						if (l.size()==0) data.insertAttenddevfeature(sc.getNg_user_id());
+
+						// 写设备人脸识别
+						List<Map<String, Object>> l = data.qryAttenddevfeature(sc.getNg_user_id());
+						if (l.size() == 0)
+							data.insertAttenddevfeature(sc.getNg_user_id());
 					}
 				}
 			}
@@ -3016,7 +3191,7 @@ public class sh {
 
 	private static void uploadsalary(String sqnb, Data data) {
 
-		List<Map<String, Object>> lacpy = data.qryAcpy(sqnb);
+		List<Map<String, Object>> lacpy = data.qryAcpyitem(sqnb);
 
 		HashMap<String, Map<String, String>> sumdata = qryUploadsalarysum(sqnb, data);
 
@@ -3040,31 +3215,38 @@ public class sh {
 					String month = Code.getFieldVal(acpy, "MONTH", "");
 					String idcdno = Code.getFieldVal(acpy, "IDCDNO", "");
 					jo.put("worker_salary_id", month + idcdno);
-					jo.put("data_time", "");
+					jo.put("data_time",
+							Code.getFillStr(Code.getFieldVal(acpy, "BKCFMDT", ""), "L", 10, "0").substring(0, 10));
 					jo.put("month", month.substring(0, 4) + "-" + month.substring(4, 6));
 
 					List<Map<String, Object>> lwkbs = data.qryWkerbs(apcd, bscd, idcdno);
 					String wkid = "";
 					if (lwkbs.size() > 0)
 						wkid = Code.getFieldVal(lwkbs.get(0), "SZ_EMPLOY_ID", "");
+					if (wkid.equals("")) {
+						wkid = "00000";
+					}
 					jo.put("worker_id", wkid);
 					jo.put("worker_name", Code.getFieldVal(acpy, "NAME", ""));
 					jo.put("id_card", idcdno);
 					jo.put("bank_no", Code.getFieldVal(acpy, "BKAN", ""));
 
-					List<Map<String, Object>> lwk = data.qryWker(idcdno);
-					String tel = "";
-					if (lwk.size() > 0)
-						tel = Code.getFieldVal(lwk.get(0), "TEL", "");
+					// List<Map<String, Object>> lwk = data.qryWker(idcdno);
+					// String tel = "";
+					// if (lwk.size() > 0)
+					// tel = Code.getFieldVal(lwk.get(0), "TEL", "");
+					String tel = "123456789";
 					jo.put("mobile", tel);
 
 					jo.put("send_amount", Code.getFieldVal(acpy, "ACPY", ""));
 					String paidamount = "";
 					if (Code.getFieldVal(acpy, "INBKCFM", "N").equals("Y"))
 						paidamount = Code.getFieldVal(acpy, "ACPY", "");
+					else
+						paidamount = "0";
 					jo.put("paid_amount", paidamount);
 					String gdstatus = "1";
-					if (!paidamount.equals(""))
+					if (!Code.getFieldVal(acpy, "INBKCFM", "N").equals("Y"))
 						gdstatus = "2";
 					jo.put("goods_status", gdstatus);
 
@@ -3074,15 +3256,20 @@ public class sh {
 					String wkds = "";
 					if (item != null) {
 						attend = item.get("ATTEND");
+						attend = String.valueOf((int) Math.ceil(Float.parseFloat(attend)));
 						salary = item.get("SALARY");
 						wkds = item.get("WKDS");
+						wkds = String.valueOf((int) Math.ceil(Float.parseFloat(wkds)));
 					}
 					jo.put("attendance_month_num", wkds);
 					jo.put("attendance_total_num", attend);
+					if (salary == null) {
+						salary = "0";
+					}
 					jo.put("total_salary", salary);
 
 					String opid = data.getNextval("OPID");
-					data.insertOplist("", opid, "newuploadsalary", "[" + jo.toJSONString() + "]");
+					data.insertOplist(apcd, bscd, opid, "newuploadsalary", "[" + jo.toJSONString() + "]");
 				}
 			}
 		}
@@ -3131,6 +3318,90 @@ public class sh {
 			return Code.resultError("1111", "导入银行流水有误" + e.getMessage());
 		}
 
+	}
+
+	public static String getYftoken(Data data) {
+
+		String appid = "CD6B613ABAE54D81971955D00B04E370";
+		JSONObject jo = new JSONObject();
+
+		List<Map<String, Object>> l = data.qryYftoken(appid);
+		if (l.size() > 0) {
+
+			jo.put("appid", appid);
+			jo.put("token", Code.getFieldVal(l.get(0), "TOKEN", ""));
+
+		}
+
+		return jo.toJSONString();
+	}
+
+	public static void refreshYftoken(Data data) {
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		RequestBody body = RequestBody.create(mediaType,
+				"appId=CD6B613ABAE54D81971955D00B04E370" + "&appKey=1EF34EE105714763823789ED391717FC"
+						+ "&timestamp=1541650703000&sign=fb54dab31972fef4bd7228b515ff5874");
+		Request request = new Request.Builder()
+				.url("http://gs-api.uface.uni-ubi.com/v1/CD6B613ABAE54D81971955D00B04E370/auth").post(body)
+				.addHeader("Content-Type", "application/x-www-form-urlencoded").addHeader("Cache-Control", "no-cache")
+				.addHeader("Postman-Token", "9e99036c-287e-425e-b6b1-b1630258ab7b").build();
+
+		try {
+			Response response = client.newCall(request).execute();
+			String result = response.body().string();
+			JSONObject jo = JSONObject.parseObject(result);
+			if (jo.getBoolean("success")) {
+				String appid = "CD6B613ABAE54D81971955D00B04E370";
+				String token = jo.getString("data");
+
+				data.delYftoken(appid);
+				data.insertYftoken(appid, token);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static String insertyfdevice(String userid, String applydata, Data data) {
+
+		try {
+
+			Yfdevice dev = JSONObject.parseObject(applydata, Yfdevice.class);
+			data.insertYfdevice(dev);
+			return Code.resultSuccess();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", e.getMessage());
+		}
+
+	}
+
+	public static String updateyfdevice(String userid, String applydata, Data data) {
+		try {
+
+			Yfdevice dev = JSONObject.parseObject(applydata, Yfdevice.class);
+			data.updateYfdevice(dev);
+			return Code.resultSuccess();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", e.getMessage());
+		}
+	}
+
+	public static String delyfdevice(String userid, String applydata, Data data) {
+		try {
+			data.delYfdevice(applydata);
+			return Code.resultSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", e.getMessage());
+		}
 	}
 
 }

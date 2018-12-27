@@ -13,6 +13,10 @@ import cn.com.sailin.falconweb.publiccode.Code;
 import cn.com.sailin.falconweb.publiccode.sh;
 import cn.com.sailin.falconweb.schedle.Schedle;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -30,26 +34,68 @@ public class WebserviceImpl implements WebserviceInterface {
 
 	@Resource
 	private WebServiceContext wsContext;
-	
+
 	private final static Logger log = LoggerFactory.getLogger("cn.com.sailin.falconweb.publiccode.sh");
 
 	private boolean hasAuth(String userid, String timestamp, String token, String method, String applydata) {
 
+		// return true;
+
+		if (!userid.equals("SYS")) {
+			String pw = data.getPassword(userid);
+			String md5source1=userid.trim() + pw.trim() + timestamp.trim() + method.trim() + applydata.trim();
+			String md5source2=userid.trim()+pw.trim() + timestamp.trim() + method.trim();
+			String m51 = Code.md5(md5source1);
+			String m52=Code.md5(md5source2);
+			if (m51.toUpperCase().equals(token.toUpperCase())||m52.toUpperCase().equals(token.toUpperCase())) {
+				long curr = System.currentTimeMillis();
+				long priv = curr - 10 * 60 * 1000;
+				long back = curr + 10 * 60 * 1000;
+
+				SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+				String starttime = df.format(new Date(priv));
+				String endtime = df.format(new Date(back));
+
+				if (timestamp.compareTo(starttime) > 0 && timestamp.compareTo(endtime) < 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	private boolean hasAuthweb(String userid, String timestamp, String token, String method, String applydata) {
+
 		return true;
 
-		// String pw = data.getPassword(userid);
+		// String pw = data.getPasswordweb(userid);
 		// String m5 = Code.md5(userid + pw + timestamp + method + applydata);
+
+		// System.out.println("Remote:");
+		// System.out.println(" userid:" + userid);
+		// System.out.println(" timestamp:" + timestamp);
+		// System.out.println(" method:" + method);
+		// System.out.println(" applydata:" + applydata);
+		// System.out.println(" token:" + token);
+		// System.out.println("Local:");
+		// System.out.println(" string:" + userid + pw + timestamp + method +
+		// applydata);
+		// System.out.println(" md5:" + m5);
+
 		// if (m5.toUpperCase().equals(token.toUpperCase())) {
 		// long curr = System.currentTimeMillis();
 		// long priv = curr - 10 * 60 * 1000;
 		// long back = curr + 10 * 60 * 1000;
-		//
-		// SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-		// String starttime = df.format(new Date(priv));
-		// String endtime = df.format(new Date(back));
-		//
-		// if (timestamp.compareTo(starttime) > 0
-		// && timestamp.compareTo(endtime) < 0) {
+
+		// String starttime = Code.dtft.format(new Date(priv));
+		// String endtime = Code.dtft.format(new Date(back));
+
+		// if (timestamp.compareTo(starttime) > 0 && timestamp.compareTo(endtime) < 0) {
 		// return true;
 		// } else {
 		// return false;
@@ -57,41 +103,6 @@ public class WebserviceImpl implements WebserviceInterface {
 		// } else {
 		// return false;
 		// }
-	}
-
-	private boolean hasAuthweb(String userid, String timestamp, String token, String method, String applydata) {
-
-		return true;
-
-//		String pw = data.getPasswordweb(userid);
-//		String m5 = Code.md5(userid + pw + timestamp + method + applydata);
-
-//		System.out.println("Remote:");
-//		System.out.println("	userid:" + userid);
-//		System.out.println("	timestamp:" + timestamp);
-//		System.out.println("	method:" + method);
-//		System.out.println("	applydata:" + applydata);
-//		System.out.println("   token:" + token);
-//		System.out.println("Local:");
-//		System.out.println("   string:" + userid + pw + timestamp + method + applydata);
-//		System.out.println("   md5:" + m5);
-
-//		if (m5.toUpperCase().equals(token.toUpperCase())) {
-//			long curr = System.currentTimeMillis();
-//			long priv = curr - 10 * 60 * 1000;
-//			long back = curr + 10 * 60 * 1000;
-
-//			String starttime = Code.dtft.format(new Date(priv));
-//			String endtime = Code.dtft.format(new Date(back));
-
-//			if (timestamp.compareTo(starttime) > 0 && timestamp.compareTo(endtime) < 0) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		} else {
-//			return false;
-//		}
 
 	}
 
@@ -109,25 +120,25 @@ public class WebserviceImpl implements WebserviceInterface {
 
 	@Transactional
 	@Override
-	public String invoke(String userid, String timestamp, String token, String method, String applydata) {
+	public String invoke(String userid, String timestamp, String token, String method, String applydata){
 
 		String res = null;
 
 		String day = Code.getWeek(new Date());
 		String pid = data.getPid();
-		
+
 		log.info("pid:" + pid + " method:" + method + " applydata:" + applydata);
 
 		data.insertLog(day, pid, method, getClientInfo() + ":" + applydata, userid);
-
+		
 		if (hasAuth(userid, timestamp, token, method, applydata)) {
 
 			// check
 			if (method.equals("dsql"))
 				res = sh.Dsql(applydata, data);
 			// check
-			if (method.equals("esql"))
-				res = sh.Esql(applydata, data);
+			//if (method.equals("esql"))
+			//	res = sh.Esql(applydata, data);
 			// check 添加审核数据
 			if (method.equals("insertacpy"))
 				res = sh.insertAcpy(userid, applydata, data);
@@ -205,7 +216,7 @@ public class WebserviceImpl implements WebserviceInterface {
 				res = sh.delWker(userid, applydata, data);
 			// check 更改民工数据
 			if (method.equals("updatewker"))
-				res=sh.updateWker(userid, applydata, data);
+				res = sh.updateWker(userid, applydata, data);
 			// check 添加功能
 			if (method.equals("insertacfunctioninfo"))
 				res = sh.insertAcfunctioninfo(userid, applydata, data);
@@ -303,10 +314,10 @@ public class WebserviceImpl implements WebserviceInterface {
 			if (method.equals("getbshisinfo"))
 				res = sh.getBshisinfo(userid, applydata, data);
 			if (method.equals("dobscoll"))
-				res=sh.doBscoll(userid, applydata, data);
+				res = sh.doBscoll(userid, applydata, data);
 			// check 导入银行反馈数据
 			if (method.equals("importbankback"))
-				res=sh.importBankback(userid, applydata, data);
+				res = sh.importBankback(userid, applydata, data);
 			if (method.equals("getfillstr")) {
 				JSONObject obj = JSON.parseObject(applydata);
 				String sSrc = obj.getString("src");
@@ -315,32 +326,54 @@ public class WebserviceImpl implements WebserviceInterface {
 				String sFill = obj.getString("fill");
 				return Code.getFillStr(sSrc, sSign, Integer.parseInt(sLen), sFill);
 			}
-			//添加操作列表
+			// 添加操作列表
 			if (method.equals("insertoplist"))
-				res=sh.insertOplist(applydata, data);
-			//删除操作列表
+				res = sh.insertOplist(applydata, data);
+			// 删除操作列表
 			if (method.equals("deloplist"))
-				res=sh.delOplist(applydata, data);
-			//更新操作列表出错返回值
+				res = sh.delOplist(applydata, data);
+			// 更新操作列表出错返回值
 			if (method.equals("updateoplistresult"))
-				res=sh.updateOplistresult(applydata, data);
+				res = sh.updateOplistresult(applydata, data);
 			// check 重置密码
 			if (method.equals("resetpassword"))
 				res = sh.resetPassword(userid, applydata, data);
+			// 第三门考勤数据上传接口
 			if (method.equals("attendsubmit"))
-				res = sh.attendSubmit(userid,applydata,data);
-			//工人离职
+				res = sh.attendSubmit(userid, applydata, data);
+			if (method.equals("yfattendsubmit"))
+				res=sh.yfattendSubmit(userid, applydata, data);
+			// 工人离职
 			if (method.equals("wkerleave"))
-				res=sh.wkerleave(userid,applydata,data);
-			//银行流水
+				res = sh.wkerleave(userid, applydata, data);
+			// 银行流水
 			if (method.equals("bankrecord"))
-				res=sh.bankrecord(userid,applydata,data);
-			
-			//测试上传考勤数据
+				res = sh.bankrecord(userid, applydata, data);
+
+			// 测试上传考勤数据
 			if (method.equals("testuploadwkds"))
-				res=sh.uploadwkds(userid, applydata, data);
+				res = sh.uploadwkds(userid, applydata, data);
 			// if (method.equals("test")) {
 			// schedle.importWkds();
+
+			// 测试上传工地人员数据
+			if (method.equals("testuploadhuman"))
+				res = sh.uploadhumanbybscd(userid, applydata, data);
+			if (method.equals("testuploadsalary"))
+				res=sh.uploadsalarybysqnb(userid,applydata,data);
+			if (method.equals("getyftoken"))
+				res=sh.getYftoken(data);
+			
+			if (method.equals("insertyfdevice"))
+				res=sh.insertyfdevice(userid,applydata,data);
+			if (method.equals("updateyfdevice"))
+				res=sh.updateyfdevice(userid,applydata,data);
+			if (method.equals("delyfdevice"))
+				res=sh.delyfdevice(userid,applydata,data);
+			
+			if (method.equals("testbklist"))
+				res=data.getAllbkcdbybkcd(applydata);
+			
 			// }
 		} else
 
@@ -350,11 +383,12 @@ public class WebserviceImpl implements WebserviceInterface {
 		if (res == null)
 			res = Code.resultError("1111", "非法method[" + method + "]");
 
-		int len=res.length();
-		if (len>100) len=100;
-		
-		log.info("pid:" + pid + " res:" + res.substring(0,len));
-		
+		int len = res.length();
+		if (len > 100)
+			len = 100;
+
+		log.info("pid:" + pid + " res:" + res.substring(0, len));
+
 		data.updateLog(day, pid, res);
 
 		return res;
@@ -367,6 +401,8 @@ public class WebserviceImpl implements WebserviceInterface {
 		String day = Code.getWeek(new Date());
 		String pid = data.getPid();
 
+		log.info("pid:" + pid + " method:" + method + " applydata:" + applydata);
+		
 		data.insertLog(day, pid, method, getClientInfo() + ":" + applydata, userid);
 
 		if (hasAuthweb(userid, timestamp, token, method, applydata)) {
@@ -381,28 +417,37 @@ public class WebserviceImpl implements WebserviceInterface {
 			if (method.equals("getacpyinfo"))
 				res = sh.getAcpyinfo(applydata, data);
 			if (method.equals("dsql"))
-				res=sh.Dsql(applydata, data);
-			//添加操作列表
+				res = sh.Dsql(applydata, data);
+			// 添加操作列表
 			if (method.equals("insertoplist"))
-				res=sh.insertOplist(applydata, data);
-			//删除操作列表
+				res = sh.insertOplist(applydata, data);
+			// 删除操作列表
 			if (method.equals("deloplist"))
-				res=sh.delOplist(applydata, data);
-			//更新操作列表出错返回值
+				res = sh.delOplist(applydata, data);
+			// 更新操作列表出错返回值
 			if (method.equals("updateoplistresult"))
-				res=sh.updateOplistresult(applydata, data);
+				res = sh.updateOplistresult(applydata, data);
+			if (method.equals("yfattendsubmit"))
+				res=sh.yfattendSubmit("SYS", applydata, data);
 		} else {
 			res = Code.resultError("1111", "鉴权失败，非法调用");
 		}
 		if (res == null)
 			res = Code.resultError("1111", "非法method[" + method + "]");
+		
+		int len = res.length();
+		if (len > 100)
+			len = 100;
+		
+		log.info("pid:" + pid + " res:" + res.substring(0, len));
+		
 		data.updateLog(day, pid, res);
 
 		return res;
 	}
-	
+
 	@Override
-	public String postbytes(String userid,String timestamp,String token,String applydata,byte[] bytes) {
+	public String postbytes(String userid, String timestamp, String token, String applydata, byte[] bytes) {
 		return "";
 	}
 

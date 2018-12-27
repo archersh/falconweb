@@ -108,7 +108,7 @@ public class Schedle {
 				Calendar endday = Calendar.getInstance();
 				String temp = _ft.format(today.getTime());
 				endday.set(Integer.parseInt(temp.substring(0, 4)), Integer.parseInt(temp.substring(4, 6)) - 1,
-						Integer.parseInt(temp.substring(6, 8)));
+						Integer.parseInt(temp.substring(6, 8)), 0, 0, 0);
 				Calendar startday = (Calendar) endday.clone();
 				startday.add(Calendar.DATE, -1);
 
@@ -255,6 +255,11 @@ public class Schedle {
 			else
 				data.insertWkerattendtime(wktm);
 		}
+	}
+
+	@Scheduled(initialDelay = 10000, fixedDelay = 18000000)
+	public void updateYftoken() {
+		sh.refreshYftoken(data);
 	}
 
 }

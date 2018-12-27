@@ -85,14 +85,12 @@ public class Attend {
 
 			if (md.getStarttime() == null) {
 				md.setStarttime((Calendar) cur.clone());
-			} else {
-				if (md.getEndtime() == null) {
-					md.setEndtime((Calendar) cur.clone());
-				} else {
-					if (cur.after(md.getEndtime())) {
-						md.setEndtime((Calendar) cur.clone());
-					}
-				}
+			}
+			if (md.getEndtime() == null) {
+				md.setEndtime((Calendar) cur.clone());
+			}
+			if (cur.after(md.getEndtime())) {
+				md.setEndtime((Calendar) cur.clone());
 			}
 			// System.out.println(JSON.toJSON(md) + Code.dtft.format(cur.getTime()));
 			mmd.put(idcdno + "-" + date.substring(0, 8), md);

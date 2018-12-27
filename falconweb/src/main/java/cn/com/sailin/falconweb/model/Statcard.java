@@ -23,6 +23,16 @@ public class Statcard {
 	private String apcd;
 	
 	private int apid;
+	
+	private String sz_photo_path;
+	
+	public String getSz_photo_path() {
+		return sz_photo_path;
+	}
+
+	public void setSz_photo_path(String sz_photo_path) {
+		this.sz_photo_path = sz_photo_path;
+	}
 
 	public int getSt_kind() {
 		return st_kind;

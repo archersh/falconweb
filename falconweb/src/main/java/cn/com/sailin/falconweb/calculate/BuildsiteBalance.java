@@ -39,6 +39,8 @@ public class BuildsiteBalance {
 
 	private HashMap<String, Map<String, Object>> _sumrs = null;
 
+	private HashMap<String, String> _bslc = null;
+
 	private SimpleDateFormat _dtft = null;
 
 	private String _reqtype;
@@ -104,7 +106,7 @@ public class BuildsiteBalance {
 		for (Map<String, Object> m : list) {
 			_sumrs.put(Code.getFieldVal(m, "APCD", "") + "-" + Code.getFieldVal(m, "BSCD", ""), m);
 		}
-		
+
 		System.out.println(JSON.toJSONString(_sumrs));
 	}
 
@@ -113,13 +115,22 @@ public class BuildsiteBalance {
 		if (_reqtype.equals("SV"))
 			lbs = _data.qryBslistbysvdp(_reqval);
 		if (_reqtype.equals("BK"))
-			lbs = _data.qryBslistbybkcd(_reqval);
+			lbs = _data.qryFullbslistbybkcd(_reqval);
 		if (_reqtype.equals("CC"))
 			lbs = _data.qryBslistbycccd(_reqval);
 		if (lbs != null) {
 			for (Map<String, Object> m : lbs) {
 				_setbs.add(Code.getFieldVal(m, "APCD", "") + "-" + Code.getFieldVal(m, "BSCD", ""));
 			}
+		}
+	}
+
+	private void getBsls() {
+		List<Map<String, Object>> lbs = _data.qryBslc();
+		_bslc = new HashMap<String, String>();
+		for (Map<String, Object> m : lbs) {
+			_bslc.put(Code.getFieldVal(m, "APCD", "").trim() + "-" + Code.getFieldVal(m, "BSCD", ""),
+					Code.getFieldVal(m, "LCCD", ""));
 		}
 	}
 
@@ -267,6 +278,18 @@ public class BuildsiteBalance {
 			bsst.setCCCD("");
 		else
 			bsst.setCCDS(Code.getFieldVal(m, "SYDSTB", ""));
+	    String lccd=_bslc.get(bsst.getAPCD()+ "-" + bsst.getBSCD());
+	    if (lccd==null) { lccd="";};
+	    if (!lccd.equals("")) {
+	    	m = Code.getMapval(_cccd, lccd);
+	    	if (m==null)
+	    		bsst.setLCNAME("");
+	    	else
+	    		bsst.setLCNAME(Code.getFieldVal(m, "SYDSTB", ""));
+	    }else
+	    {
+	    	bsst.setLCNAME("");
+	    }
 		bsst.setSPANBL(Code.getFieldVal(mbs, "SPANRQBL", "0"));
 		bsst.setSVDP(Code.getFieldVal(mbs, "SVDP", ""));
 		bsst.setBLDY(Code.getFieldVal(mbs, "BLWNDY", "0"));
@@ -279,8 +302,8 @@ public class BuildsiteBalance {
 			bsst.setBLSTRM("当前月进度款额度银行还未登记");
 		} else {
 			bsst.setCURBL(Code.getFieldVal(m, "SPANBL", "0"));
-			int currbl = Integer.parseInt(bsst.getCURBL());
-			int setbl = Integer.parseInt(bsst.getSPANBL());
+			float currbl = Float.parseFloat(bsst.getCURBL());
+			float setbl = Float.parseFloat(bsst.getSPANBL());
 			if (currbl < setbl) {
 				bsst.setBLSTATUS("Y");
 				bsst.setBLSTRM("当前额度满足");
@@ -296,10 +319,10 @@ public class BuildsiteBalance {
 			bsst.setQXRM("没有计算结果");
 			bsst.setQXRS("0");
 		} else {
-			//以确认数据为基础的欠薪人数
+			// 以确认数据为基础的欠薪人数
 			int qxrs = Integer.parseInt(Code.getFieldVal(m, "QXRSCFM", "0"));
 			int ffrs = Integer.parseInt(Code.getFieldVal(m, "FFRS", "0"));
-			int wkrs=Integer.parseInt(Code.getFieldVal(m, "WKRS", "0"));
+			int wkrs = Integer.parseInt(Code.getFieldVal(m, "WKRS", "0"));
 			bsst.setQXRS(String.valueOf(qxrs));
 			bsst.setFFRS(String.valueOf(ffrs));
 			bsst.setCKRS(String.valueOf(wkrs));
@@ -308,7 +331,7 @@ public class BuildsiteBalance {
 			Calendar dtff = Calendar.getInstance();
 			dtff.clear();
 			dtff.set(Integer.parseInt(bsst.getPYDATE().substring(0, 4)),
-					Integer.parseInt(bsst.getPYDATE().substring(4, 6))-1,
+					Integer.parseInt(bsst.getPYDATE().substring(4, 6)) - 1,
 					Integer.parseInt(bsst.getPYDATE().substring(6, 8)));
 			Calendar dtkx = (Calendar) dtff.clone();
 			dtkx.add(Calendar.DATE, _kxts);
@@ -360,7 +383,8 @@ public class BuildsiteBalance {
 		getBsbl(blmonth);
 		getBscoll(pymonth);
 		getSumrs();
-		getBslist();
+		getBslist();		
+		getBsls();
 
 		// 获取工地列表
 		List<Map<String, Object>> bslist = _data.qryBsinfonodt();

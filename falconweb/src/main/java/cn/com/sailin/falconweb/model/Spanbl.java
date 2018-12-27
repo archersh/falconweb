@@ -24,6 +24,17 @@ public class Spanbl {
 	
 	private String RQANBL;//要求的账户余额
 	
+	private String CHARGEDATE;//入账日期
+	
+	@JSONField(name="CHARGEDATE")	
+	public String getCHARGEDATE() {
+		return CHARGEDATE;
+	}
+
+	public void setCHARGEDATE(String cHARGEDATE) {
+		CHARGEDATE = cHARGEDATE;
+	}
+
 	@JSONField(name="MONTH")
 	public String getMONTH() {
 		return MONTH;

@@ -66,7 +66,7 @@ public class HistoryBalance {
 		if (_reqtype.equals("SV"))
 			lbs = _data.qryBslistbysvdp(_reqval);
 		if (_reqtype.equals("BK"))
-			lbs = _data.qryBslistbybkcd(_reqval);
+			lbs = _data.qryFullbslistbybkcd(_reqval);
 		if (_reqtype.equals("CC"))
 			lbs = _data.qryBslistbycccd(_reqval);
 		if (lbs != null) {

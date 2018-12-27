@@ -56,6 +56,17 @@ public class Bsst {
 	
 	private String SUMFFRS;//发薪总人次
 	
+	private String LCNAME;//发薪单位名称
+	
+	@JSONField(name="LCNAME")	
+	public String getLCNAME() {
+		return LCNAME;
+	}
+
+	public void setLCNAME(String lCNAME) {
+		LCNAME = lCNAME;
+	}
+
 	@JSONField(name="SUMQXRS")
 	public String getSUMQXRS(){
 		return SUMQXRS;

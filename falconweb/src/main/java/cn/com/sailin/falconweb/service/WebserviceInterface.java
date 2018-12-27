@@ -1,5 +1,7 @@
 package cn.com.sailin.falconweb.service;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -13,7 +15,7 @@ public interface WebserviceInterface {
 			@WebParam(name = "timestamp") String timestamp,
 			@WebParam(name = "token") String token, 
 			@WebParam(name = "method") String method,
-			@WebParam(name = "applydata") String applydata);
+			@WebParam(name = "applydata") String applydata) throws UnsupportedEncodingException;
 	
 	@WebMethod
 	public String webinvoke(
