@@ -11,7 +11,7 @@ config:
 spring:
   datasource:
     //url: jdbc:oracle:thin:@169.169.43.72:1521:orcl
-    url: jdbc:oracle:thin:@192.168.17.10:1521:orcl
+    url: jdbc:oracle:thin:@127.0.0.1:1521:orcl
     username: tpcfs
     password: tpcfs
     driver-class-name: oracle.jdbc.driver.OracleDriver

@@ -10,5 +10,7 @@ public interface WebserviceInterface {
 	public String getData();
 	
 	public String CallService(String method,String applyData);
+	
+	public String invoke(String jobId,String applyData,String userId,String password);
 
 }

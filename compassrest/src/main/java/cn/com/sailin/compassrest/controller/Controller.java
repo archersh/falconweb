@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +38,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
@@ -55,6 +59,8 @@ public class Controller {
 
 	@Autowired
 	private Data data;
+	
+	public static SimpleDateFormat dtft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@RequestMapping(value = "/rest", method = RequestMethod.POST)
 	public @ResponseBody String invoke(HttpServletRequest request) {
@@ -152,6 +158,10 @@ public class Controller {
 			
 			if (method.equals("getctnsizetype")) {
 				return getCtnsizetype();
+			}
+			
+			if (method.equals("readoutctninfo")) {
+				return readOutCtnInfobycntr(Code.getFieldVal(obj, "applydata", ""));
 			}
 
 			if (result.equals("")) {
@@ -514,5 +524,58 @@ public class Controller {
 			e.printStackTrace();
 			return Code.resultError("1111", "删除文件出错" + e.getMessage());
 		}
+	}
+	
+	private String readOutCtnInfobycntr(String cntr) {
+		try {
+			JSONObject jo=new JSONObject();
+			
+			long enddate = System.currentTimeMillis();
+			long startdate=enddate-30*24*60*60*1000;
+			
+			String send=dtft.format(new Date(enddate));
+			String sstart=dtft.format(new Date(startdate));
+			
+			jo.put("id",send);
+			jo.put("userName","13567910431");
+			jo.put("userPassWord","AX27698048");
+			jo.put("palceCode","");
+			jo.put("unCode", "");
+			jo.put("voyage", "");	
+			jo.put("ctnNo", cntr);
+			jo.put("blNo","");
+			jo.put("ctnAwayFlag","");
+			jo.put("startTime","");
+			jo.put("endTime", "");
+			jo.put("vesselNameE", "");
+			jo.put("jobId", "OUTCTNBILLINFO");
+			
+			JSONArray ja = new JSONArray();
+			ja.add("OUTCTNBILLINFO");
+			ja.add(jo);
+			
+			JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
+			Client client = dcf.createClient(config.getYgturl());
+			Object[] objects = new Object[0];
+			objects = client.invoke("callEDIESBPub", "AXTC", "ZJYGT", "OUTCTNINFO",ja.toJSONString() , "", "");
+			String result= objects[0].toString();
+			if (!result.equals("")) {
+				JSONObject jr=JSONObject.parseObject(result);
+				if (jr.getString("msgId").equals("0000")) {
+					JSONArray jar=jr.getJSONArray("CtnInfo");
+					for (int i=0;i<jar.size();i++) {
+						JSONObject jrm=(JSONObject) jar.get(i);
+						data.insertOutCtnInfo(jrm);
+						return Code.resultSuccess("Y");
+					}
+				}
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultSuccess("调用易港通数据出错");
+		}
+		
+		return Code.resultSuccess("N");
 	}
 }

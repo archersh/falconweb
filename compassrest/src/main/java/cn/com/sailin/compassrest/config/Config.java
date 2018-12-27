@@ -12,6 +12,18 @@ public class Config {
 	private String uploadpath;
 	
 	private String updatefile;
+	
+	private String ygturl;
+	
+	
+
+	public String getYgturl() {
+		return ygturl;
+	}
+
+	public void setYgturl(String ygturl) {
+		this.ygturl = ygturl;
+	}
 
 	public String getUrl() {
 		return url;
