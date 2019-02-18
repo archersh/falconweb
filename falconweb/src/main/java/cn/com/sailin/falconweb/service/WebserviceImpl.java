@@ -361,6 +361,11 @@ public class WebserviceImpl implements WebserviceInterface {
 				res = sh.uploadhumanbybscd(userid, applydata, data);
 			if (method.equals("testuploadsalary"))
 				res=sh.uploadsalarybysqnb(userid,applydata,data);
+			//测试上传工地数据
+			if (method.equals("testuploadproject"))
+				res=sh.testuploadproject(userid,applydata,data);
+			
+			
 			if (method.equals("getyftoken"))
 				res=sh.getYftoken(data);
 			

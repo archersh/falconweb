@@ -2564,6 +2564,16 @@ public class sh {
 		uploadsalary(applydata, data);
 		return Code.resultSuccess();
 	}
+	
+	public static String testuploadproject(String userid,String applydata,Data data) {
+		List<Map<String,Object>> lbs=data.qryBsinfo();
+		for (Map<String,Object>mbs : lbs) {
+			
+			uploadproject(Code.getFieldVal(mbs, "APCD", ""),Code.getFieldVal(mbs, "BSCD", ""),data);
+			
+		}
+		return Code.resultSuccess();
+	}
 
 	public static String importBankback(String userid, String applydata, Data data) {
 		try {
