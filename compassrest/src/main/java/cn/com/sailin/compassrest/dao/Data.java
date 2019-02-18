@@ -81,53 +81,36 @@ public class Data {
 				py.getChargename(), py.getAmount(), py.getPaymodel(), py.getPaydate(), py.getPayopenid() });
 
 	}
-	
+
+	public void delOutCtnInfo(String cntr) {
+		String sql = "delete from t_outctninfo where ctnno=?";
+		jdbc.update(sql, new Object[] { cntr });
+	}
+
 	public void insertOutCtnInfo(JSONObject jo) {
-		String sql="insert into t_outctninfo(actualLocation,palcecode,ctnawaytime,actualpositionblock,"
+		String sql = "insert into t_outctninfo(actualLocation,palcecode,ctnawaytime,actualpositionblock,"
 				+ "ctntype,ctnno,blno,vesselnamee,uncode,voyage,ctnoperatorcode,ctnsizetype,damageinfo,appearanceaim,inboxcompanyname,remarks,"
 				+ "dj_flag,dj_amount,djfj_flag,djfj_amount,rsv1,rsv2,rsv3,rsv4,rsv5,rsv6,rsv7,rsv8,rsv9,rsv10,rsv11,rsv12,rsv13,rsv14,rsv15,rsv16,rsv17,rsv18,rsv19,rsv20)"
 				+ " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		jdbc.update(sql,new Object[] {Code.getFieldVal(jo, "actualLocation", ""),
-				Code.getFieldVal(jo,"palceCode",""),
-				Code.getFieldVal(jo,"ctnAwayTime",""),
-				Code.getFieldVal(jo,"actualPositionBlock",""),
-				Code.getFieldVal(jo,"ctntype",""),
-				Code.getFieldVal(jo,"ctnNo",""),
-				Code.getFieldVal(jo,"blNo",""),
-				Code.getFieldVal(jo,"vesselNameE",""),
-				Code.getFieldVal(jo,"unCode",""),
-				Code.getFieldVal(jo,"voyage",""),
-				Code.getFieldVal(jo,"ctnOperatorCode",""),
-				Code.getFieldVal(jo,"ctnSizeType",""),
-				Code.getFieldVal(jo,"damageInfo",""),
-				Code.getFieldVal(jo,"AppearanceAim",""),
-				Code.getFieldVal(jo,"InBoxCompanyName",""),
-				Code.getFieldVal(jo,"Remarks",""),
-				Code.getFieldVal(jo,"DJ_Flag",""),
-				Code.getFieldVal(jo,"DJ_Amount",""),
-				Code.getFieldVal(jo,"DJFJ_Flag",""),
-				Code.getFieldVal(jo,"DJFJ_Amount",""),
-				Code.getFieldVal(jo,"RSV1",""),
-				Code.getFieldVal(jo,"RSV2",""),
-				Code.getFieldVal(jo,"RSV3",""),
-				Code.getFieldVal(jo,"RSV4",""),
-				Code.getFieldVal(jo,"RSV5",""),
-				Code.getFieldVal(jo,"RSV6",""),
-				Code.getFieldVal(jo,"RSV7",""),
-				Code.getFieldVal(jo,"RSV8",""),
-				Code.getFieldVal(jo,"RSV9",""),
-				Code.getFieldVal(jo,"RSV10",""),
-				Code.getFieldVal(jo,"RSV11",""),
-				Code.getFieldVal(jo,"RSV12",""),
-				Code.getFieldVal(jo,"RSV13",""),
-				Code.getFieldVal(jo,"RSV14",""),
-				Code.getFieldVal(jo,"RSV15",""),
-				Code.getFieldVal(jo,"RSV16",""),
-				Code.getFieldVal(jo,"RSV17",""),
-				Code.getFieldVal(jo,"RSV18",""),
-				Code.getFieldVal(jo,"RSV19",""),
-				Code.getFieldVal(jo,"RSV20","")});
-	}			
+		jdbc.update(sql, new Object[] { Code.getFieldVal(jo, "actualLocation", ""),
+				Code.getFieldVal(jo, "palceCode", ""), Code.getFieldVal(jo, "ctnAwayTime", ""),
+				Code.getFieldVal(jo, "actualPositionBlock", ""), Code.getFieldVal(jo, "ctntype", ""),
+				Code.getFieldVal(jo, "ctnNo", ""), Code.getFieldVal(jo, "blNo", ""),
+				Code.getFieldVal(jo, "vesselNameE", ""), Code.getFieldVal(jo, "unCode", ""),
+				Code.getFieldVal(jo, "voyage", ""), Code.getFieldVal(jo, "ctnOperatorCode", ""),
+				Code.getFieldVal(jo, "ctnSizeType", ""), Code.getFieldVal(jo, "damageInfo", ""),
+				Code.getFieldVal(jo, "AppearanceAim", ""), Code.getFieldVal(jo, "InBoxCompanyName", ""),
+				Code.getFieldVal(jo, "Remarks", ""), Code.getFieldVal(jo, "DJ_Flag", ""),
+				Code.getFieldVal(jo, "DJ_Amount", ""), Code.getFieldVal(jo, "DJFJ_Flag", ""),
+				Code.getFieldVal(jo, "DJFJ_Amount", ""), Code.getFieldVal(jo, "RSV1", ""),
+				Code.getFieldVal(jo, "RSV2", ""), Code.getFieldVal(jo, "RSV3", ""), Code.getFieldVal(jo, "RSV4", ""),
+				Code.getFieldVal(jo, "RSV5", ""), Code.getFieldVal(jo, "RSV6", ""), Code.getFieldVal(jo, "RSV7", ""),
+				Code.getFieldVal(jo, "RSV8", ""), Code.getFieldVal(jo, "RSV9", ""), Code.getFieldVal(jo, "RSV10", ""),
+				Code.getFieldVal(jo, "RSV11", ""), Code.getFieldVal(jo, "RSV12", ""), Code.getFieldVal(jo, "RSV13", ""),
+				Code.getFieldVal(jo, "RSV14", ""), Code.getFieldVal(jo, "RSV15", ""), Code.getFieldVal(jo, "RSV16", ""),
+				Code.getFieldVal(jo, "RSV17", ""), Code.getFieldVal(jo, "RSV18", ""), Code.getFieldVal(jo, "RSV19", ""),
+				Code.getFieldVal(jo, "RSV20", "") });
+	}
 
 	public void delOutready(String gcpguid) {
 		String sql = "delete from sf_outready where gcpguid=?";
@@ -153,8 +136,8 @@ public class Data {
 		String sql = "select purposecode,purposename from rp_repairitempurpose";
 		return jdbc.queryForList(sql);
 	}
-	
-	public List<Map<String,Object>> qryCtnsizetype(){
+
+	public List<Map<String, Object>> qryCtnsizetype() {
 		String sql = "select * from ctn_size_type order by ctnsizetype";
 		return jdbc.queryForList(sql);
 	}
@@ -210,7 +193,7 @@ public class Data {
 
 	public String getRepairid(String cntrid) {
 		String sql = "select f_getrepairid(?) as repairid from dual";
-		List<Map<String, Object>> list = jdbc.queryForList(sql,new Object[] {cntrid});
+		List<Map<String, Object>> list = jdbc.queryForList(sql, new Object[] { cntrid });
 		return Code.getFieldVal(list.get(0), "repairid", "");
 	}
 
@@ -245,39 +228,45 @@ public class Data {
 		String sql = "insert into rp_uploadfile(repairid,filename,uptime) values(?,?,to_char(sysdate,'YYYYMMDDHH24MISS'))";
 		jdbc.update(sql, new Object[] { repairId, fileName });
 	}
-	
-	public void deleteUploadfile(String repairId,String fileName) {
-		String sql="delete from rp_uploadfile where repairid=? and filename=?";
-		jdbc.update(sql,new Object[] {repairId,fileName});
+
+	public void deleteUploadfile(String repairId, String fileName) {
+		String sql = "delete from rp_uploadfile where repairid=? and filename=?";
+		jdbc.update(sql, new Object[] { repairId, fileName });
 	}
-	
-	public List<Map<String, Object>> qryYgtfeenotsend(){
-		String sql="select t.*,to_char(indate,'YYYY-MM-DD HH24:MI:SS') as ctnInTime from t_ygtfee t where nvl(trim(t.insend),'N')='N'";
+
+	public List<Map<String, Object>> qryYgtfeenotsend() {
+		String sql = "select t.*,to_char(indate,'YYYY-MM-DD HH24:MI:SS') as ctnInTime,to_char(optime,'YYYY-MM-DD HH24:MI:SS') as optime from t_ygtfee t where nvl(trim(t.insend),'N')='N'";
 		return jdbc.queryForList(sql);
 	}
-	
-	public void updateYgtfee(String indate,String cntr,String insend,String ygtresult,String ygtdesc,String ygtresultinfo) {
-		String sql="update t_ygtfee set insend=?,ygtresult=?,ygtdesc=?,ygtresultinfo=?"
-				+ " where indate=to_date(?,'YYYY-MM-DD HH24:MI:SS')"
-				+ " and cntr=?";
-		jdbc.update(sql,new Object[] {insend,ygtresult,ygtdesc,ygtresultinfo,indate,cntr});
+
+	public void updateYgtfee(String indate, String cntr, String insend, String ygtresult, String ygtdesc,
+			String ygtresultinfo) {
+		String sql = "update t_ygtfee set insend=?,ygtresult=?,ygtdesc=?,ygtresultinfo=?"
+				+ " where indate=to_date(?,'YYYY-MM-DD HH24:MI:SS')" + " and cntr=?";
+		if (ygtdesc.length()>500) ygtdesc = ygtdesc.substring(0,500);
+		if (ygtresultinfo.length()>1000) ygtresultinfo.substring(0,1000);
+		jdbc.update(sql, new Object[] { insend, ygtresult, ygtdesc, ygtresultinfo, indate, cntr });
 	}
-	
-	public List<Map<String,Object>> qryYgtcntrnotsend(){
-		String sql="select cntr,to_char('YYYY-MM-DD HH24:MI:SS',ottime) as gtottm from pg_ygtcntr where insend='N'";
+
+	public List<Map<String, Object>> qryYgtcntrnotsend() {
+		String sql = "select cntr,to_char(ottime,'YYYY-MM-DD HH24:MI:SS') as gtottm,plannumber,barcode from pg_ygtcntr where insend='N'";
 		return jdbc.queryForList(sql);
 	}
-	
-	public List<Map<String,Object>> qryPgctntkbyplanbar(String plannumber,String barcode){
-		String sql="select * from pg_ctntk_info"
-				+ " where plannumber=? and barcode=?";
-		return jdbc.queryForList(sql,new Object[] {plannumber,barcode});
+
+	public List<Map<String, Object>> qryPgctntkbyplanbar(String plannumber, String barcode) {
+		String sql = "select * from pg_ctntk_info" + " where plannumber=? and barcode=?";
+		return jdbc.queryForList(sql, new Object[] { plannumber, barcode });
+	}
+
+	public void updateYgtcntr(String plannumber, String barcode, String insend, String ygtmsgid, String ygtmsgdesc) {
+		String sql = "update pg_ygtcntr set insend=?,ygtmsgid=?,ygtdesc=?" + " where plannumber=? and barcode=?";
+		jdbc.update(sql, new Object[] { insend, ygtmsgid, ygtmsgdesc, plannumber, barcode });
 	}
 	
-	public void updateYgtcntr(String plannumber,String barcode,String insend,String ygtmsgid,String ygtmsgdesc) {
-		String sql="update pg_ygtcntr set insend=?,ygtmsgid=?,ygtmsgdesc=?"
-				+ " where plannumber=? and barcode=?";
-		jdbc.update(sql,new Object[] {insend,ygtmsgid,ygtmsgdesc,plannumber,barcode});
+	public String getCompanycode() {
+		String sql="select * from ac_companyinfo";
+		List<Map<String,Object>> lr=jdbc.queryForList(sql);
+		return Code.getFieldVal(lr.get(0),"COMCODE","");
 	}
 
 }

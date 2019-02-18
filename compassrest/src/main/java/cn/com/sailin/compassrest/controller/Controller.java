@@ -528,6 +528,9 @@ public class Controller {
 	
 	private String readOutCtnInfobycntr(String cntr) {
 		try {
+			
+			data.delOutCtnInfo(cntr);
+			
 			JSONObject jo=new JSONObject();
 			
 			long enddate = System.currentTimeMillis();

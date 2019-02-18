@@ -127,7 +127,8 @@ public class Schedle {
 
 		for (Map<String, Object> m : lygt) {
 
-			sendInctninfo(m);
+			if (Code.getFieldVal(m, "OPCD", "").trim().equals("RE"))
+				sendInctninfo(m);
 			sendBillcheck(m);
 		}
 
@@ -188,6 +189,8 @@ public class Schedle {
 
 	private void sendBillcheck(Map<String, Object> m) {
 
+		String opcd = Code.getFieldVal(m, "OPCD", "").trim();
+
 		JSONObject jo = new JSONObject();
 
 		long cur = System.currentTimeMillis();
@@ -213,7 +216,10 @@ public class Schedle {
 		jo.put("rsv10", "");
 
 		JSONObject jctn = new JSONObject();
-		jctn.put("ctnInTime", Code.getFieldVal(m, "ctnInTime", ""));
+		if (opcd.equals("RE"))
+			jctn.put("ctnInTime", Code.getFieldVal(m, "ctnInTime", ""));
+		if (opcd.equals("DE"))
+			jctn.put("ctnInTime", Code.getFieldVal(m, "optime", ""));
 		jctn.put("ctnSizeType", Code.getFieldVal(m, "CTNSIZETYPE", ""));
 		jctn.put("ctnNo", Code.getFieldVal(m, "CNTR", ""));
 		jctn.put("blNo", Code.getFieldVal(m, "BLNO", ""));
@@ -222,8 +228,11 @@ public class Schedle {
 		jctn.put("voyage", Code.getFieldVal(m, "VOYAGE", ""));
 		jctn.put("djAmount", Code.getFieldVal(m, "DJAMOUNT", ""));
 		jctn.put("djfjAmount", Code.getFieldVal(m, "DJFJAMOUNT", ""));
-		jctn.put("rsv01", Code.getFieldVal(m, "RSV1", ""));
-		jctn.put("rsv02", Code.getFieldVal(m, "RSV2", ""));
+		if (opcd.equals("RE"))
+			jctn.put("rsv01", "HK");
+		if (opcd.equals("DE"))
+			jctn.put("rsv01", "TK");
+		jctn.put("rsv02", Code.getFieldVal(m, "RSV1", ""));// 条形码
 		jctn.put("rsv03", Code.getFieldVal(m, "RSV3", ""));
 		jctn.put("rsv04", Code.getFieldVal(m, "RSV4", ""));
 		jctn.put("rsv05", Code.getFieldVal(m, "RSV5", ""));
