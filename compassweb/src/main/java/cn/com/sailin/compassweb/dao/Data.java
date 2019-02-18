@@ -163,5 +163,11 @@ public class Data {
 		});
 		return rm;
 	}
+	
+	public String getCompanycode() {
+		String sql="select * from ac_companyinfo";
+		List<Map<String,Object>> lr=jdbc.queryForList(sql);
+		return Code.getFieldVal(lr.get(0),"COMCODE","");
+	}
 
 }

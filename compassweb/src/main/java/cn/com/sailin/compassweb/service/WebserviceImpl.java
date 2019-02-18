@@ -85,7 +85,7 @@ public class WebserviceImpl implements WebserviceInterface {
 	}
 
 	@Override
-	public String invoke(String jobId, String applyData, String userId, String password) {
+	public String invoke(String jobId, String applyData) {
 		String proid = data.getPid();
 		Date dt = new Date();
 		String day = Code.getWeek(dt);
@@ -201,10 +201,17 @@ public class WebserviceImpl implements WebserviceInterface {
 			SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 			String timestamp = df.format(dt);
 			String timestamp1 = URLEncoder.encode(timestamp, "utf-8");
-			String user_id = "nbax";
-			String secret = "b176a43bc589b8f3b37fa7324488asxx";
-			//String user_id = "HXM117321";
-			//String secret = "4kop352e03cmscnbdepoth125462jgf";
+			String comcode = data.getCompanycode();
+			String user_id="";
+			String secret="";
+			if (comcode.equals("NB")) {
+				user_id = "nbax";
+				secret = "b176a43bc589b8f3b37fa7324488asxx";
+			}
+			if (comcode.equals("YJDC")) {
+				user_id = "HXM117321";
+				secret = "4kop352e03cmscnbdepoth125462jgf";
+			}
 			String sign = Code.md5(user_id + secret + timestamp);
 			return config.getSfurl() + "random=" + Math.random() + "&sign=" + sign + "&user_id=" + user_id
 					+ "&timestamp=" + timestamp1;
