@@ -19,7 +19,7 @@ import cn.com.sailin.falconweb.dao.Data;
 import cn.com.sailin.falconweb.model.Uploaddata;
 import cn.com.sailin.falconweb.model.Wkerattendtime;
 import cn.com.sailin.falconweb.publiccode.Code;
-import cn.com.sailin.falconweb.publiccode.sh;
+import cn.com.sailin.falconweb.publiccode.Sh;
 
 @Component
 @EnableScheduling
@@ -27,6 +27,9 @@ public class Schedle {
 
 	@Autowired
 	private Data data;
+	
+	@Autowired
+	private Sh sh;
 
 	private SimpleDateFormat _ft = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -152,43 +155,33 @@ public class Schedle {
 	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
 	public void uploadInfo() {
 
+		String apcd = "";
+		String bscd = "";
+		String type = "";
+		String content = "";
+		String opid = "";
 		try {
 			List<Map<String, Object>> list = data.qryOplistupload();
 			for (Map<String, Object> m : list) {
-				Uploaddata up = Uploaddata.buildObject(Code.getFieldVal(m, "apcd", ""), Code.getFieldVal(m, "bscd", ""),
-						Code.getFieldVal(m, "type", ""), data);
-				up.setContent(Code.getFieldVal(m, "content", ""));
+				apcd = Code.getFieldVal(m, "apcd", "");
+				bscd = Code.getFieldVal(m, "bscd", "");
+				type = Code.getFieldVal(m, "type", "");
+				content = Code.getFieldVal(m, "content", "");
+				opid = Code.getFieldVal(m, "opid", "");
+				Uploaddata up = Uploaddata.buildObject(apcd, bscd, type, data);
+				up.setContent(content);
 				JSONObject jo = JSON.parseObject(uploadpost(up));
 				if (!Code.getFieldVal(jo, "MSGID", "").equals("0000")) {
 					data.updateOplistresult(Code.getFieldVal(m, "opid", ""), jo.toJSONString());
+					System.out.println("opid:" + opid + ";apcd:" + apcd + ";bscd:" + bscd + ";type:" + type
+							+ ";content:" + content);
 				} else {
-					data.insertOplistsuccess(Code.getFieldVal(m, "apcd", ""), Code.getFieldVal(m, "bscd", ""),
-							Code.getFieldVal(m, "opid", ""), Code.getFieldVal(m, "type", ""),
-							Code.getFieldVal(m, "content", ""));
-					data.delOplist(Code.getFieldVal(m, "opid", ""));
+					data.insertOplistsuccess(apcd, bscd, opid, type, content);
+					data.delOplist(opid);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	private String uploadpost(Uploaddata up) {
-		try {
-			Map<String, String> m = new HashMap<String, String>();
-			m.put("user", up.getUser());
-			m.put("pass", up.getPass());
-			m.put("content", up.getContent());
-			String req = Code.postUploadHttp(up.getUrl(), m);
-			JSONObject jo = JSON.parseObject(req);
-			if (jo.getString("statusCode").equals("200")) {
-				return Code.resultSuccess();
-			} else {
-				return Code.resultError("1111", req);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Code.resultError("1111", e.getMessage());
 		}
 	}
 
@@ -260,6 +253,25 @@ public class Schedle {
 	@Scheduled(initialDelay = 10000, fixedDelay = 18000000)
 	public void updateYftoken() {
 		sh.refreshYftoken(data);
+	}
+
+	private String uploadpost(Uploaddata up) {
+		try {
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("user", up.getUser());
+			m.put("pass", up.getPass());
+			m.put("content", up.getContent());
+			String req = Code.postUploadHttp(up.getUrl(), m);
+			JSONObject jo = JSON.parseObject(req);
+			if (jo.getString("statusCode").equals("200")) {
+				return Code.resultSuccess();
+			} else {
+				return Code.resultError("1111", req);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Code.resultError("1111", e.getMessage());
+		}
 	}
 
 }

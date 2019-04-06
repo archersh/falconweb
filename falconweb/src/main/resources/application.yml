@@ -20,3 +20,6 @@ spring:
       charset: UTF-8
       force: true
       enabled: true
+      
+options:
+  uploadpath: /usr/local/tomcat-7.0.70/webapps/pic/

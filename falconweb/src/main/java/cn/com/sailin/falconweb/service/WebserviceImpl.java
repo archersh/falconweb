@@ -8,9 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.com.sailin.falconweb.config.Config;
 import cn.com.sailin.falconweb.dao.Data;
 import cn.com.sailin.falconweb.publiccode.Code;
-import cn.com.sailin.falconweb.publiccode.sh;
+import cn.com.sailin.falconweb.publiccode.Sh;
 import cn.com.sailin.falconweb.schedle.Schedle;
 
 import java.io.IOException;
@@ -28,6 +29,12 @@ public class WebserviceImpl implements WebserviceInterface {
 
 	@Autowired
 	private Data data;
+	
+	@Autowired
+	private Config config;
+	
+	@Autowired
+	private Sh sh;
 
 	// @Autowired
 	// private Schedle schedle;
@@ -378,6 +385,9 @@ public class WebserviceImpl implements WebserviceInterface {
 			
 			if (method.equals("testbklist"))
 				res=data.getAllbkcdbybkcd(applydata);
+			
+			if (method.equals("uploadfile"))
+				res=sh.uploadfile(applydata);
 			
 			// }
 		} else

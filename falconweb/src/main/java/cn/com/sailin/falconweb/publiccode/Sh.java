@@ -1,6 +1,15 @@
 package cn.com.sailin.falconweb.publiccode;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,9 +18,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSON;
@@ -25,6 +40,7 @@ import cn.com.sailin.falconweb.calculate.HistoryBalance;
 import cn.com.sailin.falconweb.calculate.NewBs;
 import cn.com.sailin.falconweb.calculate.NewWorker;
 import cn.com.sailin.falconweb.calculate.NoffWorker;
+import cn.com.sailin.falconweb.config.Config;
 import cn.com.sailin.falconweb.dao.Data;
 import cn.com.sailin.falconweb.model.Acfunctioninfo;
 import cn.com.sailin.falconweb.model.Acmenustruct;
@@ -54,11 +70,15 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class sh {
+@Component
+public class Sh {
 
 	private final static Logger log = LoggerFactory.getLogger("cn.com.sailin.falconweb.publiccode.sh");
 
-	public static String Dsql(String sql, Data data) {
+	@Autowired
+	public Config config;
+	
+	public String Dsql(String sql, Data data) {
 
 		CallResult result = new CallResult();
 
@@ -79,7 +99,7 @@ public class sh {
 		}
 	}
 
-	public static String Esql(String sql, Data data) {
+	public String Esql(String sql, Data data) {
 
 		try {
 			data.getJdbc().execute(sql);
@@ -92,7 +112,7 @@ public class sh {
 		}
 	}
 
-	private static HashMap<String, Object> getLccdbybscd(String apcd, String bscd, Data data) {
+	private HashMap<String, Object> getLccdbybscd(String apcd, String bscd, Data data) {
 
 		List<Map<String, Object>> lc = data.qryLccdbybscd(apcd, bscd);
 
@@ -128,7 +148,7 @@ public class sh {
 	 * @return
 	 */
 
-	public static String insertAcpy(String userid, String applydata, Data data) {
+	public String insertAcpy(String userid, String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -296,7 +316,7 @@ public class sh {
 	 * @param data
 	 * @return
 	 */
-	public static String delAcpy(String applydata, Data data) {
+	public String delAcpy(String applydata, Data data) {
 
 		try {
 			// 读取该批次的数据
@@ -348,7 +368,7 @@ public class sh {
 	/**
 	 * 设置承包公司审核
 	 */
-	public static String updateAcpyccck(String userid, String applydata, Data data) {
+	public String updateAcpyccck(String userid, String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -414,7 +434,7 @@ public class sh {
 	/**
 	 * 设置劳务公司审核
 	 */
-	public static String updateAcpylcck(String userid, String applydata, Data data) {
+	public String updateAcpylcck(String userid, String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -482,7 +502,7 @@ public class sh {
 	/**
 	 * 银行导出
 	 */
-	public static String updateAcpybkot(String userid, String applydata, Data data) {
+	public String updateAcpybkot(String userid, String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -533,7 +553,7 @@ public class sh {
 	/*
 	 * 银行确认
 	 */
-	public static String updateAcpybkcfm(String userid, String applydata, Data data) {
+	public String updateAcpybkcfm(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String sqnb = Code.getFieldVal(obj, "SQNB", "");
@@ -589,7 +609,7 @@ public class sh {
 		}
 	}
 
-	public static String insertBslc(String userid, String applydata, Data data) {
+	public String insertBslc(String userid, String applydata, Data data) {
 
 		try {
 			Bs_lc bslc = new Bs_lc();
@@ -631,7 +651,7 @@ public class sh {
 
 	}
 
-	public static String insertBsls(String userid, String applydata, Data data) {
+	public String insertBsls(String userid, String applydata, Data data) {
 
 		try {
 			Bs_ls bsls = new Bs_ls();
@@ -668,7 +688,7 @@ public class sh {
 
 	}
 
-	public static String delbslc(String applydata, Data data) {
+	public String delbslc(String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -685,7 +705,7 @@ public class sh {
 
 	}
 
-	public static String delbsls(String applydata, Data data) {
+	public String delbsls(String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -702,7 +722,7 @@ public class sh {
 
 	}
 
-	public static String delWkds(String applydata, Data data) {
+	public String delWkds(String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -730,7 +750,7 @@ public class sh {
 		}
 	}
 
-	public static String insertWkds(String applydata, Data data) {
+	public String insertWkds(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String month = obj.getString("MONTH");
@@ -807,7 +827,7 @@ public class sh {
 		}
 	}
 
-	public static String getNextval(String applydata, Data data) {
+	public String getNextval(String applydata, Data data) {
 
 		try {
 
@@ -831,7 +851,7 @@ public class sh {
 
 	}
 
-	public static String insertSpanbl(String userid, String applydata, Data data) {
+	public String insertSpanbl(String userid, String applydata, Data data) {
 
 		try {
 			List<Spanbl> list = new ArrayList<Spanbl>();
@@ -872,12 +892,12 @@ public class sh {
 		}
 	}
 
-	public static String getTest(String applydata, Data data) {
+	public String getTest(String applydata, Data data) {
 
 		return null;
 	}
 
-	public static String getNoffWorker(String applydata, Data data) {
+	public String getNoffWorker(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String month = Code.getFieldVal(obj, "MONTH", "");
@@ -897,7 +917,7 @@ public class sh {
 		}
 	}
 
-	private static Bscollinfo buildBscollinfo(String month, String apcd, String bscd, Data data) {
+	private Bscollinfo buildBscollinfo(String month, String apcd, String bscd, Data data) {
 		Bscollinfo bs = new Bscollinfo();
 		bs.setMONTH(month);
 		bs.setAPCD(apcd);
@@ -953,7 +973,7 @@ public class sh {
 		return bs;
 	}
 
-	private static Bscollinfo buildBscollinfo(String month, String apcd, String bscd, String sqnb, String lccd,
+	private Bscollinfo buildBscollinfo(String month, String apcd, String bscd, String sqnb, String lccd,
 			Data data) {
 		Bscollinfo bs = new Bscollinfo();
 		bs.setMONTH(month);
@@ -1030,19 +1050,19 @@ public class sh {
 		return bs;
 	}
 
-	private static void doBscoll(String month, String apcd, String bscd, Data data) {
+	private void doBscoll(String month, String apcd, String bscd, Data data) {
 		data.delBscollinfo(month, apcd, bscd);
 		Bscollinfo bs = buildBscollinfo(month, apcd, bscd, data);
 		data.insertBscollinfo(bs);
 		return;
 	}
 
-	private static void doBscoll(String month, String apcd, String bscd, String sqnb, String lccd, Data data) {
+	private void doBscoll(String month, String apcd, String bscd, String sqnb, String lccd, Data data) {
 		Bscollinfo bs = buildBscollinfo(month, apcd, bscd, sqnb, lccd, data);
 		data.updateAcpy(sqnb, lccd, bs);
 	}
 
-	public static String doBscoll(String userid, String applydata, Data data) {
+	public String doBscoll(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String month = Code.getFieldVal(obj, "MONTH", "");
@@ -1058,7 +1078,7 @@ public class sh {
 		}
 	}
 
-	public static String delSybscd(String applydata, Data data) {
+	public String delSybscd(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String apcd = obj.getString("APCD");
@@ -1079,7 +1099,7 @@ public class sh {
 		}
 	}
 
-	public static String insertSybscd(String applydata, Data data) {
+	public String insertSybscd(String applydata, Data data) {
 		try {
 			Sybscd bs = JSON.parseObject(applydata, Sybscd.class);
 			data.insertSybscd(bs);
@@ -1107,7 +1127,7 @@ public class sh {
 		}
 	}
 
-	public static String updateSybscdByBs(String userid, String applydata, Data data) {
+	public String updateSybscdByBs(String userid, String applydata, Data data) {
 		try {
 			Sybscd bs = new Sybscd();
 			JSONObject obj = JSON.parseObject(applydata);
@@ -1170,7 +1190,7 @@ public class sh {
 		}
 	}
 
-	public static String updateSybscdByBank(String userid, String applydata, Data data) {
+	public String updateSybscdByBank(String userid, String applydata, Data data) {
 		try {
 			Sybscd bs = new Sybscd();
 			JSONObject obj = JSON.parseObject(applydata);
@@ -1199,7 +1219,7 @@ public class sh {
 		}
 	}
 
-	public static String updateSybscdByDt(String userid, String applydata, Data data) {
+	public String updateSybscdByDt(String userid, String applydata, Data data) {
 		try {
 			Sybscd bs = new Sybscd();
 			JSONObject obj = JSON.parseObject(applydata);
@@ -1229,7 +1249,7 @@ public class sh {
 		}
 	}
 
-	public static String insertSycdtb(String userid, String applydata, Data data) {
+	public String insertSycdtb(String userid, String applydata, Data data) {
 		try {
 			Sycdtb cd = JSON.parseObject(applydata, Sycdtb.class);
 			data.delSycdtb(cd.getSYCDTB(), cd.getSYIDTB());
@@ -1242,7 +1262,7 @@ public class sh {
 		}
 	}
 
-	public static String delSycdtb(String userid, String applydata, Data data) {
+	public String delSycdtb(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String sycd = obj.getString("SYCDTB");
@@ -1256,7 +1276,7 @@ public class sh {
 		}
 	}
 
-	public static String getBsmonitor(String userid, String applydata, Data data) {
+	public String getBsmonitor(String userid, String applydata, Data data) {
 		try {
 
 			JSONObject obj = JSON.parseObject(applydata);
@@ -1277,7 +1297,7 @@ public class sh {
 		}
 	}
 
-	public static String getBshisinfo(String userid, String applydata, Data data) {
+	public String getBshisinfo(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String reqtype = Code.getFieldVal(obj, "REQTYPE", "");
@@ -1300,7 +1320,7 @@ public class sh {
 		}
 	}
 
-	private static Wker getWker(String apcd, String bscd, String idcdno, Data data) {
+	private Wker getWker(String apcd, String bscd, String idcdno, Data data) {
 		Wker wker = new Wker();
 		wker.setAPCD(apcd);
 		wker.setBSCD(bscd);
@@ -1336,7 +1356,7 @@ public class sh {
 		return wker;
 	}
 
-	public static String delWker(String userid, String applydata, Data data) {
+	public String delWker(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String apcd = obj.getString("APCD");
@@ -1406,7 +1426,7 @@ public class sh {
 
 	}
 
-	private static String updateWker(Wker wker, Data data) {
+	private String updateWker(Wker wker, Data data) {
 		List<Map<String, Object>> list = data.qryAttendUser("HW", wker.getSZ_EMPLOY_ID());
 		if (list.size() > 0) {
 			if (data.updateAttendWker(wker) == 0)
@@ -1420,7 +1440,7 @@ public class sh {
 		return "";
 	}
 
-	private static String updateWkerbs(Wker wker, Data data) {
+	private String updateWkerbs(Wker wker, Data data) {
 		// 获取考勤系统工人数据
 		List<Map<String, Object>> lwk = data.qryAttendUser(wker.getAPCD(), wker.getSZ_EMPLOY_ID());
 		if (lwk.size() == 0)
@@ -1443,7 +1463,7 @@ public class sh {
 		return "";
 	}
 
-	private static String insertWker(Wker wker, Data data) {
+	private String insertWker(Wker wker, Data data) {
 		List<Map<String, Object>> list = data.qryAttendUser("HW", wker.getSZ_EMPLOY_ID());
 		if (list.size() > 0) {
 			if (data.updateAttendWker(wker) == 0)
@@ -1456,7 +1476,7 @@ public class sh {
 		return "";
 	}
 
-	private static String insertWkerbs(Wker wker, Data data) {
+	private String insertWkerbs(Wker wker, Data data) {
 		// 获取考勤系统工人数据
 		List<Map<String, Object>> lwk = data.qryAttendUser(wker.getAPCD(), wker.getSZ_EMPLOY_ID());
 		if (lwk.size() == 0)
@@ -1480,7 +1500,7 @@ public class sh {
 		return "";
 	}
 
-	public static String insertWker(String userid, String applydata, Data data) {
+	public String insertWker(String userid, String applydata, Data data) {
 		try {
 			Wker wker = JSON.parseObject(applydata, Wker.class);
 
@@ -1663,7 +1683,7 @@ public class sh {
 		}
 	}
 
-	public static String updateWker(String userid, String applydata, Data data) {
+	public String updateWker(String userid, String applydata, Data data) {
 		try {
 			Wker wker = JSON.parseObject(applydata, Wker.class);
 			wker.setRGUR(userid);
@@ -1792,7 +1812,7 @@ public class sh {
 		}
 	}
 
-	public static String resetPassword(String userid, String applydata, Data data) {
+	public String resetPassword(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String user = Code.getFieldVal(obj, "USERID", "");
@@ -1811,7 +1831,7 @@ public class sh {
 		}
 	}
 
-	public static String attendSubmit(String userid, String applydata, Data data) {
+	public String attendSubmit(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 
@@ -1856,7 +1876,7 @@ public class sh {
 		}
 	}
 
-	public static String yfattendSubmit(String userid, String applydata, Data data) {
+	public String yfattendSubmit(String userid, String applydata, Data data) {
 
 		try {
 			JSONObject jo = JSONObject.parseObject(applydata);
@@ -1934,7 +1954,7 @@ public class sh {
 
 	}
 
-	public static String updatePassword(String userid, String applydata, Data data) {
+	public String updatePassword(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String user = Code.getFieldVal(obj, "USERID", "");
@@ -1957,7 +1977,7 @@ public class sh {
 		}
 	}
 
-	public static String updatePasswordworker(String applydata, Data data) {
+	public String updatePasswordworker(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String idcdno = Code.getFieldVal(obj, "IDCDNO", "");
@@ -1979,7 +1999,7 @@ public class sh {
 		}
 	}
 
-	public static String insertAcfunctioninfo(String userid, String applydata, Data data) {
+	public String insertAcfunctioninfo(String userid, String applydata, Data data) {
 		try {
 			Acfunctioninfo func = JSON.parseObject(applydata, Acfunctioninfo.class);
 			data.insertAcfunctioninfo(func);
@@ -1992,7 +2012,7 @@ public class sh {
 
 	}
 
-	public static String insertAcmenustruct(String userid, String applydata, Data data) {
+	public String insertAcmenustruct(String userid, String applydata, Data data) {
 		try {
 			Acmenustruct menu = JSON.parseObject(applydata, Acmenustruct.class);
 			data.insertAcmenustruct(menu);
@@ -2004,7 +2024,7 @@ public class sh {
 		}
 	}
 
-	public static String insertActoolcfg(String userid, String applydata, Data data) {
+	public String insertActoolcfg(String userid, String applydata, Data data) {
 		try {
 			Actoolcfg cfg = JSON.parseObject(applydata, Actoolcfg.class);
 			data.insertActoolcfg(cfg);
@@ -2016,7 +2036,7 @@ public class sh {
 		}
 	}
 
-	public static String insertAcroleinfo(String userid, String applydata, Data data) {
+	public String insertAcroleinfo(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String roleid = obj.getString("ROLEID");
@@ -2032,7 +2052,7 @@ public class sh {
 		}
 	}
 
-	public static String delAcrole(String userid, String applydata, Data data) {
+	public String delAcrole(String userid, String applydata, Data data) {
 		try {
 			data.delAcrolefunctionbyroleid(applydata);
 			data.delAcroleinfo(applydata);
@@ -2045,7 +2065,7 @@ public class sh {
 		}
 	}
 
-	public static String insertAcrolefunction(String userid, String applydata, Data data) {
+	public String insertAcrolefunction(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String roleid = obj.getString("ROLEID");
@@ -2063,7 +2083,7 @@ public class sh {
 
 	}
 
-	public static String insertAcuserinfo(String userid, String applydata, Data data) {
+	public String insertAcuserinfo(String userid, String applydata, Data data) {
 		try {
 			Acuserinfo ur = JSON.parseObject(applydata, Acuserinfo.class);
 			data.insertAcuserinfo(ur);
@@ -2075,7 +2095,7 @@ public class sh {
 		}
 	}
 
-	public static String insertAcroleuser(String userid, String applydata, Data data) {
+	public String insertAcroleuser(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String user = obj.getString("USERID");
@@ -2091,7 +2111,7 @@ public class sh {
 		}
 	}
 
-	public static String delAcroleuserbyuserid(String userid, String applydata, Data data) {
+	public String delAcroleuserbyuserid(String userid, String applydata, Data data) {
 		try {
 			data.delAcroleuserbyuserid(applydata);
 			return Code.resultSuccess();
@@ -2102,7 +2122,7 @@ public class sh {
 		}
 	}
 
-	public static String delAcuserinfo(String userid, String applydata, Data data) {
+	public String delAcuserinfo(String userid, String applydata, Data data) {
 		try {
 			data.delAcuserinfo(applydata);
 			return Code.resultSuccess();
@@ -2113,7 +2133,7 @@ public class sh {
 		}
 	}
 
-	public static String delAcmenustruct(String userid, String applydata, Data data) {
+	public String delAcmenustruct(String userid, String applydata, Data data) {
 		try {
 			data.delAcmenustruct(applydata);
 			return Code.resultSuccess();
@@ -2124,7 +2144,7 @@ public class sh {
 		}
 	}
 
-	public static String delAcfunctioninfo(String userid, String applydata, Data data) {
+	public String delAcfunctioninfo(String userid, String applydata, Data data) {
 		try {
 			data.delAcfunctioninfo(applydata);
 			data.delAcrolefunctionbyfuncid(applydata);
@@ -2138,7 +2158,7 @@ public class sh {
 		}
 	}
 
-	public static String delActoolcfg(String userid, String applydata, Data data) {
+	public String delActoolcfg(String userid, String applydata, Data data) {
 		try {
 			data.delActoolcfg(applydata);
 			return Code.resultSuccess();
@@ -2149,7 +2169,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAcmenustrucinfo(String userid, String applydata, Data data) {
+	public String updateAcmenustrucinfo(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String mt = obj.getString("MENUTEXT");
@@ -2166,7 +2186,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAcmenustructordernum(String userid, String applydata, Data data) {
+	public String updateAcmenustructordernum(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String menuid1 = obj.getString("MENUID1");
@@ -2185,7 +2205,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAcfunctioninfo(String userid, String applydata, Data data) {
+	public String updateAcfunctioninfo(String userid, String applydata, Data data) {
 		try {
 			Acfunctioninfo func = JSON.parseObject(applydata, Acfunctioninfo.class);
 			if (data.updateAcfunctioninfo(func) == 0)
@@ -2198,7 +2218,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAcfunctioninfoordernum(String userid, String applydata, Data data) {
+	public String updateAcfunctioninfoordernum(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String funcid1 = obj.getString("FUNCTIONID1");
@@ -2217,7 +2237,7 @@ public class sh {
 		}
 	}
 
-	public static String updateActoolcfginfo(String userid, String applydata, Data data) {
+	public String updateActoolcfginfo(String userid, String applydata, Data data) {
 		try {
 			Actoolcfg tool = JSON.parseObject(applydata, Actoolcfg.class);
 			if (data.updateActoolcfginfo(tool) == 0)
@@ -2230,7 +2250,7 @@ public class sh {
 		}
 	}
 
-	public static String updateActoolcfgordernum(String userid, String applydata, Data data) {
+	public String updateActoolcfgordernum(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String buttonid = obj.getString("BUTTONID");
@@ -2245,7 +2265,7 @@ public class sh {
 		}
 	}
 
-	public static String incMenuclicknum(String userid, String applydata, Data data) {
+	public String incMenuclicknum(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String funcid = obj.getString("FUNCTIONID");
@@ -2259,7 +2279,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAcuserinfo(String userid, String applydata, Data data) {
+	public String updateAcuserinfo(String userid, String applydata, Data data) {
 		try {
 			Acuserinfo user = JSON.parseObject(applydata, Acuserinfo.class);
 			if (data.updateAcuserinfo(user) == 0)
@@ -2272,7 +2292,7 @@ public class sh {
 		}
 	}
 
-	public static String getNewbs(String applydata, Data data) {
+	public String getNewbs(String applydata, Data data) {
 
 		try {
 			if (applydata.equals(""))
@@ -2287,7 +2307,7 @@ public class sh {
 
 	}
 
-	public static String getNewworker(String applydata, Data data) {
+	public String getNewworker(String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -2304,7 +2324,7 @@ public class sh {
 		}
 	}
 
-	public static String getWkds(String applydata, Data data) {
+	public String getWkds(String applydata, Data data) {
 
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
@@ -2327,7 +2347,7 @@ public class sh {
 		}
 	}
 
-	public static String insertAnnc(String userid, String applydata, Data data) {
+	public String insertAnnc(String userid, String applydata, Data data) {
 		try {
 			Annc annc = JSON.parseObject(applydata, Annc.class);
 			annc.setCHUR(userid);
@@ -2342,7 +2362,7 @@ public class sh {
 		}
 	}
 
-	public static String updateAnnc(String userid, String applydata, Data data) {
+	public String updateAnnc(String userid, String applydata, Data data) {
 		try {
 			Annc annc = JSON.parseObject(applydata, Annc.class);
 			annc.setCHUR(userid);
@@ -2360,7 +2380,7 @@ public class sh {
 		}
 	}
 
-	public static String delAnnc(String userid, String applydata, Data data) {
+	public String delAnnc(String userid, String applydata, Data data) {
 		try {
 			if (applydata.equals(""))
 				return Code.resultError("1111", "公告号不能为空");
@@ -2373,7 +2393,7 @@ public class sh {
 		}
 	}
 
-	public static String getWorkinfo(String applydata, Data data) {
+	public String getWorkinfo(String applydata, Data data) {
 		try {
 			if (applydata.equals(""))
 				return Code.resultError("1111", "身份证不能为空");
@@ -2390,7 +2410,7 @@ public class sh {
 		}
 	}
 
-	public static String getAnnc(Data data) {
+	public String getAnnc(Data data) {
 		try {
 			List<Map<String, Object>> list = data.qryAnnc();
 			return Code.resultSuccess(list);
@@ -2400,7 +2420,7 @@ public class sh {
 		}
 	}
 
-	public static String getCheckon(String applydata, Data data) {
+	public String getCheckon(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String idcdno = Code.getFieldVal(obj, "IDCDNO", "");
@@ -2420,7 +2440,7 @@ public class sh {
 		}
 	}
 
-	public static String getAcpyinfo(String applydata, Data data) {
+	public String getAcpyinfo(String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String month = Code.getFieldVal(obj, "MONTH", "");
@@ -2444,7 +2464,7 @@ public class sh {
 		}
 	}
 
-	public static String importWkdsBybscdmonth(String userid, String applydata, Data data) {
+	public String importWkdsBybscdmonth(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String apcd = Code.getFieldVal(obj, "APCD", "");
@@ -2470,7 +2490,7 @@ public class sh {
 		}
 	}
 
-	public static String importWkdsBybscdmonth(String userid, String apcd, String bscd, String startdate,
+	public String importWkdsBybscdmonth(String userid, String apcd, String bscd, String startdate,
 			String enddate, String month, Data data) {
 		try {
 			List<Map<String, Object>> lwkds = (List<Map<String, Object>>) new Attend(apcd, bscd, startdate, enddate,
@@ -2500,7 +2520,7 @@ public class sh {
 		}
 	}
 
-	public static String uploadwkds(String userid, String applydata, Data data) {
+	public String uploadwkds(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String apcd = Code.getFieldVal(obj, "APCD", "");
@@ -2545,7 +2565,7 @@ public class sh {
 		}
 	}
 
-	public static String uploadhumanbybscd(String userid, String applydata, Data data) {
+	public String uploadhumanbybscd(String userid, String applydata, Data data) {
 
 		JSONObject obj = JSON.parseObject(applydata);
 		String apcd = Code.getFieldVal(obj, "apcd", "");
@@ -2560,22 +2580,22 @@ public class sh {
 
 	}
 
-	public static String uploadsalarybysqnb(String userid, String applydata, Data data) {
+	public String uploadsalarybysqnb(String userid, String applydata, Data data) {
 		uploadsalary(applydata, data);
 		return Code.resultSuccess();
 	}
-	
-	public static String testuploadproject(String userid,String applydata,Data data) {
-		List<Map<String,Object>> lbs=data.qryBsinfo();
-		for (Map<String,Object>mbs : lbs) {
-			
-			uploadproject(Code.getFieldVal(mbs, "APCD", ""),Code.getFieldVal(mbs, "BSCD", ""),data);
-			
+
+	public String testuploadproject(String userid, String applydata, Data data) {
+		List<Map<String, Object>> lbs = data.qryBsinfo();
+		for (Map<String, Object> mbs : lbs) {
+
+			uploadproject(Code.getFieldVal(mbs, "APCD", ""), Code.getFieldVal(mbs, "BSCD", ""), data);
+
 		}
 		return Code.resultSuccess();
 	}
 
-	public static String importBankback(String userid, String applydata, Data data) {
+	public String importBankback(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String sqnb = Code.getFieldVal(obj, "SQNB", "");
@@ -2635,7 +2655,7 @@ public class sh {
 		}
 	}
 
-	public static String getBsdetail(String userid, String applydata, Data data) {
+	public String getBsdetail(String userid, String applydata, Data data) {
 		try {
 			JSONObject obj = JSON.parseObject(applydata);
 			String month = Code.getFieldVal(obj, "MONTH", "");
@@ -2666,7 +2686,7 @@ public class sh {
 		}
 	}
 
-	private static int getAttendbranchid(String apcd, String bscd, Data data) {
+	private int getAttendbranchid(String apcd, String bscd, Data data) {
 		try {
 			List<Map<String, Object>> bs = data.qryAttendbsinfo(apcd, bscd);
 
@@ -2682,7 +2702,7 @@ public class sh {
 		}
 	}
 
-	private static int getAttendWkerid(String apcd, String wkid, Data data) {
+	private int getAttendWkerid(String apcd, String wkid, Data data) {
 		try {
 			List<Map<String, Object>> wk = data.qryAttendUser(apcd, wkid);
 
@@ -2697,7 +2717,7 @@ public class sh {
 		}
 	}
 
-	private static int getAttendWkeridbyidcdno(String apcd, String idcdno, Data data) {
+	private int getAttendWkeridbyidcdno(String apcd, String idcdno, Data data) {
 		try {
 			List<Map<String, Object>> wk = data.qryAttendUserbyidcdno(apcd, idcdno);
 
@@ -2712,7 +2732,7 @@ public class sh {
 		}
 	}
 
-	public static String importAttendData(String applydata, Data data) {
+	public String importAttendData(String applydata, Data data) {
 		try {
 			JSONObject jo = JSON.parseObject(applydata);
 			// ret=0表示有效数据
@@ -2750,7 +2770,7 @@ public class sh {
 		}
 	}
 
-	public static String insertOplist(String applydata, Data data) {
+	public String insertOplist(String applydata, Data data) {
 		try {
 			JSONObject jo = JSON.parseObject(applydata);
 			String apcd = Code.getFieldVal(jo, "apcd", "");
@@ -2765,7 +2785,7 @@ public class sh {
 		}
 	}
 
-	public static String delOplist(String applydata, Data data) {
+	public String delOplist(String applydata, Data data) {
 		try {
 			data.delOplist(applydata);
 			return Code.resultSuccess();
@@ -2775,7 +2795,7 @@ public class sh {
 		}
 	}
 
-	public static String wkerleave(String userid, String applydata, Data data) {
+	public String wkerleave(String userid, String applydata, Data data) {
 		try {
 			JSONObject jo = JSON.parseObject(applydata);
 			String apcd = Code.getFieldVal(jo, "APCD", "");
@@ -2817,7 +2837,7 @@ public class sh {
 		}
 	}
 
-	public static String updateOplistresult(String applydata, Data data) {
+	public String updateOplistresult(String applydata, Data data) {
 		try {
 			JSONObject jo = JSON.parseObject(applydata);
 			String opid = Code.getFieldVal(jo, "opid", "");
@@ -2830,7 +2850,7 @@ public class sh {
 		}
 	}
 
-	private static void uploadproject(String apcd, String bscd, Data data) {
+	private void uploadproject(String apcd, String bscd, Data data) {
 		List<Map<String, Object>> list = data.qryBsinfo(apcd, bscd);
 		if (list.size() > 0) {
 
@@ -2860,7 +2880,115 @@ public class sh {
 		}
 	}
 
-	private static void uploadhuman(String apcd, String bscd, String wkerid, Data data) {
+	public String uploadfile(String filename) {
+		String boundary = UUID.randomUUID().toString();
+		String prefix = "--";
+		String end = "\r\n";
+		String content_type = "multipart/form-data";
+		String CHARSET = "utf-8";
+		int TIME_OUT = 30 * 1000;
+		URL url = null;
+
+		HttpURLConnection conn = null;
+		DataOutputStream dos = null;
+		InputStream is = null;
+
+		try {
+			url = new URL(
+					"http://www.pm361.cn/ZHGD/oss/postFile.do?interfaceKey=18080420fiQFuL&interfaceSecret=0W0Nr1RQ0o");
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setReadTimeout(TIME_OUT);
+			conn.setConnectTimeout(TIME_OUT);
+			conn.setDoInput(true); // 允许输入流
+			conn.setDoOutput(true); // 允许输出流
+			conn.setUseCaches(false); // 不允许使用缓存
+			conn.setRequestMethod("POST"); // 请求方式
+			conn.setRequestProperty("Charset", "utf-8"); // 设置编码
+			conn.setRequestProperty("connection", "keep-alive"); // 设置长连接，节省连接时间
+			conn.setRequestProperty("Content-Type", content_type + ";boundary=" + boundary);
+
+			OutputStream outputSteam = conn.getOutputStream();
+			dos = new DataOutputStream(outputSteam);
+
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(prefix);
+			stringBuffer.append(boundary);
+			stringBuffer.append(end);
+			dos.write(stringBuffer.toString().getBytes());
+
+			//String picpath = "D:\\work\\falcon\\delphi\\Client\\Exe\\temp";
+			String picpath=config.getUploadpath();
+
+			File file = new File(picpath, filename);
+
+			StringBuffer sb = new StringBuffer();
+			sb.append(prefix);
+			sb.append(boundary);
+			sb.append(end);
+
+			/**
+			 * 这里重点注意： name 里面的值为服务器端需要 key 只有这个 key 才 可以得到对应的文件 filename 是文件的名字，包含后缀名的
+			 * 比如:abc.png
+			 */
+			sb.append("Content-Disposition: form-data; name=\"0\"; filename=\"" + file.getName() + ".jpg\"" + end);
+			sb.append("Content-Type: application/octet-stream; charset=" + CHARSET + end);
+			sb.append(end);
+			dos.write(sb.toString().getBytes());
+
+			is = new FileInputStream(file);
+
+			int byteRead;
+			int pwd;
+
+			pwd = is.read();
+
+			while ((byteRead = is.read()) != -1) {
+				byteRead = byteRead ^ pwd;
+				dos.write(byteRead);
+			}
+			// 一个文件结束标志
+			dos.write(end.getBytes());
+
+			// 结束 http 流
+			byte[] end_data = (prefix + boundary + prefix + end).getBytes();
+			dos.write(end_data);
+			dos.flush();
+
+			/**
+			 * 获取响应码 200=成功 当响应成功，获取响应的流
+			 */
+			int res = conn.getResponseCode();
+			System.out.println("response code:" + res);
+
+			if (res == 200) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+				StringBuilder sbres = new StringBuilder();
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					sbres.append(line);
+				}
+
+				String resdata = sbres.toString();
+				JSONObject jres = JSONObject.parseObject(resdata);
+				return jres.getJSONObject("data").getString("picName");
+			}
+			return "";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		} finally {
+			try {
+				is.close();
+				dos.close();
+				conn.disconnect();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				return "";
+			}
+		}
+	}
+
+	private void uploadhuman(String apcd, String bscd, String wkerid, Data data) {
 
 		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
 		String projectnum = "";
@@ -2877,6 +3005,29 @@ public class sh {
 
 			if (lwk.size() > 0) {
 				Map<String, Object> wk = lwk.get(0);
+
+				// 上传员工照片
+				// 上传平台的地址
+				String uppath = Code.getFieldVal(wk, "UPPATH", "");
+				// 如果地址是空的上传照片
+				if (uppath.equals("")) {
+					String filename = "";
+					filename = Code.getFieldVal(wk, "PIC2", "");
+					if (filename.equals("")) {
+						filename = Code.getFieldVal(wk, "PIC3", "");
+					}
+					if (filename.equals("")) {
+						filename = Code.getFieldVal(wk, "PIC4", "");
+					}
+					if (filename.equals("")) {
+						filename = Code.getFieldVal(wk, "PIC5", "");
+					}
+					if (filename.equals("")) {
+						uppath=uploadfile(filename);
+						data.updateWkeruppath(idcdno, uppath);
+					}
+				}
+
 				JSONObject jo = new JSONObject();
 				jo.put("project_id", bscd);
 				jo.put("worker_id", wkerid);
@@ -2916,7 +3067,7 @@ public class sh {
 				jo.put("is_minority", inmin);
 				jo.put("nation", Code.getFieldVal(wk, "ETHNIC", ""));
 				jo.put("address", Code.getFieldVal(wk, "HOMEADD", ""));
-				jo.put("worker_photo", "");
+				jo.put("worker_photo", uppath);
 				jo.put("status", Code.getFieldVal(wkbs, "INEMP", ""));
 				String iscert = Code.getFieldVal(wkbs, "ISCERT", "");
 				if (iscert.equals("Y"))
@@ -2958,7 +3109,7 @@ public class sh {
 		}
 	}
 
-	private static void deletehuman(String apcd, String bscd, String idcdno, String wkid, Data data) {
+	private void deletehuman(String apcd, String bscd, String idcdno, String wkid, Data data) {
 
 		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
 
@@ -2982,7 +3133,7 @@ public class sh {
 		}
 	}
 
-	private static void uploadattend(Map<String, Object> m, Data data) {
+	private void uploadattend(Map<String, Object> m, Data data) {
 		JSONObject jo = new JSONObject();
 		jo.put("project_id", Code.getFieldVal(m, "BSCD", ""));
 		jo.put("record_date", Code.getFieldVal(m, "DATE", ""));
@@ -3008,7 +3159,7 @@ public class sh {
 				"[" + jo.toJSONString() + "]");
 	}
 
-	private static void uploadexprience(String apcd, String bscd, String idcdno, Data data) {
+	private void uploadexprience(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> ljl = data.qryCyjl(apcd, bscd, idcdno);
 
@@ -3046,7 +3197,7 @@ public class sh {
 
 	}
 
-	private static void deleteexprience(String apcd, String bscd, String idcdno, Data data) {
+	private void deleteexprience(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> ljl = data.qryCyjl(apcd, bscd, idcdno);
 
@@ -3083,7 +3234,7 @@ public class sh {
 
 	}
 
-	private static void uploadtrain(String apcd, String bscd, String idcdno, Data data) {
+	private void uploadtrain(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> lpx = data.qryPxxx(apcd, bscd, idcdno);
 		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
@@ -3118,7 +3269,7 @@ public class sh {
 		}
 	}
 
-	private static void deletetrain(String apcd, String bscd, String idcdno, Data data) {
+	private void deletetrain(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> lpx = data.qryPxxx(apcd, bscd, idcdno);
 		List<Map<String, Object>> lbs = data.qryBsinfo(apcd, bscd);
@@ -3150,7 +3301,7 @@ public class sh {
 
 	}
 
-	public static HashMap<String, Map<String, String>> qryUploadsalarysum(String sqnb, Data data) {
+	public HashMap<String, Map<String, String>> qryUploadsalarysum(String sqnb, Data data) {
 		HashMap<String, Map<String, String>> sumdata = new HashMap<String, Map<String, String>>();
 
 		List<Map<String, Object>> lattend = data.qryUploadtotalattend(sqnb);
@@ -3199,7 +3350,7 @@ public class sh {
 		return sumdata;
 	}
 
-	private static void uploadsalary(String sqnb, Data data) {
+	private void uploadsalary(String sqnb, Data data) {
 
 		List<Map<String, Object>> lacpy = data.qryAcpyitem(sqnb);
 
@@ -3285,7 +3436,7 @@ public class sh {
 		}
 	}
 
-	private static void uploadbank(JSONObject bkrec, Data data) {
+	private void uploadbank(JSONObject bkrec, Data data) {
 
 		String apcd = Code.getFieldVal(bkrec, "APCD", "");
 		String bscd = Code.getFieldVal(bkrec, "BSCD", "");
@@ -3310,7 +3461,7 @@ public class sh {
 		}
 	}
 
-	public static String bankrecord(String userid, String applydata, Data data) {
+	public String bankrecord(String userid, String applydata, Data data) {
 
 		try {
 			JSONArray ja = JSON.parseArray(applydata);
@@ -3330,7 +3481,7 @@ public class sh {
 
 	}
 
-	public static String getYftoken(Data data) {
+	public String getYftoken(Data data) {
 
 		String appid = "CD6B613ABAE54D81971955D00B04E370";
 		JSONObject jo = new JSONObject();
@@ -3346,7 +3497,7 @@ public class sh {
 		return jo.toJSONString();
 	}
 
-	public static void refreshYftoken(Data data) {
+	public void refreshYftoken(Data data) {
 		OkHttpClient client = new OkHttpClient();
 
 		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
@@ -3376,7 +3527,7 @@ public class sh {
 
 	}
 
-	public static String insertyfdevice(String userid, String applydata, Data data) {
+	public String insertyfdevice(String userid, String applydata, Data data) {
 
 		try {
 
@@ -3391,7 +3542,7 @@ public class sh {
 
 	}
 
-	public static String updateyfdevice(String userid, String applydata, Data data) {
+	public String updateyfdevice(String userid, String applydata, Data data) {
 		try {
 
 			Yfdevice dev = JSONObject.parseObject(applydata, Yfdevice.class);
@@ -3404,7 +3555,7 @@ public class sh {
 		}
 	}
 
-	public static String delyfdevice(String userid, String applydata, Data data) {
+	public String delyfdevice(String userid, String applydata, Data data) {
 		try {
 			data.delYfdevice(applydata);
 			return Code.resultSuccess();

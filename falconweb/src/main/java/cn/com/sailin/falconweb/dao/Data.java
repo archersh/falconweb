@@ -1454,5 +1454,10 @@ public class Data {
 		String sql = "select * from yftoken where APPID=?";
 		return jdbc.queryForList(sql,new Object[] {appid});
 	}
+	
+	public int updateWkeruppath(String idcdno,String uppath) {
+		String sql="update wker set uppath=? where idcdno=?";
+		return jdbc.update(sql,new Object[] {uppath,idcdno});
+	}
 
 }
