@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.com.sailin.compassrest.config.Config;
 import cn.com.sailin.compassrest.dao.Data;
 import cn.com.sailin.compassrest.publiccode.Code;
+import cn.com.sailin.compassrest.publiccode.JaxWsDynamicClientFactory;
 
 @Component
 @EnableScheduling
@@ -50,7 +50,7 @@ public class Schedle {
 				ctout.put("id", data.getPid());
 				ctout.put("jobId", "CTOUT");
 				String cfsid = Code.getFieldVal(mygtcntr, "CFSID", "1");
-				if (cfsid.equals("1"))
+				if (cfsid.equals("1")||cfsid.equals("2"))
 					ctout.put("actualLocation", "DC48082571");
 				if (cfsid.equals("3"))
 					ctout.put("actualLocation", "DC42351333");
@@ -143,7 +143,7 @@ public class Schedle {
 		jo.put("jobId", "INCTNINFO");
 
 		String cfsid = Code.getFieldVal(m, "CFSID", "1");
-		if (cfsid.equals("1")) {
+		if (cfsid.equals("1")||cfsid.equals("2")) {
 			jo.put("userName", "13567910431");
 			jo.put("userPassWord", "AX27698048");
 		}
@@ -156,7 +156,7 @@ public class Schedle {
 
 		JSONObject jct = new JSONObject();
 
-		if (cfsid.equals("1")) {
+		if (cfsid.equals("1")||cfsid.equals("2")) {
 			jct.put("palceCode", "DC48082571");
 		}
 		if (cfsid.equals("3")) {
@@ -196,7 +196,7 @@ public class Schedle {
 		long cur = System.currentTimeMillis();
 		jo.put("id", _ft.format(new Date(cur)));
 		jo.put("jobId", "BILLCHECK");
-		if (Code.getFieldVal(m, "CFSID", "1").equals("1")) {
+		if (Code.getFieldVal(m, "CFSID", "1").equals("1")||Code.getFieldVal(m, "CFSID", "1").equals("2")) {
 			jo.put("userName", "13567910431");
 			jo.put("userPassWord", "AX27698048");
 		}
