@@ -1459,5 +1459,16 @@ public class Data {
 		String sql="update wker set uppath=? where idcdno=?";
 		return jdbc.update(sql,new Object[] {uppath,idcdno});
 	}
+	
+	public void delWkdsdate(String apcd,String bscd,String idcdno,String date) {
+		String sql="delete from wkdsdate where APCD=? and BSCD=? and IDCDNO=? and WORKDATE=?";
+		jdbc.update(sql,new Object[] {apcd,bscd,idcdno,date});
+	}
+	
+	public void insertWkdsdate(String apcd,String bscd,String idcdno,String name,String post,String wkds,String inonemon,String workdate) {
+		String sql="insert into wkdsdate(APCD,BSCD,IDCDNO,NAME,POST,WKDS,INONEMON,WORKDATE)"
+				+ "values (?,?,?,?,?,?,?,?)";
+		jdbc.update(sql,new Object[] {apcd,bscd,idcdno,name,post,wkds,inonemon,workdate});
+	}
 
 }

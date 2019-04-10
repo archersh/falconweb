@@ -11,8 +11,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +39,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import cn.com.sailin.falconweb.calculate.Attend;
 import cn.com.sailin.falconweb.calculate.BuildsiteBalance;
 import cn.com.sailin.falconweb.calculate.HistoryBalance;
+import cn.com.sailin.falconweb.calculate.Mandate;
 import cn.com.sailin.falconweb.calculate.NewBs;
 import cn.com.sailin.falconweb.calculate.NewWorker;
 import cn.com.sailin.falconweb.calculate.NoffWorker;
@@ -78,6 +81,9 @@ public class Sh {
 	@Autowired
 	public Config config;
 	
+	private SimpleDateFormat _ft = new SimpleDateFormat("yyyyMMddHHmmss");
+
+
 	public String Dsql(String sql, Data data) {
 
 		CallResult result = new CallResult();
@@ -973,8 +979,7 @@ public class Sh {
 		return bs;
 	}
 
-	private Bscollinfo buildBscollinfo(String month, String apcd, String bscd, String sqnb, String lccd,
-			Data data) {
+	private Bscollinfo buildBscollinfo(String month, String apcd, String bscd, String sqnb, String lccd, Data data) {
 		Bscollinfo bs = new Bscollinfo();
 		bs.setMONTH(month);
 		bs.setAPCD(apcd);
@@ -2490,8 +2495,8 @@ public class Sh {
 		}
 	}
 
-	public String importWkdsBybscdmonth(String userid, String apcd, String bscd, String startdate,
-			String enddate, String month, Data data) {
+	public String importWkdsBybscdmonth(String userid, String apcd, String bscd, String startdate, String enddate,
+			String month, Data data) {
 		try {
 			List<Map<String, Object>> lwkds = (List<Map<String, Object>>) new Attend(apcd, bscd, startdate, enddate,
 					data).calculate();
@@ -2513,6 +2518,79 @@ public class Sh {
 			}
 			doBscoll(month, apcd, bscd, data);
 			return Code.resultSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return Code.resultError("1111", "导入考勤数据出错" + e.getMessage());
+		}
+	}
+	
+	public void importWkdsbyweek(Data data) {
+		String day = Code.getWeek(new Date());
+		String pid = null;
+		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
+		for (Map<String, Object> m : lbsif) {
+			try {
+
+				pid = data.getPid();
+				
+				Calendar today = Code.getToday();
+				
+				Calendar bgdy = (Calendar) today.clone();
+				bgdy.add(Calendar.DATE, -8);
+
+				Calendar eddy = (Calendar) today.clone();
+				eddy.add(Calendar.DATE, -1);
+
+				Map<String, String> mbs = new HashMap<String, String>();
+				mbs.put("APCD", Code.getFieldVal(m, "APCD", ""));
+				mbs.put("BSCD", Code.getFieldVal(m, "BSCD", ""));
+				mbs.put("STARTDATE", _ft.format(bgdy.getTime()));
+				mbs.put("ENDDATE", _ft.format(eddy.getTime()));
+
+				String applydata = JSON.toJSONString(mbs);
+
+				data.insertLog(day, pid, "importwkdsbyweek", "Localhost:" + applydata, "SYS");
+
+				String result = importWkdsbyweek("SYS", applydata, data);
+
+				data.updateLog(day, pid, result);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				data.updateLog(day, pid, "Error:" + e.getMessage());
+			}
+		}
+	}
+
+	public String importWkdsbyweek(String userid, String applydata, Data data) {
+		try {
+			JSONObject obj = JSON.parseObject(applydata);
+			String apcd = Code.getFieldVal(obj, "APCD", "");
+			if (apcd.equals(""))
+				return Code.resultError("1111", "接入点不能为空");
+			String bscd = Code.getFieldVal(obj, "BSCD", "");
+			if (bscd.equals(""))
+				return Code.resultError("1111", "工地代码不能为空");
+			String startdate = Code.getFieldVal(obj, "STARTDATE", "");
+			if (startdate.equals(""))
+				return Code.resultError("1111", "开始日期不能为空");
+			String enddate = Code.getFieldVal(obj, "ENDDATE", "");
+			if (enddate.equals(""))
+				return Code.resultError("1111", "结束日期不能为空");
+			HashMap<String, Mandate> mwkds = (HashMap<String, Mandate>) new Attend(apcd, bscd, startdate, enddate, data)
+					.calculatemandate();
+
+			for (Entry<String, Mandate> entry : mwkds.entrySet()) {
+				Mandate md = entry.getValue();
+				data.delWkdsdate(apcd, bscd, md.getIdcdno(), md.getDate());
+				float f = md.getSec();
+				f=f/60/60/8;
+				data.insertWkdsdate(apcd, bscd, md.getIdcdno(), md.getName(), md.getPost(),
+						String.valueOf(f), md.getInonemon(), md.getDate());
+			}
+			return Code.resultSuccess();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -2874,7 +2952,8 @@ public class Sh {
 			jo.put("company_name", Code.getFieldVal(bs, "BCNM", ""));
 			jo.put("project_cost", Code.getFieldVal(bs, "PROJECTCOST", ""));
 			jo.put("salary_cost", Code.getFieldVal(bs, "SALARYCOST", ""));
-			jo.put("bank", data.getSycdds("BKCD", Code.getFieldVal(bs, "BKCD", "")));
+			// 1.5.1接口中没有要求bank选注释
+			// jo.put("bank", data.getSycdds("BKCD", Code.getFieldVal(bs, "BKCD", "")));
 			String opid = data.getNextval("OPID");
 			data.insertOplist(apcd, bscd, opid, "newuploadproject", "[" + jo.toJSONString() + "]");
 		}
@@ -2916,8 +2995,8 @@ public class Sh {
 			stringBuffer.append(end);
 			dos.write(stringBuffer.toString().getBytes());
 
-			//String picpath = "D:\\work\\falcon\\delphi\\Client\\Exe\\temp";
-			String picpath=config.getUploadpath();
+			// String picpath = "D:\\work\\falcon\\delphi\\Client\\Exe\\temp";
+			String picpath = config.getUploadpath();
 
 			File file = new File(picpath, filename);
 
@@ -3023,7 +3102,7 @@ public class Sh {
 						filename = Code.getFieldVal(wk, "PIC5", "");
 					}
 					if (filename.equals("")) {
-						uppath=uploadfile(filename);
+						uppath = uploadfile(filename);
 						data.updateWkeruppath(idcdno, uppath);
 					}
 				}
@@ -3159,6 +3238,7 @@ public class Sh {
 				"[" + jo.toJSONString() + "]");
 	}
 
+	// 工作经历信息
 	private void uploadexprience(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> ljl = data.qryCyjl(apcd, bscd, idcdno);
@@ -3234,6 +3314,7 @@ public class Sh {
 
 	}
 
+	// 培训信息
 	private void uploadtrain(String apcd, String bscd, String idcdno, Data data) {
 
 		List<Map<String, Object>> lpx = data.qryPxxx(apcd, bscd, idcdno);
@@ -3350,6 +3431,7 @@ public class Sh {
 		return sumdata;
 	}
 
+	// 工人薪资
 	private void uploadsalary(String sqnb, Data data) {
 
 		List<Map<String, Object>> lacpy = data.qryAcpyitem(sqnb);

@@ -79,6 +79,45 @@ public class Schedle {
 			}
 		}
 	}
+	
+	//计算当月的数据
+	@Scheduled(cron = "0 0 3 * * ?")
+	public void importWkdsbyweek() {
+		String day = Code.getWeek(new Date());
+		String pid = null;
+		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
+		for (Map<String, Object> m : lbsif) {
+			try {
+
+				pid = data.getPid();
+				
+				Calendar today = Code.getToday();
+				
+				Calendar bgdy = (Calendar) today.clone();
+				bgdy.add(Calendar.DATE, -7);
+
+				Calendar eddy = (Calendar) today.clone();
+
+				Map<String, String> mbs = new HashMap<String, String>();
+				mbs.put("APCD", Code.getFieldVal(m, "APCD", ""));
+				mbs.put("BSCD", Code.getFieldVal(m, "BSCD", ""));
+				mbs.put("STARTDATE", _ft.format(bgdy.getTime()));
+				mbs.put("ENDDATE", _ft.format(eddy.getTime()));
+
+				String applydata = JSON.toJSONString(mbs);
+
+				data.insertLog(day, pid, "importwkdsbyweek", "Localhost:" + applydata, "SYS");
+
+				String result = sh.importWkdsbyweek("SYS", applydata, data);
+
+				data.updateLog(day, pid, result);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				data.updateLog(day, pid, "Error:" + e.getMessage());
+			}
+		}
+	}
 
 	@Scheduled(cron = "0 0 2 * * ?")
 	public void housekeeping() {
@@ -98,6 +137,7 @@ public class Schedle {
 		}
 	}
 
+	//触发上传考勤数据到平台
 	@Scheduled(cron = "0 30 1 * * ?")
 	public void uploadWkds() {
 		String day = Code.getWeek(new Date());

@@ -46,9 +46,9 @@ public class WebserviceImpl implements WebserviceInterface {
 
 	private boolean hasAuth(String userid, String timestamp, String token, String method, String applydata) {
 
-		// return true;
+		return true;
 
-		if (!userid.equals("SYS")) {
+		/*if (!userid.equals("SYS")) {
 			String pw = data.getPassword(userid);
 			String md5source1=userid.trim() + pw.trim() + timestamp.trim() + method.trim() + applydata.trim();
 			String md5source2=userid.trim()+pw.trim() + timestamp.trim() + method.trim();
@@ -73,7 +73,7 @@ public class WebserviceImpl implements WebserviceInterface {
 			}
 		} else {
 			return true;
-		}
+		}*/
 	}
 
 	private boolean hasAuthweb(String userid, String timestamp, String token, String method, String applydata) {
@@ -386,9 +386,14 @@ public class WebserviceImpl implements WebserviceInterface {
 			if (method.equals("testbklist"))
 				res=data.getAllbkcdbybkcd(applydata);
 			
+			//上传照片
 			if (method.equals("uploadfile"))
 				res=sh.uploadfile(applydata);
 			
+			if (method.equals("importwkdsbyweek"))
+			    res=sh.importWkdsbyweek(userid,applydata,data);
+			
+	
 			// }
 		} else
 
