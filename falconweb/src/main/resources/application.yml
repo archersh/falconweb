@@ -3,8 +3,8 @@ server:
   
 spring:
   datasource:
-      url: jdbc:mysql://127.0.0.1:3306/bps_Platform
-      //url: jdbc:mysql://www.myfalcon.top:3306/bps_Platform
+      //url: jdbc:mysql://127.0.0.1:3306/bps_Platform
+      url: jdbc:mysql://www.myfalcon.top:3306/bps_Platform
       username: bps
       password: WMC0K/PBXiiytXBrtBnLVLwm2V9nu8f7s7orxloywsMsEnoqxyPF1w5Do/xzIftahyWlayAaQoh7KCt71zy6FQ==
       driver-class-name: com.mysql.jdbc.Driver
@@ -23,3 +23,13 @@ spring:
       
 options:
   uploadpath: /usr/local/tomcat-7.0.70/webapps/pic/
+
+schedle:
+  importwkds: false
+  importwkdsbyweek: false
+  housekeeping: false
+  uploadwkds: false
+  importattenddata: false
+  uploadinfo: false
+  updatewkeerattendtime: false
+  updateyftoken: false

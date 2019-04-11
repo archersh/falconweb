@@ -10,7 +10,7 @@ public class Wker {
 	
 	private String NAME;
 	
-	private String LCCD;
+	private String LCCD;//发薪公司
 	
 	private String APCD;
 	
@@ -34,7 +34,7 @@ public class Wker {
 	
 	private String INONEMON;//是否一个月内用工
 	
-	private String LSCD;
+	private String LSCD;//劳务分包公司
 	
 	private String WORKERTYPE;
 	
@@ -115,6 +115,10 @@ public class Wker {
 	private String PIC4GUID;
 	
 	private String PIC5GUID;
+	
+	private String ISCONT;
+	
+	private String IDDEPT;
 	
 	@JSONField(name="PERSONGUID")	
 	public String getPERSONGUID() {
@@ -609,6 +613,24 @@ public class Wker {
 
 	public void setPIC1(String pIC1) {
 		PIC1 = pIC1;
+	}
+
+	@JSONField(name="ISCONT")
+	public String getISCONT() {
+		return ISCONT;
+	}
+
+	public void setISCONT(String iSCONT) {
+		ISCONT = iSCONT;
+	}
+
+	@JSONField(name="IDDEPT")
+	public String getIDDEPT() {
+		return IDDEPT;
+	}
+
+	public void setIDDEPT(String iDDEPT) {
+		IDDEPT = iDDEPT;
 	}
 	
 	

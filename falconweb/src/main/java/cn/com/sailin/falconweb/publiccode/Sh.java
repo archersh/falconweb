@@ -80,9 +80,8 @@ public class Sh {
 
 	@Autowired
 	public Config config;
-	
-	private SimpleDateFormat _ft = new SimpleDateFormat("yyyyMMddHHmmss");
 
+	private SimpleDateFormat _ft = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	public String Dsql(String sql, Data data) {
 
@@ -1536,19 +1535,17 @@ public class Sh {
 			} else {
 				wker.setWKKD(Code.getFieldVal(lsTemp.get(0), "SZ_CODE", ""));
 			}
-			// 班组检查
-			lsTemp = data.qryBzbycd(wker.getAPCD(), wker.getBSCD(), wker.getBZ());
-			// 如果是新的班组
-			if (lsTemp.size() == 0) {
-				Sycdtb cd = new Sycdtb();
-				cd.setSYCDTB("BZCD");
-				cd.setSYIDTB(wker.getBZ());
-				cd.setSYDSTB(wker.getBZNAME());
-				cd.setSYC1TB(wker.getBSCD());
-				cd.setSYC2TB(wker.getAPCD());
-				cd.setINUSCH("Y");
-				data.insertSycdtb(cd);
-			}
+
+			Sycdtb cd = new Sycdtb();
+			cd.setSYCDTB("BZCD");
+			cd.setSYIDTB(wker.getBZ());
+			cd.setSYDSTB(wker.getBZNAME());
+			cd.setSYC1TB(wker.getBSCD());
+			cd.setSYC2TB(wker.getAPCD());
+			cd.setSYC3TB(wker.getLSCD());
+			cd.setINUSCH("Y");
+			data.delSycdtb(cd.getSYCDTB(), cd.getSYIDTB());
+			data.insertSycdtb(cd);
 
 			List<Map<String, Object>> list = null;
 
@@ -1710,19 +1707,17 @@ public class Sh {
 			} else {
 				wker.setWKKD(Code.getFieldVal(lsTemp.get(0), "SZ_CODE", ""));
 			}
-			// 班组检查
-			lsTemp = data.qryBzbycd(wker.getAPCD(), wker.getBSCD(), wker.getBZ());
-			// 如果是新的班组
-			if (lsTemp.size() == 0) {
-				Sycdtb cd = new Sycdtb();
-				cd.setSYCDTB("BZCD");
-				cd.setSYIDTB(wker.getBZ());
-				cd.setSYDSTB(wker.getBZNAME());
-				cd.setSYC1TB(wker.getBSCD());
-				cd.setSYC2TB(wker.getAPCD());
-				cd.setINUSCH("Y");
-				data.insertSycdtb(cd);
-			}
+
+			Sycdtb cd = new Sycdtb();
+			cd.setSYCDTB("BZCD");
+			cd.setSYIDTB(wker.getBZ());
+			cd.setSYDSTB(wker.getBZNAME());
+			cd.setSYC1TB(wker.getBSCD());
+			cd.setSYC2TB(wker.getAPCD());
+			cd.setSYC3TB(wker.getLSCD());
+			cd.setINUSCH("Y");
+			data.delSycdtb(cd.getSYCDTB(), cd.getSYIDTB());
+			data.insertSycdtb(cd);
 
 			String res = "";
 
@@ -2524,7 +2519,7 @@ public class Sh {
 			return Code.resultError("1111", "导入考勤数据出错" + e.getMessage());
 		}
 	}
-	
+
 	public void importWkdsbyweek(Data data) {
 		String day = Code.getWeek(new Date());
 		String pid = null;
@@ -2533,9 +2528,9 @@ public class Sh {
 			try {
 
 				pid = data.getPid();
-				
+
 				Calendar today = Code.getToday();
-				
+
 				Calendar bgdy = (Calendar) today.clone();
 				bgdy.add(Calendar.DATE, -8);
 
@@ -2585,9 +2580,9 @@ public class Sh {
 				Mandate md = entry.getValue();
 				data.delWkdsdate(apcd, bscd, md.getIdcdno(), md.getDate());
 				float f = md.getSec();
-				f=f/60/60/8;
-				data.insertWkdsdate(apcd, bscd, md.getIdcdno(), md.getName(), md.getPost(),
-						String.valueOf(f), md.getInonemon(), md.getDate());
+				f = f / 60 / 60 / 8;
+				data.insertWkdsdate(apcd, bscd, md.getIdcdno(), md.getName(), md.getPost(), String.valueOf(f),
+						md.getInonemon(), md.getDate());
 			}
 			return Code.resultSuccess();
 

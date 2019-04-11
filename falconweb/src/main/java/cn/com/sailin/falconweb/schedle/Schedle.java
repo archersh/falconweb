@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.com.sailin.falconweb.config.SchedleConfig;
 import cn.com.sailin.falconweb.dao.Data;
 import cn.com.sailin.falconweb.model.Uploaddata;
 import cn.com.sailin.falconweb.model.Wkerattendtime;
@@ -30,11 +31,17 @@ public class Schedle {
 	
 	@Autowired
 	private Sh sh;
+	
+	@Autowired
+	private SchedleConfig schedleconfig;
 
 	private SimpleDateFormat _ft = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void importWkds() {
+		
+		if (!schedleconfig.getImportwkds()) return;
+		
 		String day = Code.getWeek(new Date());
 		String pid = null;
 		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
@@ -83,6 +90,9 @@ public class Schedle {
 	//计算当月的数据
 	@Scheduled(cron = "0 0 3 * * ?")
 	public void importWkdsbyweek() {
+		
+		if (!schedleconfig.getImportwkdsbyweek()) return;
+		
 		String day = Code.getWeek(new Date());
 		String pid = null;
 		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
@@ -121,6 +131,9 @@ public class Schedle {
 
 	@Scheduled(cron = "0 0 2 * * ?")
 	public void housekeeping() {
+		
+		if (!schedleconfig.getHousekeeping()) return;
+		
 		String day = Code.getWeek(new Date());
 		String pid = data.getPid();
 		try {
@@ -140,6 +153,9 @@ public class Schedle {
 	//触发上传考勤数据到平台
 	@Scheduled(cron = "0 30 1 * * ?")
 	public void uploadWkds() {
+		
+		if (!schedleconfig.getUploadwkds()) return;
+		
 		String day = Code.getWeek(new Date());
 		String pid = null;
 		List<Map<String, Object>> lbsif = data.qryBsinfonodt();
@@ -179,6 +195,9 @@ public class Schedle {
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
 	public void importAttendData() {
+		
+		if (!schedleconfig.getImportattenddata()) return;
+		
 		List<Map<String, Object>> list = data.qryOplistbytype("attenddata");
 		for (Map<String, Object> m : list) {
 			JSONObject jcon = JSON.parseObject(Code.getFieldVal(m, "content", ""));
@@ -194,6 +213,8 @@ public class Schedle {
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 5000)
 	public void uploadInfo() {
+		
+		if (!schedleconfig.getUploadinfo()) return;
 
 		String apcd = "";
 		String bscd = "";
@@ -227,6 +248,9 @@ public class Schedle {
 
 	@Scheduled(initialDelay = 5000, fixedDelay = 5000)
 	public void updateWkerattendtime() {
+		
+		if (!schedleconfig.getUpdatewkeerattendtime()) return;
+		
 		int maxngid = data.getMaxngid();
 
 		List<Map<String, Object>> list = data.qryAttenddata(maxngid);
@@ -292,6 +316,9 @@ public class Schedle {
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 18000000)
 	public void updateYftoken() {
+		
+		if (!schedleconfig.getUpdateyftoken()) return;
+		
 		sh.refreshYftoken(data);
 	}
 

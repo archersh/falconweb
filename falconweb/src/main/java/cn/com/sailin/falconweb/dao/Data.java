@@ -340,7 +340,7 @@ public class Data {
 		String sql = "insert into SPANBL(APCD,BSCD,BKCD,SPAN,SPANBL,CHDT,CHUR,MONTH,SVDT,RQANBL,CHARGEDATE)"
 				+ " values(?,?,?,?,?,now(),?,?,str_to_date(?,'%Y%m%d%H%i%s'),?,?)";
 		jdbc.update(sql, new Object[] { bl.getAPCD(), bl.getBSCD(), bl.getBKCD(), bl.getSPAN(), bl.getSPANBL(),
-				bl.getCHUR(), bl.getMONTH(), bl.getSVDT(), bl.getRQANBL(),bl.getCHARGEDATE() });
+				bl.getCHUR(), bl.getMONTH(), bl.getSVDT(), bl.getRQANBL(), bl.getCHARGEDATE() });
 		return;
 	}
 
@@ -575,7 +575,7 @@ public class Data {
 						bs.getPYDY(), bs.getBCNM(), bs.getCCCD(), bs.getBSCHUR(), bs.getRGUR(), bs.getCKBGDY(),
 						bs.getAJCODE(), bs.getTENDERID(), bs.getPROJECTTYPE(), bs.getPRINNAME(), bs.getPRINTEL(),
 						bs.getBSADDRESS(), bs.getLICENSEKEY(), bs.getSTARTDATE(), bs.getENDDATE(), bs.getPROJECTCOST(),
-						bs.getSALARYCOST(), bs.getLEASESTARTDATE(), bs.getLEASEENDDATE(),bs.getSOFTUSETYPE() });
+						bs.getSALARYCOST(), bs.getLEASESTARTDATE(), bs.getLEASEENDDATE(), bs.getSOFTUSETYPE() });
 		return;
 	}
 
@@ -599,7 +599,7 @@ public class Data {
 						bs.getBSCHUR(), bs.getCKBGDY(), bs.getAJCODE(), bs.getTENDERID(), bs.getPROJECTTYPE(),
 						bs.getPRINNAME(), bs.getPRINTEL(), bs.getBSADDRESS(), bs.getLICENSEKEY(), bs.getSTARTDATE(),
 						bs.getENDDATE(), bs.getPROJECTCOST(), bs.getSALARYCOST(), bs.getLEASESTARTDATE(),
-						bs.getLEASEENDDATE(),bs.getSOFTUSETYPE(), bs.getAPCD(), bs.getBSCD() });
+						bs.getLEASEENDDATE(), bs.getSOFTUSETYPE(), bs.getAPCD(), bs.getBSCD() });
 	}
 
 	public int updateAttendbscd(Sybscd bs) {
@@ -654,14 +654,14 @@ public class Data {
 	}
 
 	public void insertWkerbs(Wker wker) {
-		String sql = "insert into WKER_BS(IDCDNO,NAME,LCCD,APCD,BSCD,RGDT,RGUR,BKCD,BKAN,WKKD,SZ_EMPLOY_ID,INONEMON,LSCD,WORKERTYPE,DAYSALARY,MONTHSALARY,BZ,ISCERT,EMPDATE,INEMP,TIMECARD,ISGROUPER,ISMIGRANT,WKKDSV)"
-				+ " values(?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?)";
+		String sql = "insert into WKER_BS(IDCDNO,NAME,LCCD,APCD,BSCD,RGDT,RGUR,BKCD,BKAN,WKKD,SZ_EMPLOY_ID,INONEMON,LSCD,WORKERTYPE,DAYSALARY,MONTHSALARY,BZ,ISCERT,EMPDATE,INEMP,TIMECARD,ISGROUPER,ISMIGRANT,WKKDSV,ISCONT)"
+				+ " values(?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?)";
 		jdbc.update(sql,
 				new Object[] { wker.getIDCDNO(), wker.getNAME(), wker.getLCCD(), wker.getAPCD(), wker.getBSCD(),
 						wker.getRGUR(), wker.getBKCD(), wker.getBKAN(), wker.getWKKD(), wker.getSZ_EMPLOY_ID(),
 						wker.getINONEMON(), wker.getLSCD(), wker.getWORKERTYPE(), wker.getDAYSALARY(),
 						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(), wker.getEMPDATE(), wker.getTIMECARD(),
-						wker.getINGROUPER(), wker.getINMIGRANT(), wker.getWKKDSV() });
+						wker.getINGROUPER(), wker.getINMIGRANT(), wker.getWKKDSV(), wker.getISCONT() });
 		return;
 	}
 
@@ -673,13 +673,13 @@ public class Data {
 
 	public int updateWkerbs(Wker wker) {
 		String sql = "update WKER_BS set NAME=?,LCCD=?,RGDT=now(),RGUR=?,BKCD=?,BKAN=?,WKKD=?,INONEMON=?,LSCD=?,WORKERTYPE=?,DAYSALARY=?,MONTHSALARY=?,BZ=?,ISCERT=?,"
-				+ "EMPDATE=?,TIMECARD=?,ISGROUPER=?,ISMIGRANT=?,WKKDSV=? where APCD=? and BSCD=? and IDCDNO=?";
+				+ "EMPDATE=?,TIMECARD=?,ISGROUPER=?,ISMIGRANT=?,WKKDSV=?,ISCONT=? where APCD=? and BSCD=? and IDCDNO=?";
 		return jdbc.update(sql,
 				new Object[] { wker.getNAME(), wker.getLCCD(), wker.getRGUR(), wker.getBKCD(), wker.getBKAN(),
 						wker.getWKKD(), wker.getINONEMON(), wker.getLSCD(), wker.getWORKERTYPE(), wker.getDAYSALARY(),
 						wker.getMONTHSALARY(), wker.getBZ(), wker.getISCERT(), wker.getEMPDATE(), wker.getTIMECARD(),
-						wker.getINGROUPER(), wker.getINMIGRANT(), wker.getWKKDSV(), wker.getAPCD(), wker.getBSCD(),
-						wker.getIDCDNO() });
+						wker.getINGROUPER(), wker.getINMIGRANT(), wker.getWKKDSV(), wker.getISCONT(), wker.getAPCD(),
+						wker.getBSCD(), wker.getIDCDNO() });
 	}
 
 	public List<Map<String, Object>> qryWkerbs(String apcd, String bscd, String idcdno) {
@@ -709,14 +709,14 @@ public class Data {
 
 	public void insertWker(Wker wker) {
 		String sql = "insert into WKER(IDCDNO,NAME,USERPASS,RGDT,RGUR,PXQK,ZYJN,CYJL,INDY,INSEX,BRDT,HOMEADD,ETHNIC,PIC1,PIC2,PIC3,PIC4,PIC5,"
-				+ "REGADDRESS,IDSTARTDATE,IDENDDATE,TEL,EDUCATION,INMARRY,INMIN,HOUSEHOLDTYPE,PERSONGUID,PIC3GUID,PIC4GUID,PIC5GUID)"
-				+ "values(?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "REGADDRESS,IDSTARTDATE,IDENDDATE,TEL,EDUCATION,INMARRY,INMIN,HOUSEHOLDTYPE,PERSONGUID,PIC3GUID,PIC4GUID,PIC5GUID,IDDEPT)"
+				+ "values(?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		jdbc.update(sql, new Object[] { wker.getIDCDNO(), wker.getNAME(), wker.getUSERPASS(), wker.getRGUR(),
 				wker.getPXQK(), wker.getZYJN(), wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(),
 				wker.getHOMEADD(), wker.getETHNIC(), wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(),
 				wker.getPIC5(), wker.getREGADDRESS(), wker.getIDSTARTDATE(), wker.getIDENDDATE(), wker.getTEL(),
 				wker.getEDUCATION(), wker.getINMARRY(), wker.getINMIN(), wker.getHOUSEHOLDTYPE(), wker.getPERSONGUID(),
-				wker.getPIC3GUID(), wker.getPIC4GUID(), wker.getPIC5GUID() });
+				wker.getPIC3GUID(), wker.getPIC4GUID(), wker.getPIC5GUID(), wker.getIDDEPT() });
 		return;
 	}
 
@@ -741,8 +741,8 @@ public class Data {
 	}
 
 	public void insertZyjn(String idcdno, Zyjn jn) {
-		String sql = "insert into zyjn(IDCDNO,JNID,JNNAME,REMARK)" + " values(?,?,?,?)";
-		jdbc.update(sql, new Object[] { idcdno, jn.getJNID(), jn.getJNNAME(), jn.getREMARK() });
+		String sql = "insert into zyjn(IDCDNO,JNID,JNNAME,REMARK,JNNUMBER)" + " values(?,?,?,?,?)";
+		jdbc.update(sql, new Object[] { idcdno, jn.getJNID(), jn.getJNNAME(), jn.getREMARK(), jn.getJNNUMBER() });
 	}
 
 	public void delZyjn(String idcdno) {
@@ -836,14 +836,14 @@ public class Data {
 
 	public int updateWker(Wker wker) {
 		String sql = "update WKER set NAME=?,RGDT=now(),RGUR=?,PXQK=?,ZYJN=?,CYJL=?,INDY=?,INSEX=?,BRDT=?,HOMEADD=?,ETHNIC=?,PIC1=?,PIC2=?,PIC3=?,PIC4=?,PIC5=?,"
-				+ "REGADDRESS=?,IDSTARTDATE=?,IDENDDATE=?,TEL=?,EDUCATION=?,INMARRY=?,INMIN=?,HOUSEHOLDTYPE=?,PERSONGUID=?,PIC3GUID=?,PIC4GUID=?,PIC5GUID=?"
+				+ "REGADDRESS=?,IDSTARTDATE=?,IDENDDATE=?,TEL=?,EDUCATION=?,INMARRY=?,INMIN=?,HOUSEHOLDTYPE=?,PERSONGUID=?,PIC3GUID=?,PIC4GUID=?,PIC5GUID=?,IDDEPT=?"
 				+ " where IDCDNO=?";
 		return jdbc.update(sql, new Object[] { wker.getNAME(), wker.getRGUR(), wker.getPXQK(), wker.getZYJN(),
 				wker.getCYJL(), wker.getINDY(), wker.getINSEX(), wker.getBRDT(), wker.getHOMEADD(), wker.getETHNIC(),
 				wker.getPIC1(), wker.getPIC2(), wker.getPIC3(), wker.getPIC4(), wker.getPIC5(), wker.getREGADDRESS(),
 				wker.getIDSTARTDATE(), wker.getIDENDDATE(), wker.getTEL(), wker.getEDUCATION(), wker.getINMARRY(),
 				wker.getINMIN(), wker.getHOUSEHOLDTYPE(), wker.getPERSONGUID(), wker.getPIC3GUID(), wker.getPIC4GUID(),
-				wker.getPIC5GUID(), wker.getIDCDNO() });
+				wker.getPIC5GUID(), wker.getIDDEPT(), wker.getIDCDNO() });
 	}
 
 	public int wkerleave(String apcd, String bscd, String wkid, String disdate) {
@@ -888,7 +888,7 @@ public class Data {
 		}
 		return null;
 	}
-	
+
 	public List<Map<String, Object>> qryAttendUserbywkid(String apcd, String wkid) {
 		if (apcd.equals("HW") || apcd.equals("ZK") || apcd.equals("ZQ") || apcd.equals("RJ") || apcd.equals("YF")) {
 			String sql = "select * from attend.sys_user where sz_employ_id=? and nt_user_state>0";
@@ -1247,22 +1247,22 @@ public class Data {
 		String sql = "select APCD,BSCD from SYBSCD where BKCD=?";
 		return jdbc.queryForList(sql, new Object[] { bkcd });
 	}
-	
-	public List<Map<String,Object>> qryFullbslistbybkcd(String bkcd){
-		String sql="select APCD,BSCD from SYBSCD where BKCD in (" + getAllbkcdbybkcd(bkcd) + ")";
+
+	public List<Map<String, Object>> qryFullbslistbybkcd(String bkcd) {
+		String sql = "select APCD,BSCD from SYBSCD where BKCD in (" + getAllbkcdbybkcd(bkcd) + ")";
 		return jdbc.queryForList(sql);
 	}
-	
+
 	public String getAllbkcdbybkcd(String bkcd) {
-		String sql="select SYIDTB bkcd from SYCDTB where SYCDTB='BKCD' and SYC3TB='" + bkcd + "'";
-		String result="'" + bkcd + "'";
-		List<Map<String,Object>> lbs=jdbc.queryForList(sql);
-		if (lbs.size()==0) {
+		String sql = "select SYIDTB bkcd from SYCDTB where SYCDTB='BKCD' and SYC3TB='" + bkcd + "'";
+		String result = "'" + bkcd + "'";
+		List<Map<String, Object>> lbs = jdbc.queryForList(sql);
+		if (lbs.size() == 0) {
 			return result;
-		}else {
-			for (Map<String,Object> mbs:lbs) {
-				String bs=getAllbkcdbybkcd(Code.getFieldVal(mbs, "bkcd", ""));
-				result=result +  "," + bs;
+		} else {
+			for (Map<String, Object> mbs : lbs) {
+				String bs = getAllbkcdbybkcd(Code.getFieldVal(mbs, "bkcd", ""));
+				result = result + "," + bs;
 			}
 		}
 		return result;
@@ -1434,12 +1434,12 @@ public class Data {
 			return "";
 		}
 	}
-	
-	public List<Map<String,Object>> qryBslc(){
-		String sql="select * from bs_lc";
+
+	public List<Map<String, Object>> qryBslc() {
+		String sql = "select * from bs_lc";
 		return jdbc.queryForList(sql);
 	}
-	
+
 	public void insertYftoken(String appid, String token) {
 		String sql = "insert into yftoken(APPID,TOKEN,UPDATETIME) values(?,?,now())";
 		jdbc.update(sql, new Object[] { appid, token });
@@ -1449,26 +1449,27 @@ public class Data {
 		String sql = "delete from yftoken where APPID=?";
 		jdbc.update(sql, new Object[] { appid });
 	}
-	
-	public List<Map<String,Object>> qryYftoken(String appid){
+
+	public List<Map<String, Object>> qryYftoken(String appid) {
 		String sql = "select * from yftoken where APPID=?";
-		return jdbc.queryForList(sql,new Object[] {appid});
+		return jdbc.queryForList(sql, new Object[] { appid });
 	}
-	
-	public int updateWkeruppath(String idcdno,String uppath) {
-		String sql="update wker set uppath=? where idcdno=?";
-		return jdbc.update(sql,new Object[] {uppath,idcdno});
+
+	public int updateWkeruppath(String idcdno, String uppath) {
+		String sql = "update wker set uppath=? where idcdno=?";
+		return jdbc.update(sql, new Object[] { uppath, idcdno });
 	}
-	
-	public void delWkdsdate(String apcd,String bscd,String idcdno,String date) {
-		String sql="delete from wkdsdate where APCD=? and BSCD=? and IDCDNO=? and WORKDATE=?";
-		jdbc.update(sql,new Object[] {apcd,bscd,idcdno,date});
+
+	public void delWkdsdate(String apcd, String bscd, String idcdno, String date) {
+		String sql = "delete from wkdsdate where APCD=? and BSCD=? and IDCDNO=? and WORKDATE=?";
+		jdbc.update(sql, new Object[] { apcd, bscd, idcdno, date });
 	}
-	
-	public void insertWkdsdate(String apcd,String bscd,String idcdno,String name,String post,String wkds,String inonemon,String workdate) {
-		String sql="insert into wkdsdate(APCD,BSCD,IDCDNO,NAME,POST,WKDS,INONEMON,WORKDATE)"
+
+	public void insertWkdsdate(String apcd, String bscd, String idcdno, String name, String post, String wkds,
+			String inonemon, String workdate) {
+		String sql = "insert into wkdsdate(APCD,BSCD,IDCDNO,NAME,POST,WKDS,INONEMON,WORKDATE)"
 				+ "values (?,?,?,?,?,?,?,?)";
-		jdbc.update(sql,new Object[] {apcd,bscd,idcdno,name,post,wkds,inonemon,workdate});
+		jdbc.update(sql, new Object[] { apcd, bscd, idcdno, name, post, wkds, inonemon, workdate });
 	}
 
 }
